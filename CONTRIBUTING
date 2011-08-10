@@ -1,0 +1,30 @@
+Some development notes about the Lunch project
+
+The release process
+-------------------
+
+Update the documentation if needed:
+
+ * README
+
+Run the unit tests:
+
+ * trial pyoscape
+
+Update the release notes:
+
+ * RELEASE
+
+Update the ChangeLog:
+
+ * git log --pretty=medium > ChangeLog
+
+Create the tag and a tarball:
+
+ * make sure you are in the right branch. 
+ * Commit any change
+ * git tag 0.1.0
+
+Increase the version number (not yet released):
+
+ * pyoscape/__init__.py

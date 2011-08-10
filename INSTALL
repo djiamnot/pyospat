@@ -1,0 +1,21 @@
+INSTALLATION
+============
+
+This software requires pyo and spatosc. Get Pyo from http://code.google.com/p/pyo/wiki/Installation and spatosc from https://github.com/sat-metalab/spatosc
+
+You will need a few software. On Ubuntu or Debian GNU/Linux, install them using the following command ::
+
+  sudo apt-get install python-setuptools python-pyo libspatosc-0.1-dev
+
+And then run setup.py ::
+
+  python setup.py build
+  sudo python setup.py install
+
+
+DOCUMENTATION
+=============
+You can generate HTML out of the README file using rst2html::
+
+ rst2html README readme.html
+
