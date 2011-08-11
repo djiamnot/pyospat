@@ -8,6 +8,9 @@ import os
 from xml.dom import minidom
 
 class PrefParser(object):
+    """
+    Parses ~/.pyorc and provides kwargs for pyo.Server
+    """
     def __init__(self, file_name=None):
         """
         @throws IOError if file is not found.
@@ -36,18 +39,44 @@ class PrefParser(object):
         print(self._constructor_arguments)
     
     def get_kwargs(self):
+        """
+        Provides kwargs for pyo.Server
+        """
         return self._constructor_arguments
 
-if __name__ == "__main__":
-    parser = PrefParser()
-    s = pyo.Server(**parser.get_kwargs()).boot()
-    s.start()
+class PyoServerWrapper(object):
+    """
+    Encapsulates a pyo.Server and PrefParser
+    """
+    def __init__(self):
+        parser = PrefParser()
+        self._server = pyo.Server(**parser.get_kwargs()).boot()
+        self._server.start()
+        self._running = False
 
+    def get_server(self):
+        return self._server
+
+    def run(self):
+        """
+        Runs a blocking main loop.
+        """
+        self._running = True
+        try:
+            while self._running:
+                time.sleep(0.1)
+        except KeyboardInterrupt, e:
+            print("Interrupted")
+        self._server.stop()
+
+    def stop(self):
+        """
+        Stops the main loop
+        """
+        self._running = False
+
+if __name__ == "__main__":
+    server = PyoServerWrapper()
     sine = pyo.Sine(freq=440.0, mul=0.125).out()
-    try:
-        while True:
-            time.sleep(0.1)
-    except KeyboardInterrupt, e:
-        print("Interrupted")
-    s.stop()
+    server.run()
 
