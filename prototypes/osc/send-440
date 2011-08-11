@@ -1,0 +1,6 @@
+#!/bin/bash
+# Sends controls for the Pyo example that is in the same directory
+# You need python-txosc to use it.
+osc-send osc.udp://localhost:10001 /pitch ,f 440.0
+osc-send osc.udp://localhost:10001 /amp ,f 0.125
+
