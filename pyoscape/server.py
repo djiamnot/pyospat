@@ -28,6 +28,8 @@ class PrefParser(object):
         self._parse()
 
     def _parse(self):
+        if not os.path.exists(self._file_name):
+            return
         parser = minidom.parse(self._file_name)
         root = parser.childNodes[0]
         for key in self._constructor_arguments.iterkeys():
