@@ -18,5 +18,5 @@ setup(
     author_email="alexandre@quessy.net",
     url="http://github.com/sat-metalab/pyospat",
     packages=["pyospat"],
-    scripts=[]
+    scripts=["scripts/pyospat"]
     )
