@@ -1,9 +1,0 @@
-import pyo
-
-s = pyo.Server(audio = 'pa', sr = 44100, buffersize = 512).boot()
-s.start()
-
-table = pyo.LinTable([(0,0), (2,1), (5,0), (8191,0)])
-metronome = pyo.Metro(.25, 4).play()
-pick = pyo.TrigEnv(metronome, table=table, dur=1)
-w = pyo.Waveguide(pick, freq=[200,400], dur=20, minfreq=20, mul=.5).out()

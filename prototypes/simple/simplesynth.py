@@ -1,36 +1,32 @@
 import os
+import time
 import pyo
 
 S_RATE = 44100
 BACKEND = 'portaudio'
 
-
 class Pluck(object):
-	def __init__(self):
+    def __init__(self):
 
-		self.table = None
-		self.metronome = None
-		self.pick = None
-		self.w = None
-	
-	def run(self):
-		self.table = pyo.LinTable([(0,0), (2,1), (5,0), (8191,0)])
-		self.metronome = pyo.Metro(.25, 4).play()
-		self.pick = pyo.TrigEnv(self.metronome, table=self.table, dur=1)
-		self.w = pyo.Waveguide(self.pick, freq=[200,400], dur=20, minfreq=20, mul=.5).out()
-
-
-def main():
-	server = pyo.Server(audio = BACKEND, jackname = 'pluck', sr = S_RATE, buffersize = 512).boot()
-	server.start()
-	pluck = Pluck()
-	pluck.run()
+        self.table = None
+        self.metronome = None
+        self.pick = None
+        self.s1 = None
+        self.s2 = None
     
+    def run(self):
+         self.s1 = pyo.Sine(freq=400, mul=.5).out(0)
+         self.s2 = pyo.Sine(freq=250, mul=.5).out(1)
 
-    
 if __name__ == '__main__':
+    server = pyo.Server(sr=S_RATE, nchnls=2).boot()
+    server.start()
+
+    pluck = Pluck()
+    pluck.run()
     try:
-        main()
+        while True:
+            time.sleep(0.1)
     except KeyboardInterrupt, e: # Ctrl-C
         raise e
     except SystemExit, e: # sys.exit()
