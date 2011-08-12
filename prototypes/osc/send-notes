@@ -1,6 +1,13 @@
 #!/bin/bash
 # Sends controls for the Pyo example that is in the same directory
 # You need python-txosc to use it.
-osc-send osc.udp://localhost:10001 /pitch ,f 440.0
 osc-send osc.udp://localhost:10001 /amp ,f 0.125
+osc-send osc.udp://localhost:10001 /pitch ,f 440.0
+
+for note in 440.0 523.25 587.33 659.26 783.99 880.0
+do
+    osc-send osc.udp://localhost:10001 /pitch ,f $note
+    sleep 0.25
+done
+osc-send osc.udp://localhost:10001 /amp ,f 0.0
 
