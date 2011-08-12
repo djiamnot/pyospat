@@ -12,6 +12,7 @@ def clip(value, left, right):
 def test_clip():
     print(clip(-1.0, 0.0, 1.0))
 
+#TODO: use two pyo.Pan objects instead of a pyo.Mixer
 class Panner3d(object):
     def __init__(self, azimuth=0.0, elevation=0.0):
         self._mixer = pyo.Mixer(outs=1, chnls=1, time=0.025)
@@ -37,7 +38,9 @@ class Panner3d(object):
     def get_output(self):
         return self._mixer[0][0]
 
-    def add_input(self, signal, voice=0):
+    dn_azimuth = clip(math.sin(math.radians(self._azimuth)), 0.0, 1.0)
+            gain_elevation = clip(math.cos(math.radians(self._elevation)), 0.0, 1.0)
+            ef add_input(self, signal, voice=0):
         self._mixer.addInput(voice, signal)
 
     def delete_input(self, voice=0):
