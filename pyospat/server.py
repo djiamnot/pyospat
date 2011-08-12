@@ -50,11 +50,12 @@ class ServerWrapper(object):
     """
     Encapsulates a pyo.Server and PrefParser
     """
-    def __init__(self, config_file_name=None):
+    def __init__(self, config_file_name=None, use_twisted=False):
         parser = PrefParser(config_file_name)
         self._server = pyo.Server(**parser.get_kwargs()).boot()
         self._server.start()
         self._running = False
+        self._use_twisted = use_twisted
 
     def get_server(self):
         return self._server
@@ -65,8 +66,12 @@ class ServerWrapper(object):
         """
         self._running = True
         try:
-            while self._running:
-                time.sleep(0.1)
+            if self._use_twisted:
+                from twisted.internet import reactor
+                reactor.run()
+            else:
+                while self._running:
+                    time.sleep(0.1)
         except KeyboardInterrupt, e:
             print("Interrupted")
         self._server.stop()
@@ -76,6 +81,10 @@ class ServerWrapper(object):
         Stops the main loop
         """
         self._running = False
+        if self._use_twisted:
+            from twisted.internet import reactor
+            if reactor.running:
+                reactor.stop()
 
 if __name__ == "__main__":
     # example:

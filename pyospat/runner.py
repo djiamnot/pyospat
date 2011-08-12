@@ -25,7 +25,7 @@ def run():
     if options.verbose:
         config.verbose = True
 
-    s = server.ServerWrapper()
+    s = server.ServerWrapper(use_twisted=True)
     app = application.Application(config)
     s.run()
     # why does it often end with a segmentation fault?

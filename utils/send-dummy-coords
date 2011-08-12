@@ -1,0 +1,12 @@
+#!/bin/bash
+# Sends controls to test if it works or not
+# You need python-txosc to use it.
+PORT=10001
+PREFIX=/spatosc/core
+
+osc-send osc.udp://localhost:${PORT} ${PREFIX}/scene/create_listener ,s listener
+sleep 0.1
+osc-send osc.udp://localhost:${PORT} ${PREFIX}/scene/create_source ,s noise
+sleep 0.1
+osc-send osc.udp://localhost:${PORT} ${PREFIX}/whatever/noise/xyz ,fff 1 2 3
+sleep 0.1
