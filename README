@@ -52,4 +52,15 @@ Every sound sources should have a media URI.
 Things that should be configurable in the XML file:
  * loudspeakers configuration
 
+How to compute audio
+====================
+It's done in a two-step process:
+
+1) distance from listener: (meter)
+ * low-pass filter
+ * variable delay
+ * attenuation gain (configurable)
+
+2) azimuth/elevation: (angle)
+ * two panners
 
