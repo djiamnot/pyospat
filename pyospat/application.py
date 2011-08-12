@@ -6,6 +6,20 @@ import pyo
 import time
 from pyospat import server
 
+PATH_PREFIX = "/spatosc/core"
+PATHS = [
+    ["<*/*/xyz", "fff"],
+    ["<*/*/xy", "ff"],
+    ["<*/*/spread", "f"],
+    ["<*/*/spreadAE", "ff"],
+    ["connection/*/aed", "fff"],
+    ["connection/*/delay", "f"],
+    ["connection/*/gain", "f"],
+    ["connection/*/gainDB", "f"],
+    ["scene/create_source", "s"],
+    ["scene/create_listener", "s"],
+]
+
 class Application(object):
     def __init__(self, configuration):
         self._configuration = configuration
