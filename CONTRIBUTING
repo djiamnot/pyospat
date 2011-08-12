@@ -9,7 +9,7 @@ Update the documentation if needed:
 
 Run the unit tests:
 
- * trial pyoscape
+ * trial pyospat
 
 Update the release notes:
 
@@ -27,4 +27,4 @@ Create the tag and a tarball:
 
 Increase the version number (not yet released):
 
- * pyoscape/__init__.py
+ * pyospat/__init__.py
