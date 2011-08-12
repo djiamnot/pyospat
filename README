@@ -5,6 +5,20 @@ Pyoscape is a Python audio renderer for SpatOSC.
 
 See http://code.sat.qc.ca/trac/spatosc for more information.
 
+
+Developers
+==========
+
+  $ python setup.py build
+  $ sudo python setup.py develop
+
+  $ cp dot_pyorc.xml ~/.pyorc
+  $ python
+  >>> from pyoscape import server 
+  >>> s = server.ServerWrapper()
+  >>> s.run()
+
+
 Versioning
 ==========
 
