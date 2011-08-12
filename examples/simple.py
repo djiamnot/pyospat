@@ -3,7 +3,7 @@
 Uses the ServerWrapper class
 """
 import pyo
-from pyoscape import server
+from pyospat import server
 
 if __name__ == "__main__":
     pyo_server = server.ServerWrapper()
