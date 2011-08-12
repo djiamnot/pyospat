@@ -30,3 +30,26 @@ A stable series means that the command-line options and the interactive keyboard
 
 In contrast, unstable branches consist of tags which are developer snapshots. They are not expected to be compatible with any other version. Some features might change between different stable branches.
 
+
+Naming
+======
+
+ * pyospat
+ * pyspat
+ * python spatosc renderer
+ * pyo spatosc audio renderer
+
+
+How it works
+============
+
+Pyospat is an application that listens to OSC messages from SpatOSC. It dynamically creates Pyo objects and connects them together to make you hear stuff. It can be configured with an XML file in which you define how are configured your audio speakers, as well as how many audio inputs your system has and which driver to use, etc. It can play sound files as well as plugin generators and live input channels.
+
+Use string properties when it's specific for a single renderer. 
+
+Every sound sources should have a media URI.
+
+Things that should be configurable in the XML file:
+ * loudspeakers configuration
+
+
