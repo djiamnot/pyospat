@@ -24,11 +24,28 @@ maths stuff.
 import math
 
 def dot_product(v1, v2):
+    """
+    Returns the dot products of two vectors.
+    @param v1: list of three floats.
+    @param v2: list of three floats.
+    @return: float
+    """
     return sum((a * b) for a, b in zip(v1, v2))
 
 def length(v):
+    """
+    Returns the length of a vector.
+    @param v: list of three floats.
+    @return: float
+    """
     return math.sqrt(dot_product(v, v))
 
 def angle(v1, v2):
+    """
+    Returns the angle between two vectors.
+    @param v1: list of three floats.
+    @param v2: list of three floats.
+    @return: float
+    """
     return math.acos(dot_product(v1, v2) / (length(v1) * length(v2)))
 
