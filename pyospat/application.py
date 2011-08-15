@@ -37,6 +37,9 @@ def distance_to_attenuation(distance):
     return 1.0
 
 def aed_minus_aed(aed0, aed1):
+    """
+    Substracts one vector from another.
+    """
     return [
         aed0[0] - aed1[0], 
         aed0[1] - aed1[1], 
@@ -45,7 +48,7 @@ def aed_minus_aed(aed0, aed1):
 
 class Renderer(object):
     """
-    Not used yet.
+    Actually renders audio.
     """
     def __init__(self):
         # speakers coordinates:
