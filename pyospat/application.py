@@ -84,27 +84,35 @@ class Application(object):
         self._setup_osc_callbacks()
 
     def _setup_osc_callbacks(self):
-        PREFIX = "/spatosc/core"
-        self._receiver.addCallback(PREFIX + "/*/*/xyz", self._handle_node_xyz)
-        self._receiver.addCallback(PREFIX + "/connection/*/aed", self._handle_connection_aed)
-        self._receiver.addCallback(PREFIX + "/connection/*/delay", self._handle_connection_delay)
-        self._receiver.addCallback(PREFIX + "/scene/create_source", self._handle_create_source)
-        self._receiver.addCallback(PREFIX + "/scene/create_listener", self._handle_create_listener)
+        self._receiver.addCallback("/spatosc/core/*/*/xyz", self._handle_node_xyz)
+        self._receiver.addCallback("/spatosc/core/connection/*/aed", self._handle_connection_aed)
+        self._receiver.addCallback("/spatosc/core/connection/*/delay", self._handle_connection_delay)
+        self._receiver.addCallback("/spatosc/core/scene/create_source", self._handle_create_source)
+        self._receiver.addCallback("/spatosc/core/scene/create_listener", self._handle_create_listener)
         self._receiver.fallback = self._fallback
 
     def _handle_create_listener(self, message, address):
+        """
+        Handles /spatosc/core/scene/create_listener ,s node_id
+        """
         print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "s"):
             return
         node_id = message.getValues()[0]
 
     def _handle_create_source(self, message, address):
+        """
+        Handles /spatosc/core/scene/create_source ,s node_id
+        """
         print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "s"):
             return
         node_id = message.getValues()[0]
 
     def _handle_connection_delay(self, message, address):
+        """
+        Handles /spatosc/core/connection/*/delay ,f delay
+        """
         print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "f"):
             return
@@ -113,14 +121,25 @@ class Application(object):
             pass #TODO
 
     def _handle_connection_aed(self, message, address):
+        """
+        Handles /spatosc/core/connection/*/aed ,fff azimuth elevation distance
+        Azimuth and elevation are in radians.
+        """
         print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "fff"):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
+            xyz = maths.aed_to_xyz(message.getValues()) #FIXME: should not need to convert to xyz to get 2D angle
+            angle = maths.angle(xyz, [1.0, 0.0, 0.0]) # FIXME: what is a 0 degrees angle in xyz notation?
+            distance = message.getValues()[2]
+            print("angle: %f distance: %f" % (angle, distance))
             pass #TODO
 
     def _handle_node_xyz(self, message, address):
+        """
+        Handles /spatosc/core/*/*/xyz ,fff x y z
+        """
         print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "fff"):
             return

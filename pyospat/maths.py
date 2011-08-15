@@ -49,3 +49,12 @@ def angle(v1, v2):
     """
     return math.acos(dot_product(v1, v2) / (length(v1) * length(v2)))
 
+def aed_to_xyz(aed):
+    angle = aed[0]
+    elevation = aed[1]
+    distance = aed[2]
+    x = distance * math.sin(azimuth) * math.cos(elevation)
+    y = distance * math.sin(azimuth) * math.sin(elevation)
+    z = distance * math.cos(azimuth)
+    return [x, y, z]
+
