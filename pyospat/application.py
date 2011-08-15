@@ -36,39 +36,55 @@ def distance_to_attenuation(distance):
     # TODO: compute distance_to_attenuation
     return 1.0
 
+def aed_minus_aed(aed0, aed1):
+    return [
+        aed0[0] - aed1[0], 
+        aed0[1] - aed1[1], 
+        aed0[2] - aed1[2], 
+        ]
+
 class Renderer(object):
     """
     Not used yet.
     """
     def __init__(self):
         # speakers coordinates:
-        self._speaker0_angle = - math.pi / 4.0
-        self._speaker1_angle = math.pi / 4.0
+        self._speakers_angles = [
+            [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
+            [math.pi / 4.0, 0.0, 1.0]
+        ]
         # source:
-        self._noise = pyo.Noise(mul=.125)
+        self._noise = pyo.Noise(mul=1.0)
         # attenuator:
-        ## self._mixer1 = pyo.Mixer(outs=1, chnls=1)
-        ## self._mixer1.addInput(0, self._noise)
-        ## self._mixer1.setAmp(0, 0, 0.0) # changed afterwhile
-        # panner:
-        self._pan1 = pyo.Pan(self._noise, outs=1, pan=0.0).out(0)
-        self._pan2 = pyo.Pan(self._noise, outs=1, pan=0.0).out(1)
+        self._mixer = pyo.Mixer(outs=2, chnls=1, time=0.050)
+        self._mixer.addInput(0, self._noise)
+        self._mixer.setAmp(0, 0, 0.125) # vin, vout, amp changed afterwhile
+        self._mixer.setAmp(0, 1, 0.125) # changed afterwhile
+        self._mixer.out()
 
-    ## def _set_attenuation(self, linear_gain):
-    ##     self._mixer1.setAmp(0, 0, linear_gain)
+    def set_aed(self, aed):
+        azimuth = aed[0]
+        elevation = aed[1]
+        distance = aed[2]
+        # print("Renderer::set_distance_and_angle(%f, %f)" % (distance, angle))
+        # attenuation = distance_to_attenuation(distance)
+        aed0 = aed_minus_aed(aed, self._speakers_angles[0])
+        aed1 = aed_minus_aed(aed, self._speakers_angles[1])
+        
+        factor0 = 1.0
+        factor1 = 1.0
 
-    def set_distance_and_angle(self, distance, angle):
-        print("Renderer::set_distance_and_angle(%f, %f)" % (distance, angle))
-        attenuation = distance_to_attenuation(distance)
-#        self._set_attenuation(attenuation)
-        self._set_angle(angle)
+        exponent = 2.0
+        factor0 *= math.pow(math.cos(aed0[0]), exponent)
+        factor0 *= math.pow(math.cos(aed0[1]), exponent)
 
-    def _set_angle(self, angle):
-        pan1 = self._speaker0_angle + angle
-        pan2 = self._speaker1_angle + angle
-        print("Renderer::pan1, pan2: %f, %f" % (pan1, pan2))
-        self._pan1.setPan(pan1)
-        self._pan2.setPan(pan2)
+        factor1 *= math.pow(math.cos(aed1[0]), exponent)
+        factor1 *= math.pow(math.cos(aed1[1]), exponent)
+
+        print("factors: %f %f" % (factor0, factor1))
+
+        self._mixer.setAmp(0, 0, factor0)
+        self._mixer.setAmp(0, 1, factor1)
 
 def _type_tags_match(message, expected):
     """
@@ -166,12 +182,7 @@ class Application(object):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
-            xyz = maths.aed_to_xyz(message.getValues()) #FIXME: should not need to convert to xyz to get 2D angle
-            angle = maths.angle(xyz, [1.0, 0.0, 0.0]) # FIXME: what is a 0 degrees angle in xyz notation?
-            distance = message.getValues()[2]
-            self._renderer.set_distance_and_angle(distance, angle)
-            print("angle: %f distance: %f" % (angle, distance))
-            pass #TODO
+            self._renderer.set_aed(message.getValues())
 
     def _handle_node_xyz(self, message, address):
         """
