@@ -20,9 +20,11 @@ Installation
 ============
 
 Dependencies:
+ * libspatosc-0.1-dev
  * python-pyo
- * python-txosc
+ * python-setuptools
  * python-twisted-core
+ * python-txosc
 
 How to install:
   $ python setup.py build

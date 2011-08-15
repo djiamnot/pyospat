@@ -5,7 +5,7 @@ This software requires pyo and spatosc. Get Pyo from http://code.google.com/p/py
 
 You will need a few software. On Ubuntu or Debian GNU/Linux, install them using the following command ::
 
-  sudo apt-get install python-setuptools python-pyo libspatosc-0.1-dev
+  sudo apt-get install python-setuptools python-pyo libspatosc-0.1-dev python-txosc python-twisted-core
 
 And then run setup.py ::
 
