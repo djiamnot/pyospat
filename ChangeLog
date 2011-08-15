@@ -1,0 +1,277 @@
+commit c008c915e693260ddc99ebfac6edad6fa8e23ff5
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 18:53:09 2011 -0400
+
+    more comments
+
+commit b618ab2037d40beb3528645a3caafa34cd5c2a6d
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 18:46:39 2011 -0400
+
+    trying to get it to work
+
+commit baf0e77e8ca8cd64ddd3557230855e47c05c2561
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Mon Aug 15 18:35:10 2011 -0400
+
+    Mixers out, Pan struggle
+
+commit 247ab9cd60807909d761a46f34afdacde2e7dcd8
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 17:30:09 2011 -0400
+
+    should rotate noise, but I don't hear a thing
+
+commit 7948d7c4a6e708c3844e1c816fa34af1888c914c
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 17:29:56 2011 -0400
+
+    add examples/pd-controls
+
+commit a4f0076964e26904f749da71c2b65a6019393ff9
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 16:40:52 2011 -0400
+
+    get 2D angle from AED
+
+commit dc63575cb75d479f751469873f974ef8b266811d
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 16:01:00 2011 -0400
+
+    more doc
+
+commit cba97267b6a957459b5f717c7b98e5c568f0bfa4
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 15:56:11 2011 -0400
+
+    more comments
+
+commit b353f2f7b9fb872e7c2d200c0d31c690bb570a0e
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 15:50:51 2011 -0400
+
+    add maths.py
+
+commit b9350ba0c46223e13160f3dca487fb56174301fb
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 15:01:51 2011 -0400
+
+    modify license header again
+
+commit 9e5fef77d7949c49e87d62457a5117c534979ec6
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 14:48:13 2011 -0400
+
+    modify header license
+
+commit 906f4692eac1b0a6f6eda95259a46d55e8efd541
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 14:45:32 2011 -0400
+
+    add test/test_application.py
+
+commit cb3f436aa66e046d16893675b991e4811b3ba222
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 18:43:12 2011 -0400
+
+    update panner proto to use server.py
+
+commit 34275ff95bc40c5e5992e5bd874eb8e91e81bed9
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 18:35:44 2011 -0400
+
+    add --osc-receive-port option
+
+commit 87038479b9b07f43f743e59d2e003e6be0b3add3
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 18:35:37 2011 -0400
+
+    add run
+
+commit 587293842ea5d82747367681242604a8c56a403c
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 18:23:44 2011 -0400
+
+    use txosc
+
+commit 6025ace7982a2b9abcab20d6114498694b4c4717
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 17:32:02 2011 -0400
+
+    add configuration.py + notes on how to parse OSC paths
+
+commit 268e4054fb005df251218341f2ab6bbf95751692
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 17:30:59 2011 -0400
+
+    update README with how to compute audio
+
+commit 5f283b9647a3c5b1c7c5ce89df771df05191ccb3
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 16:49:40 2011 -0400
+
+    add scene.py - towards an internal representation of the scene
+
+commit aefe61f7cd5b11a508acccd82592e3de28b0c164
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 16:13:41 2011 -0400
+
+    install pyospat script
+
+commit e4d31b5ba925a7a8434ef0b173903f081fc4d6f7
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 16:12:57 2011 -0400
+
+    add a script
+
+commit e9a24fa7b232f7c1b05f120705a00be5b912d8b3
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 15:28:11 2011 -0400
+
+    use OscDataReceive
+
+commit 40b00e0faf76228834bfbe0804b62b8c350a2816
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 15:07:46 2011 -0400
+
+    mv send-440 send-notes
+
+commit 48af00a024c06591c5c97ea33c25a9afb9235ffd
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 15:06:25 2011 -0400
+
+    chmod -x server.py
+
+commit a8a64504d4ea449aa129aaee2211fe27c2948473
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 13:16:14 2011 -0400
+
+    rename imported module in examples/simple.py
+
+commit 06296553268f237fdf5dc085c0144cf62034e924
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 13:12:17 2011 -0400
+
+    rename pyoscape to pyospat
+
+commit 6f99feec0cebac05fc4c529733122232ccd0ea0a
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 13:08:15 2011 -0400
+
+    update README
+
+commit f40cc2ae2dc064d32d030b212696c282f4985a93
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 12:02:36 2011 -0400
+
+    update README
+
+commit 749bdd86a67fe4f61481e848b972d78abe233f4d
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Aug 12 12:02:03 2011 -0400
+
+    mv dot_pyorc.xml to root
+
+commit 3828ed99fb0dad3e9cfead7e8520487642c8e6d4
+Merge: 2411320 d40ac84
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 21:05:18 2011 -0400
+
+    Merge branch 'master' of github.com:sat-metalab/pyoscape
+
+commit 2411320f1cc9a489ee2a265f38c422b13d1c6e92
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 21:05:11 2011 -0400
+
+    add TODO
+
+commit d40ac84adc26f1bb5ecf164b9fb0110f4aa445a7
+Merge: cf0896f a3330e7
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Thu Aug 11 20:37:43 2011 -0400
+
+    Merge branch 'pyo-sandbox'
+
+commit a3330e78581e86e0162e6e142ee4a9408ac9281a
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Thu Aug 11 20:36:29 2011 -0400
+
+    cleanup
+
+commit 54b85f6e407b4e8940b80e3bf92f12108db7162a
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Thu Aug 11 20:35:38 2011 -0400
+
+    simple synth
+
+commit cf0896fcd2b795d26c792f398ac29153c2342ad7
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 20:16:28 2011 -0400
+
+    add a todo
+
+commit be2fc1302c990f41004faab52e657300560c2152
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 20:11:47 2011 -0400
+
+    more debug prints - should work but doesn't
+
+commit e1135c79def6a059dbce2c75ef8e88e3c8453cc2
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 19:57:57 2011 -0400
+
+    add prototypes/panner/pan3d.py - but it doesn't quite works
+
+commit 4f95c6b45f06bf51dc2e480065e461f9ab3e6bdf
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 19:04:48 2011 -0400
+
+    do not fail if ~/.pyorc does not exist
+
+commit 45de23bcb4ada233f9f288d3553d47609637d3a1
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 19:03:00 2011 -0400
+
+    add pyoscape/serber.py and examples/simple.py
+
+commit 2694f96cc17f5b115a6e25c38793279d639ba48e
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 18:41:21 2011 -0400
+
+    chmod +x xmlprefs.py
+
+commit aa303be2ce7b7640114c70d5fb498cddefde0e0c
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 18:03:17 2011 -0400
+
+    create PyoServerWrapper
+
+commit 8d7e9dfc2d92912377017d9129fe331920b0e493
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 17:55:19 2011 -0400
+
+    add prototypes/xmlprefs
+
+commit 04648718d38d29f50dda797805ad37d754f42a69
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 17:17:24 2011 -0400
+
+    add prototypes/panner
+
+commit 35fe9caa4561c6a779f9ba389f93fa80940b9020
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Thu Aug 11 16:44:22 2011 -0400
+
+    add prototypes/osc/*
+
+commit 5b5552a06fc92bd686c19e1d006039e6c1f322c8
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Aug 10 13:58:33 2011 -0400
+
+    add doc/classes.dia
+
+commit e3018736154f9aa6bc2dc8188de3e32a9237e8de
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Aug 10 12:06:06 2011 -0400
+
+    initial import
