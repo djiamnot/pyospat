@@ -1,0 +1,2 @@
+#!/bin/bash
+pd -path ~/src/spatosc/examples/pd-external/ pd-controls.pd
