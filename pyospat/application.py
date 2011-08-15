@@ -7,11 +7,18 @@ from pyospat import server
 from txosc import osc
 from txosc import dispatch
 from txosc import async
+
 class Renderer(object):
+    """
+    Not used yet.
+    """
     def __init__(self):
         pass
 
 def _type_tags_match(message, expected):
+    """
+    Checks that some typetags string matches the expected.
+    """
     if message.getTypeTags() == expected:
         return True
     else:
@@ -19,6 +26,9 @@ def _type_tags_match(message, expected):
         return False
 
 def _get_connection_id(message):
+    """
+    Split the path of a SpatOSC OSC URL to give the connection ID.
+    """
     try:
         connection_id = message.address.split("/")[3]
         return connection_id
@@ -27,6 +37,9 @@ def _get_connection_id(message):
         return None
 
 def _get_node_id(message):
+    """
+    Split the path of a SpatOSC OSC URL to give the node ID.
+    """
     try:
         connection_id = message.address.split("/")[3]
         return connection_id
@@ -35,7 +48,13 @@ def _get_node_id(message):
         return None
 
 class Application(object):
+    """
+    Main class of this application.
+    """
     def __init__(self, configuration):
+        """
+        @param configuration: Instance of a Configuration.
+        """
         self._configuration = configuration
         self._renderer = Renderer()
         port_number = self._configuration.osc_receive_port
@@ -53,7 +72,6 @@ class Application(object):
         self._receiver.addCallback(PREFIX + "/scene/create_source", self._handle_create_source)
         self._receiver.addCallback(PREFIX + "/scene/create_listener", self._handle_create_listener)
         self._receiver.fallback = self.fallback
-
 
     def _handle_create_listener(self, message, address):
         print("  Got %s from %s" % (message, address))
