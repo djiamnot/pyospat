@@ -5,6 +5,7 @@ Pyospat is a Python audio renderer for SpatOSC.
 
 See http://code.sat.qc.ca/trac/spatosc for more information.
 
+
 License
 =======
 
@@ -13,6 +14,20 @@ Free/libre open source software under the GPL license.
 Pyospat
 Copyright (C) 2011 Alexandre Quessy
 Copyright (C) 2011 Michal Seta
+
+
+Installation
+============
+
+Dependencies:
+ * python-pyo
+ * python-txosc
+ * python-twisted-core
+
+How to install:
+  $ python setup.py build
+  $ sudo python setup.py install
+  $ cp dot_pyorc.xml ~/.pyorc
 
 
 Developers
@@ -40,15 +55,6 @@ A stable series means that the command-line options and the interactive keyboard
 In contrast, unstable branches consist of tags which are developer snapshots. They are not expected to be compatible with any other version. Some features might change between different stable branches.
 
 
-Naming
-======
-
- * pyospat
- * pyspat
- * python spatosc renderer
- * pyo spatosc audio renderer
-
-
 How it works
 ============
 
@@ -60,6 +66,7 @@ Every sound sources should have a media URI.
 
 Things that should be configurable in the XML file:
  * loudspeakers configuration
+
 
 How to compute audio
 ====================

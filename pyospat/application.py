@@ -90,7 +90,7 @@ class Application(object):
         self._receiver.addCallback(PREFIX + "/connection/*/delay", self._handle_connection_delay)
         self._receiver.addCallback(PREFIX + "/scene/create_source", self._handle_create_source)
         self._receiver.addCallback(PREFIX + "/scene/create_listener", self._handle_create_listener)
-        self._receiver.fallback = self.fallback
+        self._receiver.fallback = self._fallback
 
     def _handle_create_listener(self, message, address):
         print("  Got %s from %s" % (message, address))
@@ -128,7 +128,7 @@ class Application(object):
         if node_id is not None:
             pass #TODO
 
-    def fallback(self, message, address):
+    def _fallback(self, message, address):
         """
         Fallback for any unhandled message
         """
