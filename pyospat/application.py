@@ -23,16 +23,59 @@ The Application class.
 """
 import pyo
 from pyospat import server
+from pyospat import maths
 from txosc import osc
 from txosc import dispatch
 from txosc import async
+import math
+
+def distance_to_attenuation(distance):
+    """
+    Not working yet. Just returns 1.0
+    """
+    # TODO: compute distance_to_attenuation
+    return 1.0
 
 class Renderer(object):
     """
     Not used yet.
     """
     def __init__(self):
-        pass
+        # speakers coordinates:
+        self._speaker0_angle = - math.pi / 2.0
+        self._speaker1_angle = math.pi / 2.0
+        # source:
+        self._noise = pyo.Noise(mul=.125)
+        # attenuator:
+        self._mixer1 = pyo.Mixer(outs=1, chnls=1)
+        self._mixer1.addInput(0, self._noise)
+        self._mixer1.setAmp(0, 0, 0.0) # changed afterwhile
+        # panner:
+        self._pan1 = pyo.Pan(self._noise, outs=1, pan=0.0)
+        self._pan2 = pyo.Pan(self._noise, outs=1, pan=0.0)
+        self._mixer2 = pyo.Mixer(outs=2, chnls=1)
+        # input 0:
+        self._mixer2.addInput(0, self._pan1)
+        self._mixer2.setAmp(0, 0, 1.0)
+        self._mixer2.setAmp(0, 1, 0.0)
+        # input 1:
+        self._mixer2.addInput(1, self._pan2)
+        self._mixer2.setAmp(1, 0, 0.0)
+        self._mixer2.setAmp(1, 1, 1.0)
+        self._mixer2.out()
+
+    def _set_attenuation(self, linear_gain):
+        self._mixer1.setAmp(0, 0, linear_gain)
+
+    def set_distance_and_angle(self, distance, angle):
+        print("Renderer::set_distance_and_angle(%f, %f)" % (distance, angle))
+        attenuation = distance_to_attenuation(distance)
+        self._set_attenuation(attenuation)
+        self._set_angle(angle)
+
+    def _set_angle(self, angle):
+        self._pan1.setPan(self._speaker0_angle + angle)
+        self._pan2.setPan(self._speaker1_angle + angle)
 
 def _type_tags_match(message, expected):
     """
@@ -113,7 +156,7 @@ class Application(object):
         """
         Handles /spatosc/core/connection/*/delay ,f delay
         """
-        print("  Got %s from %s" % (message, address))
+        # print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "f"):
             return
         connection_id = _get_connection_id(message)
@@ -133,6 +176,7 @@ class Application(object):
             xyz = maths.aed_to_xyz(message.getValues()) #FIXME: should not need to convert to xyz to get 2D angle
             angle = maths.angle(xyz, [1.0, 0.0, 0.0]) # FIXME: what is a 0 degrees angle in xyz notation?
             distance = message.getValues()[2]
+            self._renderer.set_distance_and_angle(distance, angle)
             print("angle: %f distance: %f" % (angle, distance))
             pass #TODO
 
@@ -140,7 +184,7 @@ class Application(object):
         """
         Handles /spatosc/core/*/*/xyz ,fff x y z
         """
-        print("  Got %s from %s" % (message, address))
+        # print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "fff"):
             return
         node_id = _get_node_id(message)
@@ -151,5 +195,5 @@ class Application(object):
         """
         Fallback for any unhandled message
         """
-        print("  Got unkown path %s from %s" % (message, address))
+        # print("  Got unkown path %s from %s" % (message, address))
 

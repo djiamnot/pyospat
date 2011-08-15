@@ -39,7 +39,7 @@ def run():
     """
     parser = OptionParser(usage="%prog [options]", version="%prog " + __version__, description=DESCRIPTION)
     parser.add_option("-v", "--verbose", action="store_true", help="Makes the output verbose.")
-    parser.add_option("-p", "--osc-receive-port", type="int", help="UDP port to listen to for OSC messages.")
+    parser.add_option("-p", "--osc-receive-port", type="int", default=10001, help="UDP port to listen to for OSC messages. Default is 10001")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     if options.verbose:
