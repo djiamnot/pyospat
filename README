@@ -5,6 +5,15 @@ Pyospat is a Python audio renderer for SpatOSC.
 
 See http://code.sat.qc.ca/trac/spatosc for more information.
 
+License
+=======
+
+Free/libre open source software under the GPL license.
+
+Pyospat
+Copyright (C) 2011 Alexandre Quessy
+Copyright (C) 2011 Michal Seta
+
 
 Developers
 ==========
