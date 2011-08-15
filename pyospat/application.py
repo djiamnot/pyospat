@@ -53,8 +53,8 @@ class Renderer(object):
     def __init__(self):
         # speakers coordinates:
         self._speakers_angles = [
-            [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
-            [math.pi / 4.0, 0.0, 1.0]
+            [- math.pi / 4.0, 0.0, 0.0], # each speaker has an aed
+            [math.pi / 4.0, 0.0, 0.0]
         ]
         # source:
         self._noise = pyo.Noise(mul=1.0)
