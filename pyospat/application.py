@@ -36,14 +36,14 @@ def distance_to_attenuation(distance):
     # TODO: compute distance_to_attenuation
     return 1.0
 
-def aed_minus_aed(aed0, aed1):
+def aed_plus_aed(aed0, aed1):
     """
     Substracts one vector from another.
     """
     return [
-        aed0[0] - aed1[0], 
-        aed0[1] - aed1[1], 
-        aed0[2] - aed1[2], 
+        aed0[0] + aed1[0], 
+        aed0[1] + aed1[1], 
+        aed0[2] + aed1[2], 
         ]
 
 class Renderer(object):
@@ -71,8 +71,8 @@ class Renderer(object):
         distance = aed[2]
         # print("Renderer::set_distance_and_angle(%f, %f)" % (distance, angle))
         # attenuation = distance_to_attenuation(distance)
-        aed0 = aed_minus_aed(aed, self._speakers_angles[0])
-        aed1 = aed_minus_aed(aed, self._speakers_angles[1])
+        aed0 = aed_plus_aed(aed, self._speakers_angles[0])
+        aed1 = aed_plus_aed(aed, self._speakers_angles[1])
         
         factor0 = 1.0
         factor1 = 1.0
