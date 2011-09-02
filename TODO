@@ -1,2 +1,5 @@
- * remove setMediaURI
- * add Wrapper::refresh method
+ * pyospat: make sure amplitude calculation is OK (write tests)
+ * spatosc: use spatosc/examples/spinspat for testing
+
+
+
