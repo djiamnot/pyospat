@@ -88,12 +88,24 @@ class Renderer(object):
         ]
         # source:
         self._noise = pyo.Noise(mul=1.0)
+
+        # variable delay:
+        self._delay = pyo.Delay(self._noise, delay=0.0, maxdelay=1.0)
+
         # attenuator:
         self._mixer = pyo.Mixer(outs=2, chnls=1, time=0.050)
-        self._mixer.addInput(0, self._noise)
+        self._mixer.addInput(0, self._delay)
         self._mixer.setAmp(0, 0, 0.125) # vin, vout, amp changed afterwhile
         self._mixer.setAmp(0, 1, 0.125) # changed afterwhile
         self._mixer.out()
+
+    def set_delay(self, delay):
+        """
+        Changes the variable delay duration, for Doppler effect and a realistic rendering.
+        @param delay: Duration in seconds.
+        """
+        # TODO: the binaural renderer should have a different variable delay for each ear.
+        self._delay.setDelay(delay)
 
     def set_aed(self, aed):
         factor0 = factor_from_positions(aed, self._speakers_angles[0])
@@ -186,7 +198,7 @@ class Application(object):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
-            pass #TODO
+            self._renderer.set_delay(message.getValues()[0])
 
     def _handle_connection_aed(self, message, address):
         """
