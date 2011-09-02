@@ -96,3 +96,12 @@ def angle_between_vectors(v1, v2):
     # Return the angle in radians
     return angle
 
+def add(aed0, aed1):
+    """
+    Adds one vector to another.
+    """
+    return [
+        aed0[0] + aed1[0], 
+        aed0[1] + aed1[1], 
+        aed0[2] + aed1[2], 
+        ]

@@ -36,42 +36,45 @@ def distance_to_attenuation(distance):
     # TODO: compute distance_to_attenuation
     return 1.0
 
-def aed_plus_aed(aed0, aed1):
+def map_from_zero_to_one(value):
     """
-    Adds one vector to another.
-    """
-    return [
-        aed0[0] + aed1[0], 
-        aed0[1] + aed1[1], 
-        aed0[2] + aed1[2], 
-        ]
-
-def angle(speaker_aed=[0.,0.,0.],source_aed=[0.,0.,0.]):
-    """
-    Computes the angle difference between speaker and source position
-    @param v1: speaker aed (vector of floats)
-    @param v2: source aed (vector of floats)
+    Maps a value in the range [-1.0, 1.0] to the range [0.0, 1.0]
+    @param value: float in the range [-1.0, 1.0]
     @rtype: float
     """
-    return maths.angle_between_vectors(speaker_aed,source_aed)
+    return value * 0.5 + 0.5
 
-def attenuate(position):
+def attenuate_according_to_angle(angle):
     """
     Computes attenuation per speaker (0..1)
-    @param f1: radian
+    @param angle: radian
     @rtype: float
     """
-    # TODO: add distance
-    return math.cos(position) * 0.5 + 0.5
+    return map_from_zero_to_one(math.cos(angle))
 
-def spread(input,factor=2):
+def spread(value, exponent=2):
     """
     Apply spread factor (according to constant total power)
-    @param i1: input
-    @param i2: exponent, default=2
+    @param value: input
+    @param exponent: exponent, default=2
     @rtype: float
     """
-    return math.pow(input,factor)
+    #TODO: give this a better name
+    return math.pow(value, factor)
+
+def angle_to_attenuation(speaker_aed, source_aed, exponent=2.0):
+    """
+    @param speaker_aed: AED position of the loudspeaker.
+    @param source_aed: AED position of the sound source.
+    @rtype: float
+    @return: Audio level factor.
+    """
+    aed = maths.add(speaker_aed, source_aed)
+    factor = 1.0
+    factor *= spread(angle_to_attenuation(aed[0]), exponent)
+    factor *= spread(angle_to_attenuation(aed[1]), exponent)
+    # TODO: factor *= distance_to_attenuation(aed[2])
+    return factor
 
 class Renderer(object):
     """
@@ -93,31 +96,11 @@ class Renderer(object):
         self._mixer.out()
 
     def set_aed(self, aed):
-        azimuth = aed[0]
-        elevation = aed[1]
-        distance = aed[2]
-        # print("Renderer::set_distance_and_angle(%f, %f)" % (distance, angle))
-        # attenuation = distance_to_attenuation(distance)
-        aed0 = aed_plus_aed(aed, self._speakers_angles[0])
-        aed1 = aed_plus_aed(aed, self._speakers_angles[1])
-        
-        factor0 = 1.0
-        factor1 = 1.0
-
-        def map_from_zero_to_one(value):
-            return value * 0.5 + 0.5
-
-        exponent = 2.0
-        factor0 *= math.pow(map_from_zero_to_one(math.cos(aed0[0])), exponent)
-        factor0 *= math.pow(map_from_zero_to_one(math.cos(aed0[1])), exponent)
-
-        factor1 *= math.pow(map_from_zero_to_one(math.cos(aed1[0])), exponent)
-        factor1 *= math.pow(map_from_zero_to_one(math.cos(aed1[1])), exponent)
-
-        print("factors: %f %f" % (factor0, factor1))
-
+        factor0 = factor_from_positions(aed, self._speakers_angles[0])
+        factor1 = factor_from_positions(aed, self._speakers_angles[1])
         self._mixer.setAmp(0, 0, factor0)
         self._mixer.setAmp(0, 1, factor1)
+        print("factors: %f %f" % (factor0, factor1))
 
 def _type_tags_match(message, expected):
     """
