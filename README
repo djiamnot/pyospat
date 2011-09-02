@@ -26,6 +26,13 @@ Dependencies:
  * python-twisted-core
  * python-txosc
 
+To build and install pyo:
+  $ sudo apt-get install libportmidi-dev portaudio19-dev liblo-dev libsndfile-dev python-dev python-tk subversion python-imaging-tk python-wxgtk2.8
+  $ svn checkout http://pyo.googlecode.com/svn/trunk/ pyo-read-only
+  $ cd pyo-read-only
+  $ python setup.py build
+  $ sudo python setup.py install
+
 How to install:
   $ python setup.py build
   $ sudo python setup.py install
