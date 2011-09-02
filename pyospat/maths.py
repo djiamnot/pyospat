@@ -41,6 +41,11 @@ def length(v):
     return math.sqrt(dot_product(v, v))
 
 def aed_to_xyz(aed):
+    """
+    Converts AED to XYZ.
+    @param vec: list of three floats.
+    @return: list of three floats.
+    """
     azimuth = aed[0]
     elevation = aed[1]
     distance = aed[2]
@@ -50,6 +55,11 @@ def aed_to_xyz(aed):
     return [x, y, z]
 
 def normalize(vec):
+    """
+    Normalizes a 3D vector.
+    @param vec: list of three floats.
+    @return: list of three floats.
+    """
     _length = length(vec)
     return [vec[0] / _length, vec[1] / _length, vec[2] / _length]
 
@@ -61,6 +71,9 @@ def angle_between_vectors(v1, v2):
     @param v2: list of three floats.
     @rtype: float
     """
+    # used to be:
+    # return math.acos(dot_product(v1, v2) / (length(v1) * length(v2)))
+
     # normalize vectors (note: this must be done alone, not within any vector arithmetic. why?!)
     v1 = normalize(v1)
     v2 = normalize(v2)
@@ -82,15 +95,4 @@ def angle_between_vectors(v1, v2):
     #     return 0.0
     # Return the angle in radians
     return angle
-
-def angle(v1, v2):
-    """
-    Returns the angle between two vectors.
-    @param v1: list of three floats.
-    @param v2: list of three floats.
-    @return: float
-    """
-    # FIXME: eventually use angle_between_vectors instead of this function.
-    # return math.acos(dot_product(v1, v2) / (length(v1) * length(v2)))
-    return angle_between_vectors(v1, v2)
 
