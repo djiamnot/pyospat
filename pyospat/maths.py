@@ -105,3 +105,50 @@ def add(aed0, aed1):
         aed0[1] + aed1[1], 
         aed0[2] + aed1[2], 
         ]
+
+def distance_to_attenuation(distance):
+    """
+    Not working yet. Just returns 1.0
+    """
+    # TODO: compute distance_to_attenuation
+    return 1.0
+
+def map_from_zero_to_one(value):
+    """
+    Maps a value in the range [-1.0, 1.0] to the range [0.0, 1.0]
+    @param value: float in the range [-1.0, 1.0]
+    @rtype: float
+    """
+    return value * 0.5 + 0.5
+
+def attenuate_according_to_angle(angle):
+    """
+    Computes attenuation per speaker (0..1)
+    @param angle: radian
+    @rtype: float
+    """
+    return map_from_zero_to_one(math.cos(angle))
+
+def spread(value, exponent=2):
+    """
+    Apply spread factor (according to constant total power)
+    @param value: input
+    @param exponent: exponent, default=2
+    @rtype: float
+    """
+    #TODO: give this a better name
+    return math.pow(value, factor)
+
+def angle_to_attenuation(speaker_aed, source_aed, exponent=2.0):
+    """
+    @param speaker_aed: AED position of the loudspeaker.
+    @param source_aed: AED position of the sound source.
+    @rtype: float
+    @return: Audio level factor.
+    """
+    aed = maths.add(speaker_aed, source_aed)
+    factor = 1.0
+    factor *= spread(angle_to_attenuation(aed[0]), exponent)
+    factor *= spread(angle_to_attenuation(aed[1]), exponent)
+    # TODO: factor *= distance_to_attenuation(aed[2])
+    return factor
