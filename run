@@ -2,4 +2,4 @@
 # This file is not included in the distributed package, nor installed
 # It is only useful for developers to simplify launching the software.
 cd $(dirname $0)
-./scripts/pyospat $@
+python2.6 ./scripts/pyospat $@
