@@ -1,2 +1,3 @@
 #!/bin/bash
+set -o verbose
 pd -path ~/src/spatosc/examples/pd-external/ pd-controls.pd
