@@ -46,6 +46,33 @@ def aed_plus_aed(aed0, aed1):
         aed0[2] + aed1[2], 
         ]
 
+def angle(speaker_aed=[0.,0.,0.],source_aed=[0.,0.,0.]):
+    """
+    Computes the angle difference between speaker and source position
+    @param v1: speaker aed (vector of floats)
+    @param v2: source aed (vector of floats)
+    @rtype: float
+    """
+    return maths.angle_between_vectors(speaker_aed,source_aed)
+
+def attenuate(position):
+    """
+    Computes attenuation per speaker (0..1)
+    @param f1: radian
+    @rtype: float
+    """
+    # TODO: add distance
+    return math.cos(position) * 0.5 + 0.5
+
+def spread(input,factor=2):
+    """
+    Apply spread factor (according to constant total power)
+    @param i1: input
+    @param i2: exponent, default=2
+    @rtype: float
+    """
+    return math.pow(input,factor)
+
 class Renderer(object):
     """
     Actually renders audio.
