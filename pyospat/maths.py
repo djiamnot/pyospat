@@ -139,7 +139,7 @@ def spread(value, exponent=2):
     #TODO: give this a better name
     return math.pow(value, factor)
 
-def angle_to_attenuation(speaker_aed, source_aed, exponent=2.0):
+def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     """
     @param speaker_aed: AED position of the loudspeaker.
     @param source_aed: AED position of the sound source.
@@ -148,7 +148,8 @@ def angle_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     """
     aed = maths.add(speaker_aed, source_aed)
     factor = 1.0
-    factor *= spread(angle_to_attenuation(aed[0]), exponent)
-    factor *= spread(angle_to_attenuation(aed[1]), exponent)
+    factor *= spread(attenuate_according_to_angle(aed[0]), exponent)
+    factor *= spread(attenuate_according_to_angle(aed[1]), exponent)
     # TODO: factor *= distance_to_attenuation(aed[2])
     return factor
+
