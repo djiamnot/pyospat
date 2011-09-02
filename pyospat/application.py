@@ -29,7 +29,6 @@ from txosc import dispatch
 from txosc import async
 import math
 
-
 class Renderer(object):
     """
     Actually renders audio.
@@ -62,8 +61,8 @@ class Renderer(object):
         self._delay.setDelay(delay)
 
     def set_aed(self, aed):
-        factor0 = factor_from_positions(aed, self._speakers_angles[0])
-        factor1 = factor_from_positions(aed, self._speakers_angles[1])
+        factor0 = maths.angles_to_attenuation(aed, self._speakers_angles[0])
+        factor1 = maths.angles_to_attenuation(aed, self._speakers_angles[1])
         self._mixer.setAmp(0, 0, factor0)
         self._mixer.setAmp(0, 1, factor1)
         print("factors: %f %f" % (factor0, factor1))
