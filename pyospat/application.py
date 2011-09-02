@@ -38,7 +38,7 @@ def distance_to_attenuation(distance):
 
 def aed_plus_aed(aed0, aed1):
     """
-    Substracts one vector from another.
+    Adds one vector to another.
     """
     return [
         aed0[0] + aed1[0], 
@@ -77,12 +77,15 @@ class Renderer(object):
         factor0 = 1.0
         factor1 = 1.0
 
-        exponent = 2.0
-        factor0 *= math.pow(math.cos(aed0[0]), exponent)
-        factor0 *= math.pow(math.cos(aed0[1]), exponent)
+        def map_from_zero_to_one(value):
+            return value * 0.5 + 0.5
 
-        factor1 *= math.pow(math.cos(aed1[0]), exponent)
-        factor1 *= math.pow(math.cos(aed1[1]), exponent)
+        exponent = 2.0
+        factor0 *= math.pow(map_from_zero_to_one(math.cos(aed0[0])), exponent)
+        factor0 *= math.pow(map_from_zero_to_one(math.cos(aed0[1])), exponent)
+
+        factor1 *= math.pow(map_from_zero_to_one(math.cos(aed1[0])), exponent)
+        factor1 *= math.pow(map_from_zero_to_one(math.cos(aed1[1])), exponent)
 
         print("factors: %f %f" % (factor0, factor1))
 
