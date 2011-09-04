@@ -130,7 +130,7 @@ def attenuate_according_to_angle(angle):
     """
     return map_from_zero_to_one(math.cos(angle))
 
-def spread(value, exponent=2):
+def spread(value, factor=2):
     """
     Apply spread factor (according to constant total power)
     @param value: input
