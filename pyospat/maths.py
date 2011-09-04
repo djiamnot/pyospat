@@ -60,8 +60,9 @@ def normalize(vec):
     @param vec: list of three floats.
     @return: list of three floats.
     """
-    _length = length(vec)
+    _length = len(vec)
     return [vec[0] / _length, vec[1] / _length, vec[2] / _length]
+
 
 def angle_between_vectors(v1, v2):
     """
