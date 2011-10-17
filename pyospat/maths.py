@@ -60,7 +60,7 @@ def normalize(vec):
     @param vec: list of three floats.
     @return: list of three floats.
     """
-    _length = len(vec)
+    _length = length(vec)
     return [vec[0] / _length, vec[1] / _length, vec[2] / _length]
 
 
