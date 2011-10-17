@@ -1,6 +1,7 @@
+*.egg-info/
 *.pyc
 .*.swp
 _trial_temp
 build/
 dist/
-*.egg-info/
+html/
