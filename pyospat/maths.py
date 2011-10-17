@@ -43,7 +43,7 @@ def length(v):
 def aed_to_xyz(aed):
     """
     Converts AED to XYZ.
-    @param vec: list of three floats.
+    @param aed: list of three floats.
     @return: list of three floats.
     """
     azimuth = aed[0]
@@ -134,7 +134,7 @@ def spread(value, factor=2):
     """
     Apply spread factor (according to constant total power)
     @param value: input
-    @param exponent: exponent, default=2
+    @param factor: exponent, default=2
     @rtype: float
     """
     #TODO: give this a better name
