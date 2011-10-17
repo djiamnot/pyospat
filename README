@@ -42,14 +42,32 @@ How to install:
 Developers
 ==========
 
+How to use your Git repository as system-wide pyospat::
+
   $ python setup.py build
   $ sudo python setup.py develop
+
+How to use a .pyorc fot file::
 
   $ cp dot_pyorc.xml ~/.pyorc
   $ python
   >>> from pyospat import server 
   >>> s = server.ServerWrapper()
   >>> s.run()
+
+How to run the unit tests::
+
+  $ trial pyospat
+
+How to build the documentation::
+
+  $ sudo apt-get install python-epydoc
+  $ ./utils/build-doc
+
+How to make an HTML page out of this README file::
+
+  $ sudo apt-get install rst2html
+  $ rst2html README > readme.html
 
 
 Versioning
