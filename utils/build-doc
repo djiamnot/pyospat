@@ -1,0 +1,8 @@
+#!/bin/bash
+epydoc \
+    --html \
+    --name pyospat \
+    --url http://code.sat.qc.ca/trac/spatosc \
+    --output html \
+    -v \
+    pyospat
