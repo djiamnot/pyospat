@@ -38,3 +38,11 @@ class Test_Vector_Stuff(unittest.TestCase):
     
     test_dot_product.skip = "to do"
 
+class Test_Audio_Spatialization(unittest.TestCase):
+    def test_angles_to_attenuation(self):
+        def _test(speaker_aed, source_aed, expected_volume):
+            self.failUnlessEqual(maths.angles_to_attenuation(speaker_aed, source_aed), expected_volume)
+
+        _test([0.0, 0.0, 1.0], [0.0, 0.0, 1.0], 1.0) # same position
+        _test([math.pi, 0.0, 1.0], [0.0, 0.0, 1.0], 0.0) # opposite
+
