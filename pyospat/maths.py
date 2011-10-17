@@ -140,6 +140,16 @@ def spread(value, factor=2):
     #TODO: give this a better name
     return math.pow(value, factor)
 
+def subtract(aed0, aed1):
+    """
+    Subtract one vector from another.
+    """
+    return [
+        aed0[0] - aed1[0], 
+        aed0[1] - aed1[1], 
+        aed0[2] - aed1[2], 
+        ]
+
 def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     """
     The most important function in this application!
@@ -149,7 +159,7 @@ def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     @rtype: float
     @return: Audio level factor.
     """
-    aed = add(speaker_aed, source_aed)
+    aed = subtract(speaker_aed, source_aed)
     factor = 1.0
     factor *= spread(attenuate_according_to_angle(aed[0]), exponent)
     factor *= spread(attenuate_according_to_angle(aed[1]), exponent)
