@@ -142,6 +142,8 @@ def spread(value, factor=2):
 
 def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     """
+    The most important function in this application!
+    Returns the volume to mix a sound source for its position relative to the position of a speaker.
     @param speaker_aed: AED position of the loudspeaker.
     @param source_aed: AED position of the sound source.
     @rtype: float
