@@ -19,7 +19,7 @@
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-maths stuff.
+Maths stuff for audio spatialization.
 """
 import math
 
@@ -34,7 +34,7 @@ def dot_product(v1, v2):
 
 def length(v):
     """
-    Returns the length of a vector.
+    Returns the length of a 3D vector.
     @param v: list of three floats.
     @return: float
     """
@@ -60,7 +60,7 @@ def normalize(vec):
     @param vec: list of three floats.
     @return: list of three floats.
     """
-    _length = length(vec)
+    _length = length(vec) # get the length of the 3D vector
     return [vec[0] / _length, vec[1] / _length, vec[2] / _length]
 
 
