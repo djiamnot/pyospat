@@ -15,25 +15,41 @@ Pyospat
 Copyright (C) 2011 Alexandre Quessy
 Copyright (C) 2011 Michal Seta
 
+This file is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Pyospat is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
+
 
 Installation
 ============
 
 Dependencies:
- * libspatosc-0.1-dev
- * python-pyo
- * python-setuptools
- * python-twisted-core
- * python-txosc
 
-To build and install pyo:
+* libspatosc-0.1-dev
+* python-pyo
+* python-setuptools
+* python-twisted-core
+* python-txosc
+
+To build and install pyo::
+
   $ sudo apt-get install libportmidi-dev portaudio19-dev liblo-dev libsndfile-dev python-dev python-tk subversion python-imaging-tk python-wxgtk2.8
   $ svn checkout http://pyo.googlecode.com/svn/trunk/ pyo-read-only
   $ cd pyo-read-only
   $ python setup.py build
   $ sudo python setup.py install
 
-How to install:
+How to install::
+
   $ python setup.py build
   $ sudo python setup.py install
   $ cp dot_pyorc.xml ~/.pyorc
@@ -92,7 +108,8 @@ Use string properties when it's specific for a single renderer.
 Every sound sources should have a media URI.
 
 Things that should be configurable in the XML file:
- * loudspeakers configuration
+
+* loudspeakers configuration
 
 
 How to compute audio
@@ -100,10 +117,12 @@ How to compute audio
 It's done in a two-step process:
 
 1) distance from listener: (meter)
- * low-pass filter
- * variable delay
- * attenuation gain (configurable)
+
+* low-pass filter
+* variable delay
+* attenuation gain (configurable)
 
 2) azimuth/elevation: (angle)
- * two panners
+
+* two panners
 
