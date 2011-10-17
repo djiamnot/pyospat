@@ -147,7 +147,7 @@ def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     @rtype: float
     @return: Audio level factor.
     """
-    aed = maths.add(speaker_aed, source_aed)
+    aed = add(speaker_aed, source_aed)
     factor = 1.0
     factor *= spread(attenuate_according_to_angle(aed[0]), exponent)
     factor *= spread(attenuate_according_to_angle(aed[1]), exponent)
