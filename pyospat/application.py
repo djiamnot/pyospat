@@ -21,29 +21,27 @@
 """
 The Application class.
 """
+import math
 import pyo
-from pyospat import server
-from pyospat import maths
+
 from txosc import osc
 from txosc import dispatch
 from txosc import async
-import math
+
+from pyospat import server
+from pyospat import maths
 
 class Renderer(object):
     """
     Actually renders audio.
     """
-    def __init__(self):
+    def __init__(self, listener_id, speakers_angles):
         # speakers coordinates:
-        self._speakers_angles = [
-            [- math.pi / 4.0, 0.0, 0.0], # each speaker has an aed
-            [math.pi / 4.0, 0.0, 0.0]
-        ]
-        # source:
-        self._noise = pyo.Noise(mul=1.0)
-
-        # variable delay:
-        self._delay = pyo.Delay(self._noise, delay=0.0, maxdelay=1.0)
+        self._speakers_angles = speaker_angles
+        # ID
+        self._listener_id = listener_id
+        # sources:
+        self._sources = {}
 
         # attenuator:
         self._mixer = pyo.Mixer(outs=2, chnls=1, time=0.050)
@@ -52,18 +50,26 @@ class Renderer(object):
         self._mixer.setAmp(0, 1, 0.125) # changed afterwhile
         self._mixer.out()
 
-    def set_delay(self, delay):
+
+    def set_delay(self, source_name, delay):
         """
         Changes the variable delay duration, for Doppler effect and a realistic rendering.
-        @param delay: Duration in seconds.
+        @param source_name: source name
+        @type source_name: string
+        @param delay: Duration in seconds
+        @type delay: float
         """
         # TODO: the binaural renderer should have a different variable delay for each ear.
         self._delay.setDelay(delay)
 
-    def set_aed(self, aed):
+    def set_aed(self, source_name, aed):
         """
         Sets the aed of the single sound source.
         Distance must be > 0.0
+        @param source_name: source name
+        @type source_name: string
+        @param aed: azimuth, elevation, distance
+        @type aed: list
         """
         # TODO: handle more than one sound source.
         factor0 = maths.angles_to_attenuation(aed, self._speakers_angles[0])
@@ -71,6 +77,18 @@ class Renderer(object):
         self._mixer.setAmp(0, 0, factor0)
         self._mixer.setAmp(0, 1, factor1)
         print("factors: %f %f" % (factor0, factor1))
+
+    def add_source(self, source_name, type_name):
+        """
+        Add an audio source
+        @param source_name: name of the source
+        @type source_name: string
+        @param type_name: type of the source
+        @type type_name: object type
+        @rtype: bool
+        """
+        list.sources[source_name] = type_name
+        return True
 
 def _type_tags_match(message, expected):
     """
