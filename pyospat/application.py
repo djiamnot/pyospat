@@ -78,7 +78,9 @@ class Renderer(object):
         self._mixer.setAmp(0, 1, factor1)
         print("factors: %f %f" % (factor0, factor1))
 
-    def add_source(self, source_name, type_name):
+    # TODO: confirm this... I would rather (name, object), the object being
+    # an instance of a UGen.
+    def add_source(self, source_name):
         """
         Add an audio source
         @param source_name: name of the source
@@ -87,8 +89,12 @@ class Renderer(object):
         @type type_name: object type
         @rtype: bool
         """
-        list.sources[source_name] = type_name
-        return True
+        if source_name not in self._sources:
+            self._sources[source_name] = SoundSource()
+            self._mixer.addInput(0, self._source[source_name])
+            return True
+        else:
+            return False
 
 def _type_tags_match(message, expected):
     """
