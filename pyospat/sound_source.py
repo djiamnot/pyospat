@@ -37,13 +37,13 @@ class SoundSource(Object):
         self._source = None
         self._is_connected_to_listener = True
         self._number_of_outputs = outs
-        self._delay = pyo.Delay()
+        #self._delay = pyo.Delay()
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
 
     def __del__(self):
         del self._source
         del self._mixer
-        del self._delay
+        #del self._delay
             
     def set_connected(self, connected):
         """

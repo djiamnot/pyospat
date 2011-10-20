@@ -37,19 +37,20 @@ class Renderer(object):
     """
     def __init__(self, listener_id, speakers_angles):
         # speakers coordinates:
-        self._speakers_angles = speaker_angles
+        self._speakers_angles = speakers_angles
         # ID
         self._listener_id = listener_id
         # sources:
         self._sources = {}
 
+        #self._delay = None
+
         # attenuator:
         self._mixer = pyo.Mixer(outs=2, chnls=1, time=0.050)
-        self._mixer.addInput(0, self._delay)
-        self._mixer.setAmp(0, 0, 0.125) # vin, vout, amp changed afterwhile
-        self._mixer.setAmp(0, 1, 0.125) # changed afterwhile
+        ## self._mixer.addInput(0, self._delay)
+        ## self._mixer.setAmp(0, 0, 0.125) # vin, vout, amp changed afterwhile
+        ## self._mixer.setAmp(0, 1, 0.125) # changed afterwhile
         self._mixer.out()
-
 
     def set_delay(self, source_name, delay):
         """
@@ -60,7 +61,7 @@ class Renderer(object):
         @type delay: float
         """
         # TODO: the binaural renderer should have a different variable delay for each ear.
-        self._delay.setDelay(delay)
+        self._delay.setDelay(source_name, delay)
 
     def set_aed(self, source_name, aed):
         """
@@ -137,7 +138,11 @@ class Application(object):
         @param configuration: Instance of a Configuration.
         """
         self._configuration = configuration
-        self._renderer = Renderer()
+        self._speakers_angles = [
+            [- math.pi / 4.0, 0.0, 0.0], # each speaker has an aed
+            [math.pi / 4.0, 0.0, 0.0]
+        ]
+        self._renderer = Renderer('noise', self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         self._receiver = dispatch.Receiver()
         from twisted.internet import reactor
@@ -146,11 +151,16 @@ class Application(object):
         self._setup_osc_callbacks()
 
     def _setup_osc_callbacks(self):
-        self._receiver.addCallback("/spatosc/core/*/*/xyz", self._handle_node_xyz)
-        self._receiver.addCallback("/spatosc/core/connection/*/aed", self._handle_connection_aed)
-        self._receiver.addCallback("/spatosc/core/connection/*/delay", self._handle_connection_delay)
-        self._receiver.addCallback("/spatosc/core/scene/create_source", self._handle_create_source)
-        self._receiver.addCallback("/spatosc/core/scene/create_listener", self._handle_create_listener)
+        self._receiver.addCallback(
+            "/spatosc/core/*/*/xyz", self._handle_node_xyz)
+        self._receiver.addCallback(
+            "/spatosc/core/connection/*/aed", self._handle_connection_aed)
+        self._receiver.addCallback(
+            "/spatosc/core/connection/*/delay", self._handle_connection_delay)
+        self._receiver.addCallback(
+            "/spatosc/core/scene/create_source", self._handle_create_source)
+        self._receiver.addCallback(
+            "/spatosc/core/scene/create_listener", self._handle_create_listener)
         self._receiver.fallback = self._fallback
 
     def _handle_create_listener(self, message, address):
