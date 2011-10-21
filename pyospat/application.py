@@ -30,6 +30,7 @@ from txosc import async
 
 from pyospat import server
 from pyospat import maths
+from pyospat import sound_source as ss
 
 class Renderer(object):
     """
@@ -43,26 +44,6 @@ class Renderer(object):
         # sources:
         self._sources = {}
 
-        #self._delay = None
-
-        # attenuator:
-        self._mixer = pyo.Mixer(outs=2, chnls=1, time=0.050)
-        ## self._mixer.addInput(0, self._delay)
-        ## self._mixer.setAmp(0, 0, 0.125) # vin, vout, amp changed afterwhile
-        ## self._mixer.setAmp(0, 1, 0.125) # changed afterwhile
-        self._mixer.out()
-
-    def set_delay(self, source_name, delay):
-        """
-        Changes the variable delay duration, for Doppler effect and a realistic rendering.
-        @param source_name: source name
-        @type source_name: string
-        @param delay: Duration in seconds
-        @type delay: float
-        """
-        # TODO: the binaural renderer should have a different variable delay for each ear.
-        self._delay.setDelay(source_name, delay)
-
     def set_aed(self, source_name, aed):
         """
         Sets the aed of the single sound source.
@@ -75,12 +56,10 @@ class Renderer(object):
         # TODO: handle more than one sound source.
         factor0 = maths.angles_to_attenuation(aed, self._speakers_angles[0])
         factor1 = maths.angles_to_attenuation(aed, self._speakers_angles[1])
-        self._mixer.setAmp(0, 0, factor0)
-        self._mixer.setAmp(0, 1, factor1)
+        self._sources[source_name]._mixer.setAmp(0, 0, factor0)
+        self._sources[source_name]._mixer.setAmp(0, 1, factor1)
         print("factors: %f %f" % (factor0, factor1))
 
-    # TODO: confirm this... I would rather (name, object), the object being
-    # an instance of a UGen.
     def add_source(self, source_name):
         """
         Add an audio source
@@ -91,8 +70,7 @@ class Renderer(object):
         @rtype: bool
         """
         if source_name not in self._sources:
-            self._sources[source_name] = SoundSource()
-            self._mixer.addInput(0, self._source[source_name])
+            self._sources[source_name] = ss.SoundSource(2)
             return True
         else:
             return False
@@ -113,6 +91,7 @@ def _get_connection_id(message):
     """
     try:
         connection_id = message.address.split("/")[3]
+        print(connection_id, " connected...")
         return connection_id
     except IndexError, e:
         print(str(e))
@@ -146,7 +125,8 @@ class Application(object):
         port_number = self._configuration.osc_receive_port
         self._receiver = dispatch.Receiver()
         from twisted.internet import reactor
-        self._server_port = reactor.listenUDP(port_number, async.DatagramServerProtocol(self._receiver))
+        self._server_port = reactor.listenUDP(
+            port_number, async.DatagramServerProtocol(self._receiver))
         print("Listening on osc.udp://localhost:%s" % (port_number))
         self._setup_osc_callbacks()
 
@@ -158,28 +138,48 @@ class Application(object):
         self._receiver.addCallback(
             "/spatosc/core/connection/*/delay", self._handle_connection_delay)
         self._receiver.addCallback(
-            "/spatosc/core/scene/create_source", self._handle_create_source)
-        self._receiver.addCallback(
-            "/spatosc/core/scene/create_listener", self._handle_create_listener)
+            "/spatosc/core", self._handle_core)
         self._receiver.fallback = self._fallback
+
+    def _handle_core(self, message, address):
+        """
+        Handles /spatosc/core ,ss command arg
+        """
+        # this seems to be different from the previous spatosc behaviour?
+        print("  Got {0} from {1}".format(message, address))
+        command = message.getValues()[0]
+        if _type_tags_match(message, "ss"):
+            arg = message.getValues()[1]
+            if command == 'createSoundSource':
+                self._renderer.add_source(arg)
+                self._renderer._sources[arg].set_uri('pyo://Noise')
+            elif command == 'createListener':
+                print("Created listener: ", arg)
+        elif _type_tags_match(message, "sss"):
+            if command == 'connect':
+                # TODO: handle connections?
+                print("Got: ",message.getValues()[1:])
 
     def _handle_create_listener(self, message, address):
         """
         Handles /spatosc/core/scene/create_listener ,s node_id
         """
-        print("  Got %s from %s" % (message, address))
+        print("  Got {} from {}".format(message, address))
         if not _type_tags_match(message, "s"):
             return
         node_id = message.getValues()[0]
+        print("Created listener: ", note_id)
 
     def _handle_create_source(self, message, address):
         """
         Handles /spatosc/core/scene/create_source ,s node_id
         """
-        print("  Got %s from %s" % (message, address))
-        if not _type_tags_match(message, "s"):
+        print("  Got {} from {}".format(message, address))
+        if not _type_tags_match(message, "ss"):
             return
         node_id = message.getValues()[0]
+        self._renderer.add_source(node_id)
+        print("Created source: ", node_id)
 
     def _handle_connection_delay(self, message, address):
         """
@@ -190,7 +190,9 @@ class Application(object):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
-            self._renderer.set_delay(message.getValues()[0])
+            # TODO: handle connection delay
+            pass
+            #self._renderer.set_delay(message.getValues()[0])
 
     def _handle_connection_aed(self, message, address):
         """
@@ -202,7 +204,10 @@ class Application(object):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
-            self._renderer.set_aed(message.getValues())
+            #self._renderer.set_aed(message.getValues())
+            aed = message.getValues()
+            print("Getting {0} from {1}".format(aed,connection_id))
+            self._renderer.set_aed('noise', aed)
 
     def _handle_node_xyz(self, message, address):
         """
