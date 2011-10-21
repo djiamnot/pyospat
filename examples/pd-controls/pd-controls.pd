@@ -1,4 +1,4 @@
-#N canvas 133 327 469 459 10;
+#N canvas 133 309 469 459 10;
 #X obj 54 339 tgl 50 0 empty empty success 17 -7 0 10 -258113 -1 -1
 1 1;
 #X obj 54 307 spatosc;
@@ -30,17 +30,19 @@
 #X restore 54 192 pd pack3f;
 #X msg 54 212 setPositionAED noise \$1 \$2 \$3;
 #X obj 25 142 hsl 128 15 -3.14159 3.14159 0 0 empty empty empty -2
--8 0 10 -260097 -1 -1 5100 1;
+-8 0 10 -260097 -1 -1 6350 1;
 #X obj 207 23 vsl 15 128 -3.14159 3.14159 0 0 empty empty empty 0 -9
-0 10 -260097 -1 -1 11300 1;
+0 10 -260097 -1 -1 6350 1;
 #X obj 231 3 vsl 15 128 0 10 0 0 empty empty empty 0 -9 0 10 -260097
--1 -1 3900 1;
+-1 -1 0 1;
 #X obj 146 -51 loadbang;
 #X msg 150 -6 0;
 #X obj 146 -27 del 10;
 #X text 177 153 <-- angle from -PI to PI;
 #X text 255 123 <--distance must be > 0;
 #X text 236 138 <-- elevation from -PI to PI;
+#X msg 258 -9 0;
+#X obj 254 -30 del 10;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
@@ -58,7 +60,9 @@
 #X connect 13 0 8 0;
 #X connect 14 0 9 0;
 #X connect 15 0 17 0;
+#X connect 15 0 22 0;
 #X connect 16 0 13 0;
-#X connect 16 0 14 0;
 #X connect 16 0 12 0;
 #X connect 17 0 16 0;
+#X connect 21 0 14 0;
+#X connect 22 0 21 0;
