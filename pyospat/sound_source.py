@@ -24,7 +24,9 @@ SoundSource class
 import os
 import pyo
 
-class SoundSource(Object):
+from pyospat import maths
+
+class SoundSource(object):
     """
     Creates sound nodes in the renderer
     """
@@ -37,8 +39,10 @@ class SoundSource(Object):
         self._source = None
         self._is_connected_to_listener = True
         self._number_of_outputs = outs
+        self._uri = None
         #self._delay = pyo.Delay()
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
+        self._mixer.out()
 
     def __del__(self):
         del self._source
@@ -61,15 +65,17 @@ class SoundSource(Object):
         else:
             return False
 
-    def set_delay(self, del):
+    def set_delay(self, delay):
         """
         Set delay time
         @param del: delay time
         @type del: float
         """
-        self._delay.setDelay(del)
+        self._delay.setDelay(delay)
 
     def set_uri(self, uri):
+        if self._uri == uri:
+            return
         if uri.startswith('adc://'):
             try:
                 adc_num = int(uri.split('/')[-1])
@@ -80,23 +86,29 @@ class SoundSource(Object):
                 print(e)
                 return False
             # TODO: check for ':'
+            del self._source
             self._source = pyo.Input(chnl = adc_num)
+            self._uri = uri
         elif uri.startswith('pyo://'):
+            if self._uri == uri:
+                return
             try:
                 obj_name = uri.split('/')[-1]
-            except:
-                IndexError, e:
-                    print(e)
-                    return False
+            except IndexError, e:
+                print(e)
+                return False
             if obj_name == 'Noise':
+                del self._source
                 self._source = pyo.Noise()
+                self._connect()
                 return True
             else:
-                print("Pyo object {} not supported, yet!".format(obj_name))
+                print("Pyo object {0} not supported, yet!".format(obj_name))
                 return False
         elif uri.startswith('file://'):
             f_name = uri[6:]
-            if os.path.exist(f_name)
+            if os.path.exist(f_name):
+                del self._source
                 self._source = pyo.SfPlayer(f_name, loop = True)
                 return True
             else:
@@ -115,4 +127,5 @@ class SoundSource(Object):
         
     def _connect(self):
         self._mixer.addInput(0, self._source)
-        
+        self._mixer.setAmp(0, 0, 0.5)
+        self._mixer.setAmp(0, 1, 0.5)
