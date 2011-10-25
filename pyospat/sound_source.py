@@ -110,7 +110,7 @@ class SoundSource(object):
         """
         @rtype: bool
         """
-        f_name = uri[6:]
+        f_name = uri[7:]
         if os.path.exists(f_name):
             del self._source
             print("Playing sound file: %s" % (f_name))
