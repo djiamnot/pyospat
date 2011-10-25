@@ -9,11 +9,11 @@ from txosc import osc
 class Test_Parsers(unittest.TestCase):
     def test_connection_id(self):
         m = osc.Message("/foo/bar/egg/spam")
-        self.failUnlessEqual(application._get_connection_id(m), "egg")
+        self.failUnlessEqual(application.get_connection_id(m), "spam")
 
     def test_node_id(self):
-        m = osc.Message("/foo/bar/egg/spam")
-        self.failUnlessEqual(application._get_connection_id(m), "egg")
+        m = osc.Message("/id/foo/bar/egg/spam")
+        self.failUnlessEqual(application.get_connection_id(m), "egg")
 
     def test_type_tags_match(self):
         m = osc.Message("/foo", "hello", 123)
