@@ -73,47 +73,78 @@ class SoundSource(object):
         """
         self._delay.setDelay(delay)
 
+    def _set_uri_adc(self, uri):
+        """
+        @rtype: bool
+        """
+        try:
+            adc_num = int(uri.split("/")[-1])
+        except IndexError, e:
+            print(e)
+            return False
+        except TypeError, e:
+            print(e)
+            return False
+        # TODO: check for ":"
+        del self._source
+        # TODO: check if adc_num is a valid audio input
+        print(" set URI ADC: %d" % (adc_num))
+        self._source = pyo.Input(chnl=adc_num)
+        return True
+
+    def _set_uri_pyo(self, uri):
+        """
+        @rtype: bool
+        """
+        try:
+            obj_name = uri.split("/")[-1]
+        except IndexError, e:
+            print(e)
+            return False
+        if obj_name == "Noise":
+            del self._source
+            self._source = pyo.Noise()
+            return True
+        else:
+            print("Pyo object {0} not supported, yet!".format(obj_name))
+            return False
+
+    def _set_uri_file(self, uri):
+        """
+        @rtype: bool
+        """
+        f_name = uri[6:]
+        if os.path.exists(f_name):
+            del self._source
+            print("Playing sound file: %s" % (f_name))
+            self._source = pyo.SfPlayer(f_name, loop=True)
+            return True
+        else:
+            print("Sound file %s does not exist." % (f_name))
+            return False
+
     def set_uri(self, uri):
+        """
+        Sets the source URI.
+        Valid prefixes:
+        * adc://
+        * pyo://
+        * file://
+        """
         if self._uri == uri:
             return
-        if uri.startswith('adc://'):
-            try:
-                adc_num = int(uri.split('/')[-1])
-            except IndexError, e:
-                print(e)
-                return False
-            except TypeError, e:
-                print(e)
-                return False
-            # TODO: check for ':'
-            del self._source
-            self._source = pyo.Input(chnl = adc_num)
+        success = False
+        if uri.startswith("adc://"):
+            success = self._set_uri_adc(uri)
+        elif uri.startswith("pyo://"):
+            success = self._set_uri_pyo(uri)
+        elif uri.startswith("file://"):
+            success = self._set_uri_file(uri)
+        if success:
             self._uri = uri
-        elif uri.startswith('pyo://'):
-            if self._uri == uri:
-                return
-            try:
-                obj_name = uri.split('/')[-1]
-            except IndexError, e:
-                print(e)
-                return False
-            if obj_name == 'Noise':
-                del self._source
-                self._source = pyo.Noise()
-                self._connect()
-                return True
-            else:
-                print("Pyo object {0} not supported, yet!".format(obj_name))
-                return False
-        elif uri.startswith('file://'):
-            f_name = uri[6:]
-            if os.path.exist(f_name):
-                del self._source
-                self._source = pyo.SfPlayer(f_name, loop = True)
-                return True
-            else:
-                print("Sound file does not exist.")
-                return False
+            self._connect()
+        else:
+            print("Failed to set source URI to %s" % (uri))
             
     def set_relative_aed(self, aed):
         """
@@ -129,3 +160,4 @@ class SoundSource(object):
         self._mixer.addInput(0, self._source)
         self._mixer.setAmp(0, 0, 0.5)
         self._mixer.setAmp(0, 1, 0.5)
+
