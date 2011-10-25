@@ -109,10 +109,27 @@ def add(aed0, aed1):
 
 def distance_to_attenuation(distance):
     """
-    Not working yet. Just returns 1.0
+    A very crude
+    @param distance: distance in meters(?)
+    @type distance: float
+    @rtype: float
     """
     # TODO: compute distance_to_attenuation
-    return 1.0
+    attenuation = 1./distance
+    print("Attenuation is: ", attenuation)
+    return attenuation
+
+def distance(sub):
+    """
+    Quantify distance
+    @param sub: difference between vectors
+    @type sub: list
+    @rtype float
+    """
+    distance = math.sqrt(sub[0] * sub[0] + sub[1] * sub[1] + sub[2] * sub[2])
+    print("Distance: ", distance)
+    return distance
+    
 
 def map_from_zero_to_one(value):
     """
@@ -160,9 +177,10 @@ def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     @return: Audio level factor.
     """
     aed = subtract(speaker_aed, source_aed)
+    dist = distance(aed)
     factor = 1.0
     factor *= spread(attenuate_according_to_angle(aed[0]), exponent)
     factor *= spread(attenuate_according_to_angle(aed[1]), exponent)
-    # TODO: factor *= distance_to_attenuation(aed[2])
+    factor *= distance_to_attenuation(dist)
     return factor
 
