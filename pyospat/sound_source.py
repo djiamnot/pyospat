@@ -17,32 +17,28 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
-
 """
-SoundSource class
+The SoundSource class
 """
+from pyospat import maths
 import os
 import pyo
 
-from pyospat import maths
-
 class SoundSource(object):
     """
-    Creates sound nodes in the renderer
+    A sound source node in the renderer
     """
-
     def __init__(self, outs):
         """
         @param outs: number of outputs
         @type outs: int
         """
         self._source = None
-        self._is_connected_to_listener = True
+        self._is_connected_to_listener = False
         self._number_of_outputs = outs
         self._uri = None
-        #self._delay = pyo.Delay()
+        #TODO: self._delay = pyo.Delay()
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
-        self._mixer.out()
 
     def __del__(self):
         del self._source
@@ -54,7 +50,7 @@ class SoundSource(object):
         @param connected: bool
         """
         self._is_connected_to_listener = connected
-        # TODO: mute object if false.
+        self._connect()
 
     def get_connected(self):
         """
@@ -71,7 +67,8 @@ class SoundSource(object):
         @param del: delay time
         @type del: float
         """
-        self._delay.setDelay(delay)
+        print("TODO: SoundSource::setDelay(%f)" % (delay))
+        # self._delay.setDelay(delay)
 
     def _set_uri_adc(self, uri):
         """
@@ -85,12 +82,12 @@ class SoundSource(object):
         except TypeError, e:
             print(e)
             return False
-        # TODO: check for ":"
-        del self._source
-        # TODO: check if adc_num is a valid audio input
-        print(" set URI ADC: %d" % (adc_num))
-        self._source = pyo.Input(chnl=adc_num)
-        return True
+        else:
+            del self._source
+            # TODO: check if adc_num is a valid audio input
+            print(" set URI ADC: %d" % (adc_num))
+            self._source = pyo.Input(chnl=adc_num)
+            return True
 
     def _set_uri_pyo(self, uri):
         """
@@ -146,18 +143,26 @@ class SoundSource(object):
         else:
             print("Failed to set source URI to %s" % (uri))
             
-    def set_relative_aed(self, aed):
+    def set_relative_aed(self, aed, speaker_angles):
         """
         @param aed: azimuth, elevation, distance
+        @param speaker_angles: list of aed for each speaker
         @type aed: list
+        @type speaker_angles: list
         """
-        factor0 = maths.angles_to_attenuation(aed, self._speakers_angles[0])
-        factor1 = maths.angles_to_attenuation(aed, self._speakers_angles[1])
-        self._mixer.setAmp(0, 0, factor0)
-        self._mixer.setAmp(0, 1, factor1)
+        index = 0
+        for angle in speaker_angles:
+            factor = maths.angles_to_attenuation(aed, angle)
+            self._mixer.setAmp(0, index, factor)
+            print("factor[%d]: %f" % (index, factor))
+            index += 1
         
     def _connect(self):
         self._mixer.addInput(0, self._source)
-        self._mixer.setAmp(0, 0, 0.5)
-        self._mixer.setAmp(0, 1, 0.5)
+        # self._mixer.setAmp(0, 0, 0.5)
+        # self._mixer.setAmp(0, 1, 0.5)
+        if self._is_connected_to_listener:
+            self._mixer.out()
+        else:
+            self._mixer.stop()
 

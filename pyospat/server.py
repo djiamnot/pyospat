@@ -91,7 +91,7 @@ class ServerWrapper(object):
             else:
                 while self._running:
                     time.sleep(0.1)
-        except KeyboardInterrupt, e:
+        except KeyboardInterrupt:
             print("Interrupted")
         self._server.stop()
 

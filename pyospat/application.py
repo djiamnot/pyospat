@@ -21,16 +21,10 @@
 """
 The Application class.
 """
-import math
-import pyo
-
-from txosc import osc
-from txosc import dispatch
-from txosc import async
-
-from pyospat import server
-from pyospat import maths
 from pyospat import sound_source
+from txosc import async
+from txosc import dispatch
+import math
 
 class Renderer(object):
     """
@@ -43,6 +37,18 @@ class Renderer(object):
         self._listener_id = listener_id
         # sources:
         self._sources = {}
+
+    def get_listener_id(self):
+        """
+        Returns our listener ID.
+        @rtype: str
+        """
+        return self._listener_id
+
+    def set_connected(self, source_id, listener_id, connected=True):
+        if listener_id == self._listener_id:
+            if self.has_source(source_id):
+                self._sources[source_id].set_connected(connected)
     
     def set_uri(self, source_name, uri):
         """
@@ -71,12 +77,22 @@ class Renderer(object):
         @param aed: azimuth, elevation, distance
         @type aed: list
         """
-        # TODO: handle more than one sound source.
-        factor0 = maths.angles_to_attenuation(aed, self._speakers_angles[0])
-        factor1 = maths.angles_to_attenuation(aed, self._speakers_angles[1])
-        self._sources[source_name]._mixer.setAmp(0, 0, factor0)
-        self._sources[source_name]._mixer.setAmp(0, 1, factor1)
-        print("factors: %f %f" % (factor0, factor1))
+        if self.has_source(source_name):
+            self._sources[source_name].set_relative_aed(aed, self._speakers_angles)
+
+    def set_delay(self, source_name, delay):
+        """
+        Sets the delay of the single sound source.
+        @param source_name: source name
+        @type source_name: string
+        @param delay: delay
+        @type delay: float
+        """
+        if self.has_source(source_name):
+            if delay < 0.0:
+                print("Negative delay? %f" % (delay))
+                delay = 0.0
+            self._sources[source_name].set_delay(delay)
 
     def has_source(self, source_name):
         return source_name in self._sources.keys()
@@ -94,6 +110,7 @@ class Renderer(object):
             self._sources[source_name] = sound_source.SoundSource(2)
             return True
         else:
+            print("Already have sound source %s" % (source_name))
             return False
 
     def __str__(self):
@@ -117,12 +134,15 @@ def _type_tags_match(message, expected, verbose=False):
             print("Bad type tags for message %s. Expected %s" % (message, expected))
         return False
 
-def _get_connection_id(message):
+def get_connection_id(message):
     """
     Split the path of a SpatOSC OSC URL to give the connection ID.
+    Example input: /spatosc/core/connection/source0->listener0/gainDB
+    Example output: source0->listener0
     """
+    # TODO: test it
     try:
-        connection_id = message.address.split("/")[3]
+        connection_id = message.address.split("/")[4]
         print(connection_id, " connected...")
         return connection_id
     except IndexError, e:
@@ -150,10 +170,10 @@ class Application(object):
         """
         self._configuration = configuration
         self._speakers_angles = [
-            [- math.pi / 4.0, 0.0, 0.0], # each speaker has an aed
-            [math.pi / 4.0, 0.0, 0.0]
+            [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
+            [math.pi / 4.0, 0.0, 1.0]
         ]
-        self._renderer = Renderer("noise", self._speakers_angles)
+        self._renderer = Renderer(configuration.listener_id, self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         self._receiver = dispatch.Receiver()
         from twisted.internet import reactor
@@ -189,11 +209,15 @@ class Application(object):
                 self._renderer.set_uri(node_id, "pyo://Noise")
             elif command == "createListener":
                 arg = message.getValues()[1]
-                print("Created listener: ", arg)
+                # we assume our listener exists for now
+                # print("create listener: %s" % (arg))
+                del arg
         elif _type_tags_match(message, "sss"):
             if command == "connect":
-                # TODO: handle connections?
-                print("Got: ",message.getValues()[1:])
+                # TODO: handle connections
+                source_name = message.getValues()[1]
+                listener_name = message.getValues()[2]
+                self._renderer.set_connected(source_name, listener_name)
 
     def _handle_node_property(self, message, address):
         """
@@ -220,7 +244,7 @@ class Application(object):
         if not _type_tags_match(message, "s", verbose=True):
             return
         node_id = message.getValues()[0]
-        print("Created listener: ", note_id)
+        print("Created listener: ", node_id)
 
     def _handle_create_source(self, message, address):
         """
@@ -240,11 +264,16 @@ class Application(object):
         # print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "f", verbose=True):
             return
-        connection_id = _get_connection_id(message)
+        connection_id = get_connection_id(message)
         if connection_id is not None:
-            # TODO: handle connection delay
-            pass
-            #self._renderer.set_delay(message.getValues()[0])
+            try:
+                from_id = connection_id.split("->")[0] #FIXME
+                to_id = connection_id.split("->")[1] #FIXME
+                if self._renderer.get_listener_id() == to_id:
+                    delay = message.getValues()[0]
+                    self._renderer.set_delay(from_id, delay)
+            except KeyError, e:
+                print(e)
 
     def _handle_connection_aed(self, message, address):
         """
@@ -254,12 +283,17 @@ class Application(object):
         print("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "fff", verbose=True):
             return
-        connection_id = _get_connection_id(message)
+        connection_id = get_connection_id(message)
         if connection_id is not None:
-            #self._renderer.set_aed(message.getValues())
-            aed = message.getValues()
-            print("Getting {0} from {1}".format(aed, connection_id))
-            self._renderer.set_aed("noise", aed)
+            try:
+                from_id = connection_id.split("->")[0] #FIXME
+                to_id = connection_id.split("->")[1] #FIXME
+                if self._renderer.get_listener_id() == to_id:
+                    aed = message.getValues() # 3 floats list
+                    print("Got {0} from {1}".format(aed, connection_id))
+                    self._renderer.set_aed(from_id, aed)
+            except KeyError, e:
+                print(e)
 
     def _handle_node_xyz(self, message, address):
         """
