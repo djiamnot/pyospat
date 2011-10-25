@@ -30,7 +30,7 @@ from txosc import async
 
 from pyospat import server
 from pyospat import maths
-from pyospat import sound_source as ss
+from pyospat import sound_source
 
 class Renderer(object):
     """
@@ -43,6 +43,24 @@ class Renderer(object):
         self._listener_id = listener_id
         # sources:
         self._sources = {}
+    
+    def set_uri(self, source_name, uri):
+        """
+        Sets the URI of a node.
+        URI might be one of:
+        * pyo://Noise
+        * adc://0
+        * adc://1
+        * adc://2
+        * ...
+        @return success
+        @rtype bool
+        """
+        if self.has_source(source_name):
+            self._sources[source_name].set_uri(uri)
+            return True
+        else:
+            return False
 
     def set_aed(self, source_name, aed):
         """
@@ -60,6 +78,9 @@ class Renderer(object):
         self._sources[source_name]._mixer.setAmp(0, 1, factor1)
         print("factors: %f %f" % (factor0, factor1))
 
+    def has_source(self, source_name):
+        return source_name in self._sources.keys()
+
     def add_source(self, source_name):
         """
         Add an audio source
@@ -70,19 +91,30 @@ class Renderer(object):
         @rtype: bool
         """
         if source_name not in self._sources:
-            self._sources[source_name] = ss.SoundSource(2)
+            self._sources[source_name] = sound_source.SoundSource(2)
             return True
         else:
             return False
 
-def _type_tags_match(message, expected):
+    def __str__(self):
+        ret = ""
+        ret += "Renderer source nodes:"
+        if len(self._sources) == 0:
+            ret += "\n (none)"
+        else:
+            for k, v in self._sources.iteritems():
+                ret += "\n * " + k
+        return ret
+
+def _type_tags_match(message, expected, verbose=False):
     """
     Checks that some typetags string matches the expected.
     """
     if message.getTypeTags() == expected:
         return True
     else:
-        print("Bad type tags for message %s. Expected %s" % (message, expected))
+        if verbose:
+            print("Bad type tags for message %s. Expected %s" % (message, expected))
         return False
 
 def _get_connection_id(message):
@@ -121,7 +153,7 @@ class Application(object):
             [- math.pi / 4.0, 0.0, 0.0], # each speaker has an aed
             [math.pi / 4.0, 0.0, 0.0]
         ]
-        self._renderer = Renderer('noise', self._speakers_angles)
+        self._renderer = Renderer("noise", self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         self._receiver = dispatch.Receiver()
         from twisted.internet import reactor
@@ -139,6 +171,8 @@ class Application(object):
             "/spatosc/core/connection/*/delay", self._handle_connection_delay)
         self._receiver.addCallback(
             "/spatosc/core", self._handle_core)
+        self._receiver.addCallback(
+            "/spatosc/core/*/*/prop", self._handle_node_property)
         self._receiver.fallback = self._fallback
 
     def _handle_core(self, message, address):
@@ -149,23 +183,41 @@ class Application(object):
         print("  Got {0} from {1}".format(message, address))
         command = message.getValues()[0]
         if _type_tags_match(message, "ss"):
-            arg = message.getValues()[1]
-            if command == 'createSoundSource':
-                self._renderer.add_source(arg)
-                self._renderer._sources[arg].set_uri('pyo://Noise')
-            elif command == 'createListener':
+            if command == "createSoundSource":
+                node_id = message.getValues()[1]
+                self._renderer.add_source(node_id)
+                self._renderer.set_uri(node_id, "pyo://Noise")
+            elif command == "createListener":
+                arg = message.getValues()[1]
                 print("Created listener: ", arg)
         elif _type_tags_match(message, "sss"):
-            if command == 'connect':
+            if command == "connect":
                 # TODO: handle connections?
                 print("Got: ",message.getValues()[1:])
+
+    def _handle_node_property(self, message, address):
+        """
+        Handles /spatosc/core/<type>/<node>/prop ,s[sfi] command arg
+        """
+        # this seems to be different from the previous spatosc behaviour?
+        print("  Got {0} from {1}".format(message, address))
+        node_id = message.address.split("/")[4]
+        if not self._renderer.has_source(node_id):
+            print("No such source node: " + node_id)
+            print(str(self._renderer))
+            return
+        property_name = message.getValues()[0]
+        if _type_tags_match(message, "ss", verbose=True): # string property
+            value = message.getValues()[1]
+            if property_name == "uri":
+                self._renderer.set_uri(node_id, value)
 
     def _handle_create_listener(self, message, address):
         """
         Handles /spatosc/core/scene/create_listener ,s node_id
         """
         print("  Got {} from {}".format(message, address))
-        if not _type_tags_match(message, "s"):
+        if not _type_tags_match(message, "s", verbose=True):
             return
         node_id = message.getValues()[0]
         print("Created listener: ", note_id)
@@ -175,7 +227,7 @@ class Application(object):
         Handles /spatosc/core/scene/create_source ,s node_id
         """
         print("  Got {} from {}".format(message, address))
-        if not _type_tags_match(message, "ss"):
+        if not _type_tags_match(message, "ss", verbose=True):
             return
         node_id = message.getValues()[0]
         self._renderer.add_source(node_id)
@@ -186,7 +238,7 @@ class Application(object):
         Handles /spatosc/core/connection/*/delay ,f delay
         """
         # print("  Got %s from %s" % (message, address))
-        if not _type_tags_match(message, "f"):
+        if not _type_tags_match(message, "f", verbose=True):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
@@ -200,21 +252,21 @@ class Application(object):
         Azimuth and elevation are in radians.
         """
         print("  Got %s from %s" % (message, address))
-        if not _type_tags_match(message, "fff"):
+        if not _type_tags_match(message, "fff", verbose=True):
             return
         connection_id = _get_connection_id(message)
         if connection_id is not None:
             #self._renderer.set_aed(message.getValues())
             aed = message.getValues()
-            print("Getting {0} from {1}".format(aed,connection_id))
-            self._renderer.set_aed('noise', aed)
+            print("Getting {0} from {1}".format(aed, connection_id))
+            self._renderer.set_aed("noise", aed)
 
     def _handle_node_xyz(self, message, address):
         """
         Handles /spatosc/core/*/*/xyz ,fff x y z
         """
         # print("  Got %s from %s" % (message, address))
-        if not _type_tags_match(message, "fff"):
+        if not _type_tags_match(message, "fff", verbose=True):
             return
         node_id = _get_node_id(message)
         if node_id is not None:
@@ -224,5 +276,5 @@ class Application(object):
         """
         Fallback for any unhandled message
         """
-        # print("  Got unkown path %s from %s" % (message, address))
+        print("  fallback: Got %s from %s" % (message, address))
 
