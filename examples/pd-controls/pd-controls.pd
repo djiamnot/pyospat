@@ -1,7 +1,6 @@
-#N canvas 133 309 469 459 10;
+#N canvas 487 114 469 459 10;
 #X obj 54 339 tgl 50 0 empty empty success 17 -7 0 10 -258113 -1 -1
 1 1;
-#X obj 54 307 spatosc;
 #X msg 179 303 createSource noise;
 #X msg 174 325 createListener listener;
 #X obj 130 235 loadbang;
@@ -30,11 +29,11 @@
 #X restore 54 192 pd pack3f;
 #X msg 54 212 setPositionAED noise \$1 \$2 \$3;
 #X obj 25 142 hsl 128 15 -3.14159 3.14159 0 0 empty empty empty -2
--8 0 10 -260097 -1 -1 6350 1;
+-8 0 10 -260097 -1 -1 10450 1;
 #X obj 207 23 vsl 15 128 -3.14159 3.14159 0 0 empty empty empty 0 -9
-0 10 -260097 -1 -1 6350 1;
+0 10 -260097 -1 -1 7650 1;
 #X obj 231 3 vsl 15 128 0 10 0 0 empty empty empty 0 -9 0 10 -260097
--1 -1 0 1;
+-1 -1 5800 1;
 #X obj 146 -51 loadbang;
 #X msg 150 -6 0;
 #X obj 146 -27 del 10;
@@ -43,26 +42,29 @@
 #X text 236 138 <-- elevation from -PI to PI;
 #X msg 258 -9 0;
 #X obj 254 -30 del 10;
-#X connect 1 0 0 0;
-#X connect 2 0 1 0;
-#X connect 3 0 1 0;
-#X connect 4 0 5 0;
-#X connect 4 0 6 0;
+#X obj 54 307 spatosc;
+#X msg 223 236 setNodeStringProperty noise foo bar;
+#X connect 1 0 22 0;
+#X connect 2 0 22 0;
+#X connect 3 0 4 0;
+#X connect 3 0 5 0;
+#X connect 4 0 22 0;
 #X connect 5 0 1 0;
-#X connect 6 0 2 0;
-#X connect 6 0 3 0;
-#X connect 7 0 10 0;
-#X connect 8 0 10 1;
-#X connect 9 0 10 2;
-#X connect 10 0 11 0;
-#X connect 11 0 1 0;
+#X connect 5 0 2 0;
+#X connect 6 0 9 0;
+#X connect 7 0 9 1;
+#X connect 8 0 9 2;
+#X connect 9 0 10 0;
+#X connect 10 0 22 0;
+#X connect 11 0 6 0;
 #X connect 12 0 7 0;
 #X connect 13 0 8 0;
-#X connect 14 0 9 0;
-#X connect 15 0 17 0;
-#X connect 15 0 22 0;
-#X connect 16 0 13 0;
-#X connect 16 0 12 0;
-#X connect 17 0 16 0;
-#X connect 21 0 14 0;
-#X connect 22 0 21 0;
+#X connect 14 0 16 0;
+#X connect 14 0 21 0;
+#X connect 15 0 12 0;
+#X connect 15 0 11 0;
+#X connect 16 0 15 0;
+#X connect 20 0 13 0;
+#X connect 21 0 20 0;
+#X connect 22 0 0 0;
+#X connect 23 0 22 0;
