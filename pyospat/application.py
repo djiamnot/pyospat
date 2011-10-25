@@ -79,6 +79,8 @@ class Renderer(object):
         """
         if self.has_source(source_name):
             self._sources[source_name].set_relative_aed(aed, self._speakers_angles)
+        else:
+            print("No such node: %s" % (source_name))
 
     def set_delay(self, source_name, delay):
         """
@@ -143,7 +145,6 @@ def get_connection_id(message):
     # TODO: test it
     try:
         connection_id = message.address.split("/")[4]
-        print(connection_id, " connected...")
         return connection_id
     except IndexError, e:
         print(str(e))
@@ -290,8 +291,10 @@ class Application(object):
                 to_id = connection_id.split("->")[1] #FIXME
                 if self._renderer.get_listener_id() == to_id:
                     aed = message.getValues() # 3 floats list
-                    print("Got {0} from {1}".format(aed, connection_id))
+                    print("%s -> %s has AED: %s" % (from_id, to_id, aed))
                     self._renderer.set_aed(from_id, aed)
+                else:
+                    print("No such node: %s" % (from_id))
             except KeyError, e:
                 print(e)
 
