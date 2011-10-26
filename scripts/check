@@ -1,0 +1,4 @@
+#!/bin/bash
+# run this from the root of the project
+pychecker pyospat/*.py
+trial pyospat

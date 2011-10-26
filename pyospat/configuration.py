@@ -29,4 +29,5 @@ class Configuration(object):
     def __init__(self):
         self.verbose = False
         self.osc_receive_port = 10001
+        self.listener_id = "listener0"
 

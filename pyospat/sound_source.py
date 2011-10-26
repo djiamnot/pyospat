@@ -17,32 +17,30 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
-
 """
-SoundSource class
+The SoundSource class
 """
+from pyospat import maths
 import os
 import pyo
 
-from pyospat import maths
-
 class SoundSource(object):
     """
-    Creates sound nodes in the renderer
+    A sound source node in the renderer
     """
-
     def __init__(self, outs):
         """
         @param outs: number of outputs
         @type outs: int
         """
         self._source = None
-        self._is_connected_to_listener = True
+        self._is_connected_to_listener = False
         self._number_of_outputs = outs
         self._uri = None
-        #self._delay = pyo.Delay()
+        #TODO: self._delay = pyo.Delay()
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
-        self._mixer.out()
+        self._previous_aed = [0.0, 0.0, 0.0]
+        self._previous_speakers_angles = []
 
     def __del__(self):
         del self._source
@@ -54,7 +52,7 @@ class SoundSource(object):
         @param connected: bool
         """
         self._is_connected_to_listener = connected
-        # TODO: mute object if false.
+        self._connect()
 
     def get_connected(self):
         """
@@ -71,61 +69,109 @@ class SoundSource(object):
         @param del: delay time
         @type del: float
         """
-        self._delay.setDelay(delay)
+        print("TODO: SoundSource::setDelay(%f)" % (delay))
+        # self._delay.setDelay(delay)
+
+    def _set_uri_adc(self, uri):
+        """
+        @rtype: bool
+        """
+        try:
+            adc_num = int(uri.split("/")[-1])
+        except IndexError, e:
+            print(e)
+            return False
+        except TypeError, e:
+            print(e)
+            return False
+        else:
+            del self._source
+            # TODO: check if adc_num is a valid audio input
+            print(" set URI ADC: %d" % (adc_num))
+            self._source = pyo.Input(chnl=adc_num)
+            return True
+
+    def _set_uri_pyo(self, uri):
+        """
+        @rtype: bool
+        """
+        try:
+            obj_name = uri.split("/")[-1]
+        except IndexError, e:
+            print(e)
+            return False
+        if obj_name == "Noise":
+            del self._source
+            self._source = pyo.Noise()
+            return True
+        else:
+            print("Pyo object {0} not supported, yet!".format(obj_name))
+            return False
+
+    def _set_uri_file(self, uri):
+        """
+        @rtype: bool
+        """
+        f_name = uri[7:]
+        if os.path.exists(f_name):
+            del self._source
+            print("Playing sound file: %s" % (f_name))
+            self._source = pyo.SfPlayer(f_name, loop=True)
+            return True
+        else:
+            print("Sound file %s does not exist." % (f_name))
+            return False
 
     def set_uri(self, uri):
+        """
+        Sets the source URI.
+        Valid prefixes:
+        * adc://
+        * pyo://
+        * file://
+        """
         if self._uri == uri:
             return
-        if uri.startswith('adc://'):
-            try:
-                adc_num = int(uri.split('/')[-1])
-            except IndexError, e:
-                print(e)
-                return False
-            except TypeError, e:
-                print(e)
-                return False
-            # TODO: check for ':'
-            del self._source
-            self._source = pyo.Input(chnl = adc_num)
+        success = False
+        if uri.startswith("adc://"):
+            success = self._set_uri_adc(uri)
+        elif uri.startswith("pyo://"):
+            success = self._set_uri_pyo(uri)
+        elif uri.startswith("file://"):
+            success = self._set_uri_file(uri)
+        if success:
             self._uri = uri
-        elif uri.startswith('pyo://'):
-            if self._uri == uri:
-                return
-            try:
-                obj_name = uri.split('/')[-1]
-            except IndexError, e:
-                print(e)
-                return False
-            if obj_name == 'Noise':
-                del self._source
-                self._source = pyo.Noise()
-                self._connect()
-                return True
-            else:
-                print("Pyo object {0} not supported, yet!".format(obj_name))
-                return False
-        elif uri.startswith('file://'):
-            f_name = uri[6:]
-            if os.path.exist(f_name):
-                del self._source
-                self._source = pyo.SfPlayer(f_name, loop = True)
-                return True
-            else:
-                print("Sound file does not exist.")
-                return False
+            self._connect()
+            self._set_aed_to_previous()
+        else:
+            print("Failed to set source URI to %s" % (uri))
+
+    def _set_aed_to_previous(self):
+        self.set_relative_aed(self._previous_aed, self._previous_speakers_angles)
             
-    def set_relative_aed(self, aed):
+    def set_relative_aed(self, aed, speaker_angles):
         """
         @param aed: azimuth, elevation, distance
+        @param speaker_angles: list of aed for each speaker
         @type aed: list
+        @type speaker_angles: list
         """
-        factor0 = maths.angles_to_attenuation(aed, self._speakers_angles[0])
-        factor1 = maths.angles_to_attenuation(aed, self._speakers_angles[1])
-        self._mixer.setAmp(0, 0, factor0)
-        self._mixer.setAmp(0, 1, factor1)
+        # TODO: set_xyz should call this
+        index = 0
+        for angle in speaker_angles:
+            factor = maths.angles_to_attenuation(aed, angle)
+            self._mixer.setAmp(0, index, factor)
+            print("factor[%d]: %f" % (index, factor))
+            index += 1
+        self._previous_aed = aed
+        self._previous_speakers_angles = speaker_angles
         
     def _connect(self):
         self._mixer.addInput(0, self._source)
-        self._mixer.setAmp(0, 0, 0.5)
-        self._mixer.setAmp(0, 1, 0.5)
+        # self._mixer.setAmp(0, 0, 0.5)
+        # self._mixer.setAmp(0, 1, 0.5)
+        if self._is_connected_to_listener:
+            self._mixer.out()
+        else:
+            self._mixer.stop()
+
