@@ -19,7 +19,7 @@
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-maths stuff.
+Maths stuff for audio spatialization.
 """
 import math
 
@@ -34,7 +34,7 @@ def dot_product(v1, v2):
 
 def length(v):
     """
-    Returns the length of a vector.
+    Returns the length of a 3D vector.
     @param v: list of three floats.
     @return: float
     """
@@ -43,15 +43,15 @@ def length(v):
 def aed_to_xyz(aed):
     """
     Converts AED to XYZ.
-    @param vec: list of three floats.
+    @param aed: list of three floats.
     @return: list of three floats.
     """
     azimuth = aed[0]
     elevation = aed[1]
-    distance = aed[2]
-    x = distance * math.sin(azimuth) * math.cos(elevation)
-    y = distance * math.sin(azimuth) * math.sin(elevation)
-    z = distance * math.cos(azimuth)
+    _distance = aed[2]
+    x = _distance * math.sin(azimuth) * math.cos(elevation)
+    y = _distance * math.sin(azimuth) * math.sin(elevation)
+    z = _distance * math.cos(azimuth)
     return [x, y, z]
 
 def normalize(vec):
@@ -60,7 +60,7 @@ def normalize(vec):
     @param vec: list of three floats.
     @return: list of three floats.
     """
-    _length = len(vec)
+    _length = length(vec) # get the length of the 3D vector
     return [vec[0] / _length, vec[1] / _length, vec[2] / _length]
 
 
@@ -109,10 +109,17 @@ def add(aed0, aed1):
 
 def distance_to_attenuation(distance):
     """
-    Not working yet. Just returns 1.0
+    A very crude distance to attenuation conversion.
+    (we use the abs of the number you give us.)
+    @param distance: Absolute distance in meters.
+    @type distance: float
+    @rtype: float
     """
-    # TODO: compute distance_to_attenuation
-    return 1.0
+    d = abs(distance)
+    if d <= 1.0:
+        return 1.0
+    attenuation = 1.0 / d
+    return attenuation
 
 def map_from_zero_to_one(value):
     """
@@ -134,23 +141,36 @@ def spread(value, factor=2):
     """
     Apply spread factor (according to constant total power)
     @param value: input
-    @param exponent: exponent, default=2
+    @param factor: exponent, default=2
     @rtype: float
     """
     #TODO: give this a better name
     return math.pow(value, factor)
 
+def subtract(aed0, aed1):
+    """
+    Subtract one vector from another.
+    """
+    return [
+        aed0[0] - aed1[0], 
+        aed0[1] - aed1[1], 
+        aed0[2] - aed1[2], 
+        ]
+
 def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     """
+    The most important function in this application!
+    Returns the volume to mix a sound source for its position relative to the position of a speaker.
     @param speaker_aed: AED position of the loudspeaker.
     @param source_aed: AED position of the sound source.
     @rtype: float
     @return: Audio level factor.
     """
-    aed = maths.add(speaker_aed, source_aed)
+    aed = subtract(speaker_aed, source_aed)
     factor = 1.0
     factor *= spread(attenuate_according_to_angle(aed[0]), exponent)
     factor *= spread(attenuate_according_to_angle(aed[1]), exponent)
-    # TODO: factor *= distance_to_attenuation(aed[2])
+    dist = aed[2]
+    factor *= distance_to_attenuation(dist)
     return factor
 

@@ -28,9 +28,13 @@ if __name__ == '__main__':
         while True:
             time.sleep(0.1)
     except KeyboardInterrupt, e: # Ctrl-C
-        raise e
+        # raise e
+        print(e)
+        os._exit(0)
     except SystemExit, e: # sys.exit()
-        raise e
+        # raise e
+        print(e)
+        os._exit(0)
     except Exception, e:
         print 'ERROR, UNEXPECTED EXCEPTION'
         print str(e)
