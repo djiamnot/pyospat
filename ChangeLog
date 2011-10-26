@@ -1,3 +1,450 @@
+commit 624d83c57be840a8c26d2bc2bd2b625a7ab74b84
+Merge: ee0859a 57bc5ac
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 26 17:24:42 2011 -0400
+
+    Merge branch 'develop'
+
+commit 57bc5ac2ffa2b06b94caf84b74bd27ea1df8e8f3
+Merge: ec2eb6a 5ecea4f
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 26 17:23:43 2011 -0400
+
+    Merge branch 'adc-input' into develop
+
+commit 5ecea4fad1b47ebba53edf549c8c13fd31e262cb
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 26 17:23:00 2011 -0400
+
+    separate run scripts for python 2.6 and 2.7
+
+commit e85c73689f8ee47220cfc4b060bd07dea72dac87
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Oct 26 17:19:33 2011 -0400
+
+    set aed to previous one to hear still something when set URI
+
+commit 779a99bd1a9c43a3cbf60033e08a7d0800ebc242
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Oct 26 17:16:38 2011 -0400
+
+    implement clear and deleteNode
+
+commit 4887df550f3d64dd4b36593bd81ebf5569478adc
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Oct 26 15:14:58 2011 -0400
+
+    update CONTRIBUTING with how-to release info
+
+commit 485ea5349d2df5d849200ae82841d20337e54557
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Oct 26 15:09:42 2011 -0400
+
+    fixed division by zero in distance to attenuation conversion
+
+commit e4283c825997760c966f0e9626c01d81305bbd32
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Oct 26 14:54:26 2011 -0400
+
+    add BUGS
+
+commit 6addd563faf0bccffba4a760affb88cd8dd622ae
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Wed Oct 26 14:53:12 2011 -0400
+
+    small changes
+
+commit 05cf0b238a6d09a1ee7849d8cb9fb193bccccb58
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 25 18:47:57 2011 -0400
+
+    A very crude, 1/distance attenuation.
+
+commit 9f346b618117e396889cc09b7dcdc9cbe846664a
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 25 17:51:19 2011 -0400
+
+    Pd patch may have changed...
+
+commit f2645214aa6de537ece293899c0527916a7ff453
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 25 17:50:51 2011 -0400
+
+    fixed errors in init tests that made them fail
+
+commit 74d43ecbc729c43d70b66f6c99470d623ec9af29
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Tue Oct 25 17:22:03 2011 -0400
+
+    less prints
+
+commit 6e7f7d0ccab33f55cc1861144a41eb609cb427f6
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Tue Oct 25 17:14:00 2011 -0400
+
+    fix file:// parsing
+
+commit c4e4f69f360075e89fc5e5319fd0424c6c3d6bc5
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Tue Oct 25 17:11:15 2011 -0400
+
+    towards more mess
+
+commit 36b8e859c86bafa4cc9395f0b97b846eb338c508
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Tue Oct 25 15:51:35 2011 -0400
+
+    can change the sound source URI
+
+commit eb1bc4a24409f40564349c34ed8779ebfd35d92e
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 25 13:29:35 2011 -0400
+
+    added setNodeStringProperty example message
+
+commit ec2eb6a6719c213e4c88222a59b87115953524b9
+Merge: c5ba594 2a1061f
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Oct 21 18:08:42 2011 -0400
+
+    Merge branch 'multisources' into develop
+
+commit 2a1061f326146a08c43267ae0a2adbb2cf9ae6e2
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Oct 21 18:07:36 2011 -0400
+
+    trivial change to pd patch
+
+commit 388a68b8d4f776758e9c4611845140b5e17b2c69
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Oct 21 17:40:49 2011 -0400
+
+    working noise prototype with stereo spatialisation
+
+commit 15efc049093e92958455769a7f386ca93951a626
+Author: Michal Seta <mis@artengine.ca>
+Date:   Thu Oct 20 16:51:45 2011 -0400
+
+    Temporarily removed delays (commented-out) until necessary
+
+commit 8e04a46cacd6f851ab30d3332a46deb7d3208c97
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 19 19:31:10 2011 -0400
+
+    Re-save, re-commit of classes diagram
+
+commit f2b83f3be29a452bf3fc286cecd9a2d2c73c33d5
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 19 19:29:35 2011 -0400
+
+    Bare-bones classes, methods but untested.
+
+commit 8c6f1a315a2509d2e4fa390dfbdac7decf84fb42
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 19 18:52:23 2011 -0400
+
+    updated class diagram
+
+commit c19a8c3a932d7f402fa9823d13876e92476c8c94
+Author: Michal Seta <mis@artengine.ca>
+Date:   Wed Oct 19 11:44:04 2011 -0400
+
+    Saved dia classes document (may not have been saved with last changes on the last commit)
+
+commit 4bf0062ad20130b5b70ca07ddd17daf1931ecae3
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 18 19:22:44 2011 -0400
+
+    Sound source barebones according to class diagram
+
+commit cf5e184322478da42611bbf8ebab31a2a8009220
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 18 19:22:39 2011 -0400
+
+    Barebones according to the class diagram
+
+commit daadf16f24119000933f225432018a38890260e0
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 18 19:21:59 2011 -0400
+
+    retouched some ideas
+
+commit c5ba5948e38d7cc8104b2225725284bf71c33311
+Merge: 44a894f 2da9d42
+Author: Michal Seta <mis@artengine.ca>
+Date:   Tue Oct 18 13:18:19 2011 -0400
+
+    Merge branch 'develop' of github.com:sat-metalab/pyospat into develop
+
+commit 2da9d4298af3b0386eb8a279f21c8dea5f9d17c2
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Tue Oct 18 01:08:29 2011 -0400
+
+    more comments in pd-controls.pd
+
+commit 44a894f2bb3e4efbef51f1739ca60335b0966f7c
+Merge: fa2075c 516977c
+Author: Michal Seta <mis@artengine.ca>
+Date:   Mon Oct 17 18:52:02 2011 -0400
+
+    Merge branch 'develop' of github.com:sat-metalab/pyoscape into develop
+
+commit 516977ca643684babad913f5a967960e72118189
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 17:35:43 2011 -0400
+
+    heavily update classes.dia
+
+commit 11d78127941bc4ddc94ed1ea59c0a6095b93b3a1
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 16:53:38 2011 -0400
+
+    fix an error in maths.angles_to_attenuation
+
+commit 5a4d98655e5b1be0f9657cbd4e267ac9d65b363f
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 16:39:47 2011 -0400
+
+    test 1/4 circle angle
+
+commit fa2075c748a0e4135c6e99cacaa2d82e7f9af584
+Merge: 1283022 af645c7
+Author: Michal Seta <mis@artengine.ca>
+Date:   Mon Oct 17 16:37:05 2011 -0400
+
+    Merge branch 'develop' of github.com:sat-metalab/pyoscape into develop
+
+commit af645c73ca9f12354760916418183a53f4410fce
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 16:30:29 2011 -0400
+
+    more tests
+
+commit 1283022857daee88d2c8c1ae2b19f6e8a424543f
+Merge: 5173625 8ed5fac
+Author: Michal Seta <mis@artengine.ca>
+Date:   Mon Oct 17 16:21:56 2011 -0400
+
+    Merge branch 'develop' of github.com:sat-metalab/pyoscape into develop
+
+commit 5173625e0017aa7a8b09e96eea02f63cc8689663
+Author: Michal Seta <mis@artengine.ca>
+Date:   Mon Oct 17 16:21:03 2011 -0400
+
+    small change
+
+commit 8ed5fac4d3f898da38368af7f5ec07b7daa58c29
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 16:10:50 2011 -0400
+
+    fix a NameError
+
+commit ffa85fed1aec7038572633a38cdd0e0c53c19e6a
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 15:11:42 2011 -0400
+
+    README is better
+
+commit 9b2097cd729775df261af76c476b5759183e2de1
+Merge: bf21f6d f55f971
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 15:07:06 2011 -0400
+
+    Merge branch 'documentation-effort' into develop
+
+commit f55f97176e4f53e8a48af11312ab7d82e4429fde
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 15:06:51 2011 -0400
+
+    more gitignores
+
+commit 27eb1c1bcc0e4b598e928d0eb2087a78b44ce3b9
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 15:04:47 2011 -0400
+
+    simplesynth proto: exit, do not raise
+
+commit fef24f02d66ed6a0707a409fc02d0ed20003db12
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 15:04:22 2011 -0400
+
+    build doc with epydoc. Fix docstring errors.
+
+commit bf21f6d522a95ca2543621ffae2405b21f1f7acf
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 14:46:56 2011 -0400
+
+    more doc
+
+commit 2cef82fc79ed5ecd8d6e7e5de44582fe83e716cf
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Oct 17 14:44:18 2011 -0400
+
+    fix a bad typo
+
+commit ee0859a5381bb5d9e34be40b8896a0db2213c7b6
+Author: Michal Seta <mis@artengine.ca>
+Date:   Sat Sep 3 23:48:51 2011 -0400
+
+    Fixed a wrong parameter name
+
+commit a906e9403ca67a68215895746f9cefcbd12f96eb
+Author: Michal Seta <mis@artengine.ca>
+Date:   Sat Sep 3 22:22:38 2011 -0400
+
+    length should be len
+
+commit 4e1769eb3ce04b350755a9162af09ef2ebf3ff29
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 16:34:11 2011 -0400
+
+    fixed some mistakes
+
+commit 50cb551cbbe8518c898fa8599dd0e1e99707e6f4
+Merge: 867f7e0 b16d460
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 16:27:26 2011 -0400
+
+    Merge branch 'master' of github.com:sat-metalab/pyoscape
+
+commit 867f7e01ac83de14c46c4b99f72bf15fa484faa9
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 16:27:13 2011 -0400
+
+    handle variable delay
+
+commit a218e271d69496bedee01da2bd1a0c7ad0e25085
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 16:26:50 2011 -0400
+
+    explicitaly use python2.6 in the ./run script
+
+commit b16d4607a766396dfa9ff95369162f72201e2da1
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Sep 2 16:24:40 2011 -0400
+
+    Moved the math related functions form application to maths
+
+commit 17438a40946b6ace23cb9928d7b1d08af7e3fdd0
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 16:02:27 2011 -0400
+
+    refactored maths stuff in application.py
+
+commit 679896deaa59d913fba5f9ff74dded0fe98d7083
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 15:39:23 2011 -0400
+
+    more tests and doc in maths.py
+
+commit 8b44ac7bfb9a92b5a65cad53767210cca995e49f
+Merge: 8b29a55 e1a033a
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 15:26:20 2011 -0400
+
+    Merge branch 'master' of github.com:sat-metalab/pyoscape
+
+commit 8b29a55030bd1575d0acd134b960a6320adb20c9
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 15:10:31 2011 -0400
+
+    update TODO
+
+commit e1a033a97f408ed782049679783e80210dbfb4c5
+Merge: 02895af 196fb8e
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Sep 2 14:56:58 2011 -0400
+
+    Merge branch 'master' of github.com:sat-metalab/pyoscape
+
+commit 02895aff71dfd1604394b458a8847655ecb2953c
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Sep 2 14:56:37 2011 -0400
+
+    functions for computing attenutation per speaker
+
+commit 196fb8e44d46c6b61ff36f9c9f3d1a42325eca94
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 13:03:33 2011 -0400
+
+    map result of cos from 0 to 1
+
+commit d83cb1ebd8d2b20f07e3a04ee315d754c17102ba
+Merge: 473aab2 02ebe1b
+Author: Michal Seta <mis@artengine.ca>
+Date:   Fri Sep 2 12:39:10 2011 -0400
+
+    Merge branch 'master' of github.com:sat-metalab/pyoscape
+    
+    Conflicts:
+    	examples/pd-controls/run
+
+commit 02ebe1bf89c655b8dfe4bc26746da6503e7154af
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 12:36:02 2011 -0400
+
+    simplify pd patch
+
+commit 2c857199ecff0a565d3ac0c7f4bba30397c12054
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 12:32:41 2011 -0400
+
+    update pd-controls.pd to use setPositionAED
+
+commit 30b6213248235cdb949543b99624ef103283f604
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 12:16:54 2011 -0400
+
+    add maths.angle_between_vectors - not tested
+
+commit 180ae5ef2e7b5126fadd75cde7660c2029d3d428
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Fri Sep 2 11:38:59 2011 -0400
+
+    update README with how to build pyo
+
+commit 473aab2352fac44e3d6b60168fcb0b2d078c2c6b
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Fri Aug 19 11:34:21 2011 -0400
+
+    modified the pd switches to run jack + 8 channels
+
+commit 48db05a00357f20d9a182e7526a54196fee8518f
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Mon Aug 15 19:48:01 2011 -0400
+
+    distance through sin
+
+commit a9bd22d9fe820714f2b3741ab8c992a83d0aff4c
+Author: Michal Seta <djiamnot@gmail.com>
+Date:   Mon Aug 15 19:47:13 2011 -0400
+
+    angles distances set to 0.
+
+commit c4ef0bc1f0f239ab27bbc7733dfa289524db68f2
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 19:09:46 2011 -0400
+
+    math fix
+
+commit c239070dc035833e1d6643340b232120442d1e63
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 19:09:37 2011 -0400
+
+    better patch
+
+commit 75e2dc342c20e0b59b2194925f14b865e8175bcd
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 18:57:23 2011 -0400
+
+    update doc
+
+commit db3352f4e2857f582e34a20bec10c22cb8afc329
+Author: Alexandre Quessy <alexandre@quessy.net>
+Date:   Mon Aug 15 18:55:49 2011 -0400
+
+    update ChangeLog
+
 commit c008c915e693260ddc99ebfac6edad6fa8e23ff5
 Author: Alexandre Quessy <alexandre@quessy.net>
 Date:   Mon Aug 15 18:53:09 2011 -0400
