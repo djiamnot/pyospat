@@ -1,0 +1,7 @@
+Known Bugs
+==========
+
+* pyo leaks
+* pyo segfaults when we quit
+* pyo gets zombified by JACK
+
