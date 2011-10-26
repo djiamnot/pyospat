@@ -115,6 +115,19 @@ class Renderer(object):
             print("Already have sound source %s" % (source_name))
             return False
 
+    def delete_source(self, source_name):
+        print("delete_source(%s)" % (source_name))
+        if source_name in self._sources:
+            del self._sources[source_name]
+        else:
+            print("Could not find sound source %s" % (source_name))
+            return False
+
+    def clear_scene(self):
+        print("clear_scene()!")
+        for k in self._sources.keys():
+            del self._sources[k]
+
     def __str__(self):
         ret = ""
         ret += "Renderer source nodes:"
@@ -203,7 +216,10 @@ class Application(object):
         # this seems to be different from the previous spatosc behaviour?
         print("  Got {0} from {1}".format(message, address))
         command = message.getValues()[0]
-        if _type_tags_match(message, "ss"):
+        if _type_tags_match(message, "s"):
+            if command == "clear":
+                self._renderer.clear_scene()
+        elif _type_tags_match(message, "ss"):
             if command == "createSoundSource":
                 node_id = message.getValues()[1]
                 self._renderer.add_source(node_id)
@@ -213,6 +229,11 @@ class Application(object):
                 # we assume our listener exists for now
                 # print("create listener: %s" % (arg))
                 del arg
+            elif command == "deleteNode":
+                node_id = message.getValues()[1]
+                if self._renderer.has_source(node_id):
+                    self._renderer.delete_source(node_id)
+
         elif _type_tags_match(message, "sss"):
             if command == "connect":
                 # TODO: handle connections

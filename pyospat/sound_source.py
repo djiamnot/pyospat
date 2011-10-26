@@ -150,6 +150,7 @@ class SoundSource(object):
         @type aed: list
         @type speaker_angles: list
         """
+        # TODO: set_xyz should call this
         index = 0
         for angle in speaker_angles:
             factor = maths.angles_to_attenuation(aed, angle)
