@@ -11,9 +11,13 @@ Run the unit tests:
 
  * trial pyospat
 
+Increase the version number (with an even micro version number, to be released):
+
+ * pyospat/__init__.py
+
 Update the release notes:
 
- * RELEASE
+ * vim NEWS
 
 Update the ChangeLog:
 
@@ -25,7 +29,7 @@ Create the tag and a tarball:
  * Commit any change
  * git tag 0.1.0
 
-Increase the version number (not yet released):
+Increase the version number (to the next never-to-be-released odd micro version number):
 
  * pyospat/__init__.py
 
