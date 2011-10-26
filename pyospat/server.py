@@ -19,7 +19,7 @@
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The ServerWrapper and PrefParser classes..
+The ServerWrapper and PrefParser classes.
 """
 import pyo
 import time
@@ -32,7 +32,7 @@ class PrefParser(object):
     """
     def __init__(self, file_name=None):
         """
-        @throws IOError if file is not found.
+        throws IOError if file is not found.
         """
         if file_name is None:
             file_name = os.path.expanduser("~/.pyorc")
@@ -91,7 +91,7 @@ class ServerWrapper(object):
             else:
                 while self._running:
                     time.sleep(0.1)
-        except KeyboardInterrupt, e:
+        except KeyboardInterrupt:
             print("Interrupted")
         self._server.stop()
 
