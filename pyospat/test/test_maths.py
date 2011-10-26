@@ -68,3 +68,14 @@ class Test_Audio_Spatialization(unittest.TestCase):
         _test([QUARTER_PI, 0.0, 1.0], [0.0, 0.0, 1.0], expect, 1.0)
         _test([QUARTER_PI / 2.0, 0.0, 1.0], [-QUARTER_PI / 2.0, 0.0, 1.0], expect, 1.0)
 
+
+    def test_distance_attenuation(self):
+        self.failUnlessEqual(maths.distance_to_attenuation(8.0), 0.125)
+        self.failUnlessEqual(maths.distance_to_attenuation(4.0), 0.25)
+        self.failUnlessEqual(maths.distance_to_attenuation(2.0), 0.5)
+        self.failUnlessEqual(maths.distance_to_attenuation(1.0), 1.0)
+        self.failUnlessEqual(maths.distance_to_attenuation(0.5), 1.0)
+        self.failUnlessEqual(maths.distance_to_attenuation(0.0), 1.0)
+        self.failUnlessEqual(maths.distance_to_attenuation(-1.0), 1.0)
+        self.failUnlessEqual(maths.distance_to_attenuation(-2.0), 0.5)
+

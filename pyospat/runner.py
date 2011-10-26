@@ -23,13 +23,11 @@ The Runner function.
 """
 from optparse import OptionParser
 from pyospat import __version__
-from pyospat import server
 from pyospat import application
 from pyospat import configuration
-import os
-import pyo
+from pyospat import server
+from twisted.internet import error
 import sys
-import time
 
 DESCRIPTION = "Python audio renderer for SpatOSC"
 
@@ -40,15 +38,23 @@ def run():
     parser = OptionParser(usage="%prog [options]", version="%prog " + __version__, description=DESCRIPTION)
     parser.add_option("-v", "--verbose", action="store_true", help="Makes the output verbose.")
     parser.add_option("-p", "--osc-receive-port", type="int", default=10001, help="UDP port to listen to for OSC messages. Default is 10001")
+    parser.add_option("-l", "--listener-id", type="string", default="listener0", help="ID of the listener in the spatosc scene")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     if options.verbose:
         config.verbose = True
     if options.osc_receive_port:
         config.osc_receive_port = options.osc_receive_port
+    if options.listener_id:
+        config.listener_id = options.listener_id
 
     s = server.ServerWrapper(use_twisted=True)
-    app = application.Application(config)
+    try:
+        app = application.Application(config)
+    except error.CannotListenError, e:
+        print(e)
+        sys.exit(1)
     s.run()
+    del app
     # why does it often end with a segmentation fault?
 

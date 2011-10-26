@@ -1,13 +1,10 @@
-#N canvas 133 309 469 459 10;
+#N canvas 170 44 827 502 10;
 #X obj 54 339 tgl 50 0 empty empty success 17 -7 0 10 -258113 -1 -1
 1 1;
-#X obj 54 307 spatosc;
-#X msg 179 303 createSource noise;
-#X msg 174 325 createListener listener;
-#X obj 130 235 loadbang;
-#X msg 129 258 addTranslator basic BasicTranslator localhost 10001
+#X obj 328 177 loadbang;
+#X msg 287 228 addTranslator basic BasicTranslator localhost 10001
 ;
-#X obj 175 282 del 5;
+#X obj 297 249 del 5;
 #X floatatom 41 171 8 0 0 0 - - -;
 #X floatatom 93 172 5 0 0 0 - - -;
 #X floatatom 132 172 5 0 0 0 - - -;
@@ -28,41 +25,65 @@
 #X connect 4 0 1 0;
 #X connect 5 0 2 0;
 #X restore 54 192 pd pack3f;
-#X msg 54 212 setPositionAED noise \$1 \$2 \$3;
 #X obj 25 142 hsl 128 15 -3.14159 3.14159 0 0 empty empty empty -2
--8 0 10 -260097 -1 -1 6350 1;
+-8 0 10 -260097 -1 -1 9000 1;
 #X obj 207 23 vsl 15 128 -3.14159 3.14159 0 0 empty empty empty 0 -9
-0 10 -260097 -1 -1 6350 1;
+0 10 -260097 -1 -1 2850 1;
 #X obj 231 3 vsl 15 128 0 10 0 0 empty empty empty 0 -9 0 10 -260097
--1 -1 0 1;
-#X obj 146 -51 loadbang;
-#X msg 150 -6 0;
-#X obj 146 -27 del 10;
+-1 -1 1270 1;
+#X obj 23 -43 loadbang;
+#X msg 23 -5 0;
+#X obj 23 -24 del 10;
 #X text 177 153 <-- angle from -PI to PI;
 #X text 255 123 <--distance must be > 0;
 #X text 236 138 <-- elevation from -PI to PI;
-#X msg 258 -9 0;
-#X obj 254 -30 del 10;
-#X connect 1 0 0 0;
-#X connect 2 0 1 0;
-#X connect 3 0 1 0;
-#X connect 4 0 5 0;
-#X connect 4 0 6 0;
-#X connect 5 0 1 0;
-#X connect 6 0 2 0;
-#X connect 6 0 3 0;
-#X connect 7 0 10 0;
-#X connect 8 0 10 1;
-#X connect 9 0 10 2;
-#X connect 10 0 11 0;
-#X connect 11 0 1 0;
-#X connect 12 0 7 0;
-#X connect 13 0 8 0;
-#X connect 14 0 9 0;
-#X connect 15 0 17 0;
-#X connect 15 0 22 0;
-#X connect 16 0 13 0;
-#X connect 16 0 12 0;
-#X connect 17 0 16 0;
-#X connect 21 0 14 0;
-#X connect 22 0 21 0;
+#X obj 288 204 t b b;
+#X msg 236 424 clearScene;
+#X msg 232 401 forceRefresh;
+#X text 319 405 TODO;
+#X text 315 426 TODO;
+#X msg 54 212 setPositionAED source0 \$1 \$2 \$3;
+#X msg 297 268 createSource source0;
+#X msg 297 288 createListener listener0;
+#X msg 475 301 setNodeStringProperty source0 uri adc://0;
+#X msg 474 324 setNodeStringProperty source0 uri pyo://Noise;
+#X msg 231 -22 1;
+#X obj 288 169 bng 30 250 50 0 empty empty empty 17 7 0 10 -191407
+-1 -1;
+#X msg 475 347 setNodeStringProperty source0 uri file:///usr/share/sounds/alsa/Noise.wav
+;
+#X msg 479 383 setNodeStringProperty source0 uri file:///usr/share/sounds/alsa/Rear_Left.wav
+;
+#X msg 484 273 setNodeStringProperty source0 uri adc://1;
+#X obj 53 307 spatosc;
+#X connect 1 0 17 0;
+#X connect 2 0 32 0;
+#X connect 3 0 23 0;
+#X connect 3 0 24 0;
+#X connect 4 0 7 0;
+#X connect 5 0 7 1;
+#X connect 6 0 7 2;
+#X connect 7 0 22 0;
+#X connect 8 0 4 0;
+#X connect 9 0 5 0;
+#X connect 10 0 6 0;
+#X connect 11 0 13 0;
+#X connect 12 0 9 0;
+#X connect 12 0 8 0;
+#X connect 13 0 12 0;
+#X connect 13 0 27 0;
+#X connect 17 0 2 0;
+#X connect 17 1 3 0;
+#X connect 18 0 32 0;
+#X connect 19 0 32 0;
+#X connect 22 0 32 0;
+#X connect 23 0 32 0;
+#X connect 24 0 32 0;
+#X connect 25 0 32 0;
+#X connect 26 0 32 0;
+#X connect 27 0 10 0;
+#X connect 28 0 17 0;
+#X connect 29 0 32 0;
+#X connect 30 0 32 0;
+#X connect 31 0 32 0;
+#X connect 32 0 0 0;
