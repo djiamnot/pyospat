@@ -115,8 +115,8 @@ def distance_to_attenuation(distance):
     @rtype: float
     """
     # TODO: compute distance_to_attenuation
-    attenuation = 1./distance
-    print("Attenuation is: ", attenuation)
+    attenuation = 1.0 / distance
+    print("Attenuation is: %s" % (attenuation))
     return attenuation
 
 def distance(sub):
@@ -127,9 +127,8 @@ def distance(sub):
     @rtype float
     """
     distance = math.sqrt(sub[0] * sub[0] + sub[1] * sub[1] + sub[2] * sub[2])
-    print("Distance: ", distance)
+    print("Distance: %s" % (distance))
     return distance
-    
 
 def map_from_zero_to_one(value):
     """
