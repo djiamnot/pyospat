@@ -39,6 +39,8 @@ class SoundSource(object):
         self._uri = None
         #TODO: self._delay = pyo.Delay()
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
+        self._previous_aed = [0.0, 0.0, 0.0]
+        self._previous_speakers_angles = []
 
     def __del__(self):
         del self._source
@@ -140,8 +142,12 @@ class SoundSource(object):
         if success:
             self._uri = uri
             self._connect()
+            self._set_aed_to_previous()
         else:
             print("Failed to set source URI to %s" % (uri))
+
+    def _set_aed_to_previous(self):
+        self.set_relative_aed(self._previous_aed, self._previous_speakers_angles)
             
     def set_relative_aed(self, aed, speaker_angles):
         """
@@ -157,6 +163,8 @@ class SoundSource(object):
             self._mixer.setAmp(0, index, factor)
             print("factor[%d]: %f" % (index, factor))
             index += 1
+        self._previous_aed = aed
+        self._previous_speakers_angles = speaker_angles
         
     def _connect(self):
         self._mixer.addInput(0, self._source)
