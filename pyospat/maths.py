@@ -48,10 +48,10 @@ def aed_to_xyz(aed):
     """
     azimuth = aed[0]
     elevation = aed[1]
-    distance = aed[2]
-    x = distance * math.sin(azimuth) * math.cos(elevation)
-    y = distance * math.sin(azimuth) * math.sin(elevation)
-    z = distance * math.cos(azimuth)
+    _distance = aed[2]
+    x = _distance * math.sin(azimuth) * math.cos(elevation)
+    y = _distance * math.sin(azimuth) * math.sin(elevation)
+    z = _distance * math.cos(azimuth)
     return [x, y, z]
 
 def normalize(vec):
@@ -109,26 +109,17 @@ def add(aed0, aed1):
 
 def distance_to_attenuation(distance):
     """
-    A very crude
-    @param distance: distance in meters(?)
+    A very crude distance to attenuation conversion.
+    (we use the abs of the number you give us.)
+    @param distance: Absolute distance in meters.
     @type distance: float
     @rtype: float
     """
-    # TODO: compute distance_to_attenuation
-    attenuation = 1.0 / distance
-    print("Attenuation is: %s" % (attenuation))
+    d = abs(distance)
+    if d <= 1.0:
+        return 1.0
+    attenuation = 1.0 / d
     return attenuation
-
-def distance(sub):
-    """
-    Quantify distance
-    @param sub: difference between vectors
-    @type sub: list
-    @rtype float
-    """
-    distance = math.sqrt(sub[0] * sub[0] + sub[1] * sub[1] + sub[2] * sub[2])
-    print("Distance: %s" % (distance))
-    return distance
 
 def map_from_zero_to_one(value):
     """
@@ -176,10 +167,10 @@ def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     @return: Audio level factor.
     """
     aed = subtract(speaker_aed, source_aed)
-    dist = distance(aed)
     factor = 1.0
     factor *= spread(attenuate_according_to_angle(aed[0]), exponent)
     factor *= spread(attenuate_according_to_angle(aed[1]), exponent)
+    dist = aed[2]
     factor *= distance_to_attenuation(dist)
     return factor
 
