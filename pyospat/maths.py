@@ -163,6 +163,7 @@ def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     Returns the volume to mix a sound source for its position relative to the position of a speaker.
     @param speaker_aed: AED position of the loudspeaker.
     @param source_aed: AED position of the sound source.
+    @param exponent: spread between speakers. 2.0 is for stereo or quad. 4.0 for octo. 4 is more discrete than 2.
     @rtype: float
     @return: Audio level factor.
     """
