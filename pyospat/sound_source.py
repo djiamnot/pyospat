@@ -41,6 +41,7 @@ class SoundSource(object):
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
         self._previous_aed = [0.0, 0.0, 0.0]
         self._previous_speakers_angles = []
+        self._spread = 2.0
 
     def __del__(self):
         del self._source
@@ -148,6 +149,9 @@ class SoundSource(object):
 
     def _set_aed_to_previous(self):
         self.set_relative_aed(self._previous_aed, self._previous_speakers_angles)
+
+    def set_spread(self, spread):
+        self._spread = float(spread)
             
     def set_relative_aed(self, aed, speaker_angles):
         """
@@ -159,7 +163,7 @@ class SoundSource(object):
         # TODO: set_xyz should call this
         index = 0
         for angle in speaker_angles:
-            factor = maths.angles_to_attenuation(aed, angle)
+            factor = maths.angles_to_attenuation(aed, angle, self._spread)
             self._mixer.setAmp(0, index, factor)
             print("factor[%d]: %f" % (index, factor))
             index += 1
