@@ -27,6 +27,8 @@ from txosc import async
 from txosc import dispatch
 import math
 
+PROPERTY_SPREAD = "setSpread"
+
 class Renderer(object):
     """
     Actually renders audio.
@@ -96,6 +98,24 @@ class Renderer(object):
                 print("Negative delay? %f" % (delay))
                 delay = 0.0
             self._sources[source_name].set_delay(delay)
+
+    def set_node_property(self, node_id, property_name, value):
+        """
+        handles node property changes.
+        """
+        if node_id == self._listener_id:
+            if property_name == PROPERTY_SPREAD:
+                try:
+                    _set_spread(float(value))
+                except ValueError, e:
+                    print(str(e))
+
+    def _set_spread(self, spread=2.0):
+        """
+        sets the spread for each speaker.
+        """
+        for source in self._sources.itervalues():
+            source.set_spread(spread)
 
     def has_source(self, source_name):
         return source_name in self._sources.keys()
@@ -266,10 +286,14 @@ class Application(object):
             print(str(self._renderer))
             return
         property_name = message.getValues()[0]
+        value = message.getValues()[1]
         if _type_tags_match(message, "ss", verbose=True): # string property
-            value = message.getValues()[1]
             if property_name == "uri":
                 self._renderer.set_uri(node_id, value)
+            else:
+                self._renderer.set_node_property(node_id, property_name, value)
+        else:
+            self._renderer.set_node_property(node_id, property_name, value)
 
     def _handle_create_listener(self, message, address):
         """
