@@ -1,4 +1,6 @@
  * pyospat: test amplitude calculation
+ * pyospat: remove scene.py
+ * pyospat: store spread in renderer to set new sources' spread as well
  * pyospat: introspect PyoObjects properties and listen for node props that match
  * pyospat: listener's spread prop should control spread for speakers
  * pyospat: GUI with speaker volumes. (over OSC!)
