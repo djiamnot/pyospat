@@ -39,6 +39,7 @@ def run():
     parser.add_option("-v", "--verbose", action="store_true", help="Makes the output verbose.")
     parser.add_option("-p", "--osc-receive-port", type="int", default=10001, help="UDP port to listen to for OSC messages. Default is 10001")
     parser.add_option("-l", "--listener-id", type="string", default="listener0", help="ID of the listener in the spatosc scene")
+    parser.add_option("-L", "--layout", type="string", default="STEREO", help="Speakers layout. One of STEREO, QUAD, OCTO")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     if options.verbose:
@@ -47,6 +48,8 @@ def run():
         config.osc_receive_port = options.osc_receive_port
     if options.listener_id:
         config.listener_id = options.listener_id
+    if options.layout:
+        config.layout_name = options.layout
 
     s = server.ServerWrapper(use_twisted=True)
     try:
