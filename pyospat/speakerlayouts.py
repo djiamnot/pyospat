@@ -18,17 +18,40 @@
 # You should have received a copy of the GNU General Public License
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
 
+import math
+
 """
-The Configuration class.
+Speaker positions constants.
 """
 
-class Configuration(object):
-    """
-    Configuration for the application.
-    """
-    def __init__(self):
-        self.verbose = False
-        self.osc_receive_port = 10001
-        self.listener_id = "listener0"
-        self.layout_name = "STEREO"
+STEREO = [
+    [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
+    [math.pi / 4.0, 0.0, 1.0]
+    ]
+"""
+QUAD - Left, Right, Rear-Right, Rear-Left
+"""
+QUAD = [
+    [- math.pi / 4.0, 0.0, 1.0], 
+    [math.pi / 4.0, 0.0, 1.0], 
+    [3 * math.pi / 4.0, 0.0, 1.0], 
+    [- 3 * math.pi / 4.0, 0.0, 1.0]
+    ]
+"""
+OCTO - 
+Left 315 degrees, center, right 45 degrees, right 90, right-rear 135 
+rear center (180), left-rear 225, left 270,
+"""
+OCTO =   [
+    [- math.pi / 4.0, 0.0, 1.0],
+    [0.0, 0.0, 1.0],
+    [math.pi / 4.0, 0.0, 1.0], 
+    [math.pi / 2.0, 0.0, 1.0], 
+    [3 * math.pi / 4.0, 0.0, 1.0], 
+    [math.pi, 0.0, 1.0], 
+    [- 3 * math.pi / 4.0, 0.0, 1.0],
+    [- math.pi / 2.0, 0.0, 1.0],
+    ]
+
+
 

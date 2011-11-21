@@ -22,6 +22,7 @@
 The Application class.
 """
 from pyospat import sound_source
+from pyospat import speakerlayouts as layouts
 from txosc import async
 from txosc import dispatch
 import math
@@ -99,6 +100,12 @@ class Renderer(object):
     def has_source(self, source_name):
         return source_name in self._sources.keys()
 
+    def get_number_of_speakers(self):
+        """
+        Count the speakers
+        """
+        return len(self._speakers_angles)
+
     def add_source(self, source_name):
         """
         Add an audio source
@@ -109,7 +116,7 @@ class Renderer(object):
         @rtype: bool
         """
         if source_name not in self._sources:
-            self._sources[source_name] = sound_source.SoundSource(2)
+            self._sources[source_name] = sound_source.SoundSource(self.get_number_of_speakers())
             return True
         else:
             print("Already have sound source %s" % (source_name))
@@ -187,6 +194,12 @@ class Application(object):
             [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
             [math.pi / 4.0, 0.0, 1.0]
         ]
+        if self._configuration.layout_name == "STEREO":
+            self._speakers_angles = layouts.STEREO
+        if self._configuration.layout_name == "QUAD":
+            self._speakers_angles = layouts.QUAD
+        if self._configuration.layout_name == "OCTO":
+            self._speakers_angles = layouts.OCTO
         self._renderer = Renderer(configuration.listener_id, self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         self._receiver = dispatch.Receiver()
