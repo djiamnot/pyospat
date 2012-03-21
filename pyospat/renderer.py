@@ -19,7 +19,7 @@
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
 
 from pyospat import sound_source
-from pyospat import speakerlayouts as layouts
+
 
 PROPERTY_SPREAD = "setSpread"
 
