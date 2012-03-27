@@ -20,6 +20,7 @@
 """
 The SoundSource class
 """
+from pyospat import introspection
 from pyospat import maths
 import os
 import pyo
@@ -92,6 +93,22 @@ class SoundSource(object):
             self._source = pyo.Input(chnl=adc_num)
             return True
 
+    def _set_uri_pyo_generator(self, uri):
+        """
+        @rtype: bool
+        """
+        try:
+            obj_name = uri.split("/")[-1]
+            _Pyobj = introspection.get_class(obj_name)
+            if introspection.instance_has_property(_Pyobj, 'input'):
+                print obj_name, "is not a generator."
+                return False
+            else:
+                self._source = _Pyobj()
+        except IndexError, e:
+            print(e)
+            return False
+
     def _set_uri_pyo(self, uri):
         """
         @rtype: bool
@@ -136,8 +153,10 @@ class SoundSource(object):
         success = False
         if uri.startswith("adc://"):
             success = self._set_uri_adc(uri)
+        # elif uri.startswith("pyo://"):
+        #     success = self._set_uri_pyo(uri)
         elif uri.startswith("pyo://"):
-            success = self._set_uri_pyo(uri)
+            success = self._set_uri_pyo_generator(uri)
         elif uri.startswith("file://"):
             success = self._set_uri_file(uri)
         if success:
