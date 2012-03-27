@@ -25,7 +25,7 @@ from optparse import OptionParser
 from pyospat import __version__
 from pyospat import application
 from pyospat import configuration
-from pyospat import server
+from pyospat import pyoserver
 from twisted.internet import error
 import sys
 
@@ -51,7 +51,7 @@ def run():
     if options.layout:
         config.layout_name = options.layout
 
-    s = server.ServerWrapper(use_twisted=True)
+    s = pyoserver.ServerWrapper(use_twisted=True)
     try:
         app = application.Application(config)
     except error.CannotListenError, e:
