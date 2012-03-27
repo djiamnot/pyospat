@@ -39,10 +39,14 @@ def has_class(name):
         return False
 
 def get_class(name):
-    if has_class(name):
-        return pyo.__dict__[name]
-    else:
-        raise RuntimeError("Could not find class pyo.%s" % (name))
+    """
+    @rtype: pyo object
+    """
+    try:
+        m = getattr(pyo, name)
+        return m
+    except AttributeError, err:
+        print err        
 
 def get_instance_properties(instance):
     """
