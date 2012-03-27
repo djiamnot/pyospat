@@ -1,4 +1,4 @@
-#N canvas 170 44 827 502 10;
+#N canvas 245 41 827 502 10;
 #X obj 54 339 tgl 50 0 empty empty success 17 -7 0 10 -258113 -1 -1
 1 1;
 #X obj 328 177 loadbang;
@@ -26,9 +26,9 @@
 #X connect 5 0 2 0;
 #X restore 54 192 pd pack3f;
 #X obj 25 142 hsl 128 15 -3.14159 3.14159 0 0 empty empty empty -2
--8 0 10 -260097 -1 -1 9000 1;
+-8 0 10 -260097 -1 -1 6350 1;
 #X obj 207 23 vsl 15 128 -3.14159 3.14159 0 0 empty empty empty 0 -9
-0 10 -260097 -1 -1 2850 1;
+0 10 -260097 -1 -1 6350 1;
 #X obj 231 3 vsl 15 128 0 10 0 0 empty empty empty 0 -9 0 10 -260097
 -1 -1 1270 1;
 #X obj 23 -43 loadbang;
@@ -56,6 +56,7 @@
 ;
 #X msg 484 273 setNodeStringProperty source0 uri adc://1;
 #X obj 53 307 spatosc;
+#X msg 530 55 setSpread listener0 prop 1;
 #X connect 1 0 17 0;
 #X connect 2 0 32 0;
 #X connect 3 0 23 0;
@@ -87,3 +88,4 @@
 #X connect 30 0 32 0;
 #X connect 31 0 32 0;
 #X connect 32 0 0 0;
+#X connect 33 0 32 0;
