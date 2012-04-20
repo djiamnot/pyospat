@@ -105,6 +105,7 @@ class SoundSource(object):
                 return False
             else:
                 self._source = _Pyobj()
+                return True
         except IndexError, e:
             print(e)
             return False
