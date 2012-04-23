@@ -98,13 +98,19 @@ class SoundSource(object):
         @rtype: bool
         """
         try:
+            print("*** pyo generator: Trying to instntiate %s"%(uri))
             obj_name = uri.split("/")[-1]
+            print("*** Object name is %s"%(obj_name))
             _Pyobj = introspection.get_class(obj_name)
-            if introspection.instance_has_property(_Pyobj, 'input'):
+            print("*** We got an object %s..."%(_Pyobj))
+            del self._source
+            self._source = _Pyobj()
+            if introspection.instance_has_property(self._source, 'input'):
                 print obj_name, "is not a generator."
+                del self._source
                 return False
             else:
-                self._source = _Pyobj()
+                print("*** pyo generator: apparent success...")
                 return True
         except IndexError, e:
             print(e)
@@ -157,7 +163,9 @@ class SoundSource(object):
         # elif uri.startswith("pyo://"):
         #     success = self._set_uri_pyo(uri)
         elif uri.startswith("pyo://"):
+            print("*** Entering _set_uri_pyo_generator ***")
             success = self._set_uri_pyo_generator(uri)
+#            success = self._set_uri_pyo(uri)
         elif uri.startswith("file://"):
             success = self._set_uri_file(uri)
         if success:
