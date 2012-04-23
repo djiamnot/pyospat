@@ -103,13 +103,12 @@ class SoundSource(object):
             print("*** Object name is %s"%(obj_name))
             _Pyobj = introspection.get_class(obj_name)
             print("*** We got an object %s..."%(_Pyobj))
-            del self._source
-            self._source = _Pyobj()
-            if introspection.instance_has_property(self._source, 'input'):
+            if introspection.class_has_property(_Pyobj, 'input'):
                 print obj_name, "is not a generator."
-                del self._source
                 return False
             else:
+                del self._source
+                self._source = _Pyobj()
                 print("*** pyo generator: apparent success...")
                 return True
         except IndexError, e:
