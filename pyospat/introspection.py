@@ -39,10 +39,14 @@ def has_class(name):
         return False
 
 def get_class(name):
-    if has_class(name):
-        return pyo.__dict__[name]
-    else:
-        raise RuntimeError("Could not find class pyo.%s" % (name))
+    """
+    @rtype: pyo object
+    """
+    try:
+        m = getattr(pyo, name)
+        return m
+    except AttributeError, err:
+        print err        
 
 def get_instance_properties(instance):
     """
@@ -61,6 +65,14 @@ def instance_has_property(instance, property_name):
     """
     props = get_instance_properties(instance)
     return props.has_key(property_name)
+
+def class_has_property(klass, property_name):
+    """
+    Will check for a property key in a class that has not been instantiated yet.
+    @rtype: bool
+    """
+    return klass.__dict__.has_key(property_name)
+    
 
 def set_instance_property(instance, name, value):
     """
