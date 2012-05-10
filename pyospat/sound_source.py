@@ -98,7 +98,7 @@ class SoundSource(object):
         @rtype: bool
         """
         try:
-            print("*** pyo generator: Trying to instntiate %s"%(uri))
+            print("*** pyo generator: Trying to instantiate %s"%(uri))
             obj_name = uri.split("/")[-1]
             print("*** Object name is %s"%(obj_name))
             _Pyobj = introspection.get_class(obj_name)
