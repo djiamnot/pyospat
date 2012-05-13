@@ -194,12 +194,13 @@ class OSCinterface(object):
             try:
                 from_id = connection_id.split("->")[0] #FIXME
                 to_id = connection_id.split("->")[1] #FIXME
+                print("Connecting from %s to %s" % (from_id, to_id))
                 if self._renderer.get_listener_id() == to_id:
                     aed = message.getValues() # 3 floats list
                     print("%s -> %s has AED: %s" % (from_id, to_id, aed))
                     self._renderer.set_aed(from_id, aed)
                 else:
-                    print("No such node: %s" % (from_id))
+                    print("%s No such node: %s" % (self, from_id))
             except KeyError, e:
                 print(e)
 
