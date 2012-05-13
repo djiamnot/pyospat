@@ -32,6 +32,7 @@ class Renderer(object):
         self._speakers_angles = speakers_angles
         # ID
         self._listener_id = listener_id
+        print("New renderer instance with listener %s" % (self._listener_id))
         # sources:
         self._sources = {}
 
@@ -60,7 +61,9 @@ class Renderer(object):
         @rtype bool
         """
         if self.has_source(source_name):
+            print("renderer will call set_uri() on %s"%(self._sources[source_name]))
             self._sources[source_name].set_uri(uri)
+            print("Success seting URI %s to %s" % (uri, source_name))
             return True
         else:
             return False
@@ -77,7 +80,7 @@ class Renderer(object):
         if self.has_source(source_name):
             self._sources[source_name].set_relative_aed(aed, self._speakers_angles)
         else:
-            print("No such node: %s" % (source_name))
+            print("%s No such node: %s" % (self, source_name))
 
     def set_delay(self, source_name, delay):
         """
@@ -129,8 +132,11 @@ class Renderer(object):
         @type type_name: object type
         @rtype: bool
         """
+        print("entered renderer.add_source()")
         if source_name not in self._sources:
+            print("will instantiate %s"%(source_name))
             self._sources[source_name] = sound_source.SoundSource(self.get_number_of_speakers())
+            print("Success instantiating %s at %s" % (source_name, self._sources[source_name]))
             return True
         else:
             print("Already have sound source %s" % (source_name))

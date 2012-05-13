@@ -34,6 +34,7 @@ class SoundSource(object):
         @param outs: number of outputs
         @type outs: int
         """
+        print("instantiating a SoundSource... ")
         self._source = None
         self._is_connected_to_listener = False
         self._number_of_outputs = outs
@@ -43,6 +44,7 @@ class SoundSource(object):
         self._previous_aed = [0.0, 0.0, 0.0]
         self._previous_speakers_angles = []
         self._spread = 2.0
+        print("Done")
 
     def __del__(self):
         del self._source
@@ -154,6 +156,7 @@ class SoundSource(object):
         * pyo://
         * file://
         """
+        print("setting URI to %s" % (uri))
         if self._uri == uri:
             return
         success = False
