@@ -109,7 +109,9 @@ class SoundSource(object):
                 print obj_name, "is not a generator."
                 return False
             else:
-                del self._source
+                if self._source is not None:
+                    self._source().stop()
+                #del self._source
                 self._source = _Pyobj()
                 print("*** pyo generator: apparent success...")
                 return True

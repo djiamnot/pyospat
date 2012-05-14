@@ -43,6 +43,23 @@ class Renderer(object):
         """
         return self._listener_id
 
+    def add_listener(self, listener_id):
+        """
+        Add listener
+        @param listener_id: name of the listener
+        @type listener_id: string
+         @rtype: bool
+        """
+        print("entered renderer.add_listener()")
+        if listener_id not in self._listener_id:
+            print("will add make %s"%(listener_id))
+            self._listener_id = listener_id
+            print("Success adding listener %s" % (self._listener_id))
+            return True
+        else:
+            print("Already have listener named %s" % (listener_id))
+            return False
+
     def set_connected(self, source_id, listener_id, connected=True):
         if listener_id == self._listener_id:
             if self.has_source(source_id):
