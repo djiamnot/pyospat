@@ -106,8 +106,8 @@ class OSCinterface(object):
 #                self._renderer.set_uri(node_id, "pyo://Noise")
             elif command == "createListener":
                 arg = message.getValues()[1]
-                # we assume our listener exists for now
-                # print("create listener: %s" % (arg))
+                print("create listener: %s" % (arg))
+                self._renderer.add_listener(arg)
                 del arg
             elif command == "deleteNode":
                 node_id = message.getValues()[1]
