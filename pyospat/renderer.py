@@ -19,7 +19,7 @@
 # along with Pyospat.  If not, see <http://www.gnu.org/licenses/>.
 
 from pyospat import sound_source
-
+from pyospat import introspection
 
 PROPERTY_SPREAD = "setSpread"
 
@@ -117,12 +117,20 @@ class Renderer(object):
         """
         handles node property changes.
         """
+        print("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, value))
         if node_id == self._listener_id:
             if property_name == PROPERTY_SPREAD:
                 try:
                     _set_spread(float(value))
                 except ValueError, e:
                     print(str(e))
+        if node_id in self._sources:
+            print("Chaning a property %s of %s" % (property_name, node_id))
+            if introspection.class_has_property(self._sources[node_id], property_name):
+                print("Got the right property")
+                self._sources[node_id].property_name = float(value)
+            else:
+                print("%s does not have %s property" % (self._sources[node_id], property_name))
 
     def _set_spread(self, spread=2.0):
         """
