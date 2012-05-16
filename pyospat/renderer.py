@@ -132,6 +132,7 @@ class Renderer(object):
             source.set_spread(spread)
 
     def has_source(self, source_name):
+        print("We have the source: %s" % (self._sources.keys()))
         return source_name in self._sources.keys()
 
     def get_number_of_speakers(self):
