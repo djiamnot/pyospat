@@ -110,8 +110,8 @@ class SoundSource(object):
                 return False
             else:
                 if self._source is not None:
-                    self._source().stop()
-                #del self._source
+                    #self._source().stop()
+                    del self._source
                 self._source = _Pyobj()
                 print("*** pyo generator: apparent success...")
                 return True
@@ -129,8 +129,13 @@ class SoundSource(object):
             print(e)
             return False
         if obj_name == "Noise":
-            del self._source
+            print("Got Noise!")
+            if self._source is not None:
+                print("try to delete any existing source")
+                del self._source
+            print("Create noise")
             self._source = pyo.Noise()
+            print("Noise created at %s" %(self._source))
             return True
         else:
             print("Pyo object {0} not supported, yet!".format(obj_name))
@@ -203,7 +208,10 @@ class SoundSource(object):
         self._previous_speakers_angles = speaker_angles
         
     def _connect(self):
-        self._mixer.addInput(0, self._source)
+        print("%s attempts to connect %s" % (self, self._source))
+        if self._source is not None:
+            print("%s is not empty so it should connect to mixer" % (self._source))
+            self._mixer.addInput(0, self._source)
         # self._mixer.setAmp(0, 0, 0.5)
         # self._mixer.setAmp(0, 1, 0.5)
         if self._is_connected_to_listener:
