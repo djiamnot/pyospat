@@ -103,7 +103,7 @@ class OSCinterface(object):
             if command == "createSoundSource":
                 node_id = message.getValues()[1]
                 self._renderer.add_source(node_id)
-#                self._renderer.set_uri(node_id, "pyo://Noise")
+                self._renderer.set_uri(node_id, "pyo://Noise")
             elif command == "createListener":
                 arg = message.getValues()[1]
                 print("create listener: %s" % (arg))
@@ -118,7 +118,9 @@ class OSCinterface(object):
             if command == "connect":
                 # TODO: handle connections
                 source_name = message.getValues()[1]
+                print("*** source name: %s" % (source_name))
                 listener_name = message.getValues()[2]
+                print("*** listener name: %s" % (listener_name))
                 self._renderer.set_connected(source_name, listener_name)
 
     def _handle_node_property(self, message, address):
@@ -135,7 +137,7 @@ class OSCinterface(object):
         property_name = message.getValues()[0]
         value = message.getValues()[1]
         if _type_tags_match(message, "ss", verbose=True): # string property
-            if property_name == "uri":
+            if property_name == "setMediaURI":
                 self._renderer.set_uri(node_id, value)
             else:
                 self._renderer.set_node_property(node_id, property_name, value)
