@@ -136,13 +136,13 @@ class OSCinterface(object):
             return
         property_name = message.getValues()[0]
         value = message.getValues()[1]
-        if _type_tags_match(message, "ss", verbose=True): # string property
+        if _type_tags_match(message, "sf", verbose=True): # float
+            self._renderer.set_node_property(node_id, property_name, value)
+        elif _type_tags_match(message, "ss", verbose=True): # string property
             if property_name == "setMediaURI":
                 self._renderer.set_uri(node_id, value)
             else:
                 self._renderer.set_node_property(node_id, property_name, value)
-        else:
-            self._renderer.set_node_property(node_id, property_name, value)
 
     def _handle_create_listener(self, message, address):
         """
