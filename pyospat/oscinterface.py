@@ -103,11 +103,11 @@ class OSCinterface(object):
             if command == "createSoundSource":
                 node_id = message.getValues()[1]
                 self._renderer.add_source(node_id)
-#                self._renderer.set_uri(node_id, "pyo://Noise")
+                self._renderer.set_uri(node_id, "pyo://Noise")
             elif command == "createListener":
                 arg = message.getValues()[1]
-                # we assume our listener exists for now
-                # print("create listener: %s" % (arg))
+                print("create listener: %s" % (arg))
+                self._renderer.add_listener(arg)
                 del arg
             elif command == "deleteNode":
                 node_id = message.getValues()[1]
@@ -118,7 +118,9 @@ class OSCinterface(object):
             if command == "connect":
                 # TODO: handle connections
                 source_name = message.getValues()[1]
+                print("*** source name: %s" % (source_name))
                 listener_name = message.getValues()[2]
+                print("*** listener name: %s" % (listener_name))
                 self._renderer.set_connected(source_name, listener_name)
 
     def _handle_node_property(self, message, address):
@@ -134,13 +136,13 @@ class OSCinterface(object):
             return
         property_name = message.getValues()[0]
         value = message.getValues()[1]
-        if _type_tags_match(message, "ss", verbose=True): # string property
-            if property_name == "uri":
+        if _type_tags_match(message, "sf", verbose=True): # float
+            self._renderer.set_node_property(node_id, property_name, value)
+        elif _type_tags_match(message, "ss", verbose=True): # string property
+            if property_name == "setMediaURI":
                 self._renderer.set_uri(node_id, value)
             else:
                 self._renderer.set_node_property(node_id, property_name, value)
-        else:
-            self._renderer.set_node_property(node_id, property_name, value)
 
     def _handle_create_listener(self, message, address):
         """
@@ -194,12 +196,13 @@ class OSCinterface(object):
             try:
                 from_id = connection_id.split("->")[0] #FIXME
                 to_id = connection_id.split("->")[1] #FIXME
+                print("Connecting from %s to %s" % (from_id, to_id))
                 if self._renderer.get_listener_id() == to_id:
                     aed = message.getValues() # 3 floats list
                     print("%s -> %s has AED: %s" % (from_id, to_id, aed))
                     self._renderer.set_aed(from_id, aed)
                 else:
-                    print("No such node: %s" % (from_id))
+                    print("%s No such node: %s" % (self, from_id))
             except KeyError, e:
                 print(e)
 

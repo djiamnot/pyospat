@@ -34,6 +34,7 @@ class SoundSource(object):
         @param outs: number of outputs
         @type outs: int
         """
+        print("instantiating a SoundSource... ")
         self._source = None
         self._is_connected_to_listener = False
         self._number_of_outputs = outs
@@ -43,6 +44,7 @@ class SoundSource(object):
         self._previous_aed = [0.0, 0.0, 0.0]
         self._previous_speakers_angles = []
         self._spread = 2.0
+        print("Done")
 
     def __del__(self):
         del self._source
@@ -107,7 +109,9 @@ class SoundSource(object):
                 print obj_name, "is not a generator."
                 return False
             else:
-                del self._source
+                if self._source is not None:
+                    #self._source().stop()
+                    del self._source
                 self._source = _Pyobj()
                 print("*** pyo generator: apparent success...")
                 return True
@@ -125,8 +129,13 @@ class SoundSource(object):
             print(e)
             return False
         if obj_name == "Noise":
-            del self._source
+            print("Got Noise!")
+            if self._source is not None:
+                print("try to delete any existing source")
+                del self._source
+            print("Create noise")
             self._source = pyo.Noise()
+            print("Noise created at %s" %(self._source))
             return True
         else:
             print("Pyo object {0} not supported, yet!".format(obj_name))
@@ -154,6 +163,7 @@ class SoundSource(object):
         * pyo://
         * file://
         """
+        print("setting URI to %s" % (uri))
         if self._uri == uri:
             return
         success = False
@@ -173,6 +183,17 @@ class SoundSource(object):
             self._set_aed_to_previous()
         else:
             print("Failed to set source URI to %s" % (uri))
+
+    def set_property(self, property_name, value):
+        if self._source is not None:
+            props = introspection.get_instance_properties(self._source)
+            print(props)
+            if property_name in props:
+                print("Set %s property %s to %s" %(self._source, property_name, value))
+                introspection.set_instance_property(self._source, property_name, value)
+                print("%s's %s is now set to %s" % (self._source, property_name, self._source.property_name))
+            else:
+                print("%s does not have %s property" % (self._source, property_name))
 
     def _set_aed_to_previous(self):
         self.set_relative_aed(self._previous_aed, self._previous_speakers_angles)
@@ -198,7 +219,10 @@ class SoundSource(object):
         self._previous_speakers_angles = speaker_angles
         
     def _connect(self):
-        self._mixer.addInput(0, self._source)
+        print("%s attempts to connect %s" % (self, self._source))
+        if self._source is not None:
+            print("%s is not empty so it should connect to mixer" % (self._source))
+            self._mixer.addInput(0, self._source)
         # self._mixer.setAmp(0, 0, 0.5)
         # self._mixer.setAmp(0, 1, 0.5)
         if self._is_connected_to_listener:
