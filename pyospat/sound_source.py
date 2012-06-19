@@ -184,6 +184,17 @@ class SoundSource(object):
         else:
             print("Failed to set source URI to %s" % (uri))
 
+    def set_property(self, property_name, value):
+        if self._source is not None:
+            props = introspection.get_instance_properties(self._source)
+            print(props)
+            if property_name in props:
+                print("Set %s property %s to %s" %(self._source, property_name, value))
+                introspection.set_instance_property(self._source, property_name, value)
+                print("%s's %s is now set to %s" % (self._source, property_name, self._source.property_name))
+            else:
+                print("%s does not have %s property" % (self._source, property_name))
+
     def _set_aed_to_previous(self):
         self.set_relative_aed(self._previous_aed, self._previous_speakers_angles)
 
