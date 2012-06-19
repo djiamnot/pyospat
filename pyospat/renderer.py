@@ -125,12 +125,8 @@ class Renderer(object):
                 except ValueError, e:
                     print(str(e))
         if node_id in self._sources:
-            print("Chaning a property %s of %s" % (property_name, node_id))
-            if introspection.class_has_property(self._sources[node_id], property_name):
-                print("Got the right property")
-                self._sources[node_id].property_name = float(value)
-            else:
-                print("%s does not have %s property" % (self._sources[node_id], property_name))
+            print("%s is in sources..." % (node_id))
+            self._sources[node_id].set_property(property_name, value)
 
     def _set_spread(self, spread=2.0):
         """
