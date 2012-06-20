@@ -32,7 +32,6 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X text 18 94 spinserver --spatosc BasicTranslator osc.udp://localhost:10001
 ;
 #X msg 120 256 createNode listener0 Listener;
-#X msg 139 308 /snd0 setParam setMediaURI pyo://Noise;
 #X msg 149 358 /snd0 setParam setMediaURI file:///usr/share/sounds/alsa/Rear_Left.wav
 ;
 #X msg 150 398 /snd0 setParam setMediaURI pyo://Sine;
@@ -40,6 +39,7 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X floatatom 308 336 0 0 0 0 - - -;
 #X floatatom 350 465 0 0 0 0 - - -;
 #X msg 185 465 /snd0 setParam mul \$1;
+#X msg 139 308 /snd0 setParam setMediaURI pyo://Input;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -51,7 +51,7 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 19 0 0 0;
 #X connect 20 0 0 0;
 #X connect 21 0 0 0;
-#X connect 22 0 0 0;
-#X connect 23 0 22 0;
-#X connect 24 0 25 0;
+#X connect 22 0 21 0;
+#X connect 23 0 24 0;
+#X connect 24 0 0 0;
 #X connect 25 0 0 0;

@@ -105,7 +105,7 @@ class SoundSource(object):
             print("*** Object name is %s"%(obj_name))
             _Pyobj = introspection.get_class(obj_name)
             print("*** We got an object %s..."%(_Pyobj))
-            if introspection.class_has_property(_Pyobj, 'input'):
+            if introspection.class_has_property(_Pyobj, 'input') and _Pyobj is not "Input":
                 print obj_name, "is not a generator."
                 return False
             else:
