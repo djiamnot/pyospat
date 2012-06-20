@@ -103,7 +103,7 @@ class OSCinterface(object):
             if command == "createSoundSource":
                 node_id = message.getValues()[1]
                 self._renderer.add_source(node_id)
-                self._renderer.set_uri(node_id, "pyo://Noise")
+                #self._renderer.set_uri(node_id, "pyo://Noise")
             elif command == "createListener":
                 arg = message.getValues()[1]
                 print("create listener: %s" % (arg))
