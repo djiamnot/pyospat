@@ -1,6 +1,6 @@
-#N canvas -56 98 997 597 10;
+#N canvas 1 108 997 597 10;
 #X obj 43 403 s \$0-to-SPIN;
-#N canvas 1064 87 372 319 ViewControl 1;
+#N canvas 1062 92 372 319 ViewControl 0;
 #X obj 10 10 inlet;
 #X text 126 36 list: x y z p r y;
 #X msg 8 256 createNode grid GridNode;
@@ -22,11 +22,11 @@
 #X obj 418 7 widget-nodeEditor \$0;
 #X text 21 81 Launch via command line:;
 #X text 18 115 spinviewer;
-#X msg 436 330 /spatosc/core/listener/listener/prop setSpread \$1;
-#X floatatom 435 303 5 0 0 0 - - -;
-#X obj 436 356 s \$0-toRenderer;
-#X text 430 272 set listener spread;
-#X text 488 284 sent locally to renderer (or could be sent to renderer
+#X msg 490 300 /spatosc/core/listener/listener/prop setSpread \$1;
+#X floatatom 489 273 5 0 0 0 - - -;
+#X obj 490 326 s \$0-toRenderer;
+#X text 484 242 set listener spread;
+#X text 542 254 sent locally to renderer (or could be sent to renderer
 via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X msg 134 288 createNode snd0 SoundNode;
 #X text 18 94 spinserver --spatosc BasicTranslator osc.udp://localhost:10001
@@ -40,6 +40,8 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X floatatom 350 465 0 0 0 0 - - -;
 #X msg 185 465 /snd0 setParam mul \$1;
 #X msg 139 308 /snd0 setParam setMediaURI pyo://Input;
+#X msg 493 405 createNode sample SoundNode;
+#X msg 497 439 /sample setParam setMediaURI pyo://SfPlayer;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -55,3 +57,5 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 23 0 24 0;
 #X connect 24 0 0 0;
 #X connect 25 0 0 0;
+#X connect 26 0 0 0;
+#X connect 27 0 0 0;
