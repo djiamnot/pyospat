@@ -113,7 +113,7 @@ class SoundSource(object):
                     #self._source().stop()
                     del self._source
                 self._source = _Pyobj()
-                print("*** pyo generator: apparent success...")
+                print("*** pyo generator: instantiated %s" % (self._source))
                 return True
         except IndexError, e:
             print(e)
