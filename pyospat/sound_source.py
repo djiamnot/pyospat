@@ -112,6 +112,7 @@ class SoundSource(object):
                 if self._source is not None:
                     #self._source().stop()
                     del self._source
+                #FIXME: handle things like SfPlayer which need to be instantiated with some arguments...
                 self._source = _Pyobj()
                 print("*** pyo generator: instantiated %s" % (self._source))
                 return True
@@ -191,7 +192,6 @@ class SoundSource(object):
             if property_name in props:
                 print("Set %s property %s to %s" %(self._source, property_name, value))
                 introspection.set_instance_property(self._source, property_name, value)
-                print("%s's %s is now set to %s" % (self._source, property_name, self._source.property_name))
             else:
                 print("%s does not have %s property" % (self._source, property_name))
 
