@@ -135,6 +135,7 @@ class OSCinterface(object):
             print(str(self._renderer))
             return
         property_name = message.getValues()[0]
+        # TODO: handle lists as properties (i.e. a list of frequencies)
         value = message.getValues()[1]
         if _type_tags_match(message, "sf", verbose=True): # float
             self._renderer.set_node_property(node_id, property_name, value)
