@@ -126,7 +126,7 @@ class Renderer(object):
                     print(str(e))
         if node_id in self._sources:
             print("%s is in sources..." % (node_id))
-            self._sources[node_id].set_property(property_name, value)
+            self._sources[node_id].set_property(property_name, float(value))
 
     def _set_spread(self, spread=2.0):
         """

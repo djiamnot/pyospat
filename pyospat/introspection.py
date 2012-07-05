@@ -74,6 +74,34 @@ def class_has_property(klass, property_name):
     return klass.__dict__.has_key(property_name)
     
 
+# def set_instance_property(instance, name, value):
+#     """
+#     @rtype: bool
+#     @return: success
+#     value type can be float, str, int, etc.
+#     """
+#     props = get_instance_properties(instance)
+#     if props.has_key(name):
+#         prop_type = props[name]
+#         if type(value) == prop_type:
+#             instance.__setattr__(name, value)
+#             return True
+#         else:
+#             try:
+#                 instance.__setattr__(name, prop_type(value))
+#                 return True
+#             except ValueError, e:
+#                 if VERBOSE:
+#                     print("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, type(value).__name__, e))
+#                 return False
+#     else:
+#         if VERBOSE:
+#             print("pyo.%s does not have property %s." % (instance.__class__.__name__, name))
+#         return False
+
+# FIXME: handle the types properly. The problem here is that pyo
+# reports some propties as being <int> but should be floats. This should be fixed
+# upstream but a proper bug report needs to be prepared.
 def set_instance_property(instance, name, value):
     """
     @rtype: bool
@@ -81,19 +109,13 @@ def set_instance_property(instance, name, value):
     value type can be float, str, int, etc.
     """
     props = get_instance_properties(instance)
-    if props.has_key(name):
-        prop_type = props[name]
-        if type(value) == prop_type:
-            instance.__setattr__(name, value)
-            return True
-        else:
-            try:
-                instance.__setattr__(name, prop_type(value))
-                return True
-            except ValueError, e:
-                if VERBOSE:
-                    print("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, type(value).__name__, e))
-                return False
+    try:
+        instance.__setattr__(name, value)
+        return True
+    except ValueError, e:
+        if VERBOSE:
+            print("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, value.__name__, e))
+            return False
     else:
         if VERBOSE:
             print("pyo.%s does not have property %s." % (instance.__class__.__name__, name))
