@@ -101,7 +101,7 @@ def class_has_property(klass, property_name):
 
 # FIXME: handle the types properly. The problem here is that pyo
 # reports some propties as being <int> but should be floats. This should be fixed
-# upstream but a proper bug report needs to be prepared.
+# upstream but a proper bug report needs to be prepared.i
 def set_instance_property(instance, name, value):
     """
     @rtype: bool
