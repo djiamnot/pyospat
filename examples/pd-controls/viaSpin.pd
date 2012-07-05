@@ -1,4 +1,4 @@
-#N canvas 1 108 997 597 10;
+#N canvas 682 426 997 597 10;
 #X obj 43 403 s \$0-to-SPIN;
 #N canvas 1062 92 372 319 ViewControl 0;
 #X obj 10 10 inlet;
@@ -42,6 +42,7 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X msg 139 308 /snd0 setParam setMediaURI pyo://Input;
 #X msg 493 405 createNode sample SoundNode;
 #X msg 497 439 /sample setParam setMediaURI pyo://SfPlayer;
+#X msg 215 522 /snd0 setParam freq 200 300 400;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -59,3 +60,4 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 25 0 0 0;
 #X connect 26 0 0 0;
 #X connect 27 0 0 0;
+#X connect 28 0 0 0;
