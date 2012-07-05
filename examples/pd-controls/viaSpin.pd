@@ -1,4 +1,4 @@
-#N canvas 682 426 997 597 10;
+#N canvas 753 130 997 597 10;
 #X obj 43 403 s \$0-to-SPIN;
 #N canvas 1062 92 372 319 ViewControl 0;
 #X obj 10 10 inlet;
@@ -40,9 +40,17 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X floatatom 350 465 0 0 0 0 - - -;
 #X msg 185 465 /snd0 setParam mul \$1;
 #X msg 139 308 /snd0 setParam setMediaURI pyo://Input;
-#X msg 493 405 createNode sample SoundNode;
-#X msg 497 439 /sample setParam setMediaURI pyo://SfPlayer;
-#X msg 215 522 /snd0 setParam freq 200 300 400;
+#X msg 495 488 /sample setParam mul \$1;
+#X floatatom 653 482 5 0 0 0 - - -;
+#X obj 505 521 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 505 540 /sample setParam loop \$1;
+#X obj 184 519 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 184 538 /snd0 setParam loop \$1;
+#X msg 499 439 /sample setParam setMediaURI file:///usr/share/sounds/alsa/Rear_Left.wav
+\, /sample setParam loop 0;
+#X msg 493 405 deleteNode sample \, createNode sample SoundNode;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -59,5 +67,10 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 24 0 0 0;
 #X connect 25 0 0 0;
 #X connect 26 0 0 0;
-#X connect 27 0 0 0;
-#X connect 28 0 0 0;
+#X connect 27 0 26 0;
+#X connect 28 0 29 0;
+#X connect 29 0 0 0;
+#X connect 30 0 31 0;
+#X connect 31 0 0 0;
+#X connect 32 0 0 0;
+#X connect 33 0 0 0;
