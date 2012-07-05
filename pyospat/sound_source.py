@@ -148,12 +148,16 @@ class SoundSource(object):
         """
         f_name = uri[7:]
         if os.path.exists(f_name):
-            del self._source
-            print("Playing sound file: %s" % (f_name))
-            self._source = pyo.SfPlayer(f_name, loop=True)
+            if self._source is not None:
+                del(self._source)
+                print("Playing sound file: {0}".format(f_name))
+                self._source = pyo.SfPlayer(f_name, loop=True)
+            else:
+                print("Playing sound file: {0}".format(f_name))
+                self._source = pyo.SfPlayer(f_name, loop=True)
             return True
         else:
-            print("Sound file %s does not exist." % (f_name))
+            print("File {0} does not exist.".format(f_name))
             return False
 
     def set_uri(self, uri):
@@ -179,13 +183,30 @@ class SoundSource(object):
         elif uri.startswith("file://"):
             success = self._set_uri_file(uri)
         if success:
+            print("  * {0} was loaded".format(uri))
             self._uri = uri
             self._connect()
             self._set_aed_to_previous()
         else:
             print("Failed to set source URI to %s" % (uri))
 
+    def set_uri_plugin(self, uri): 
+        """
+        Sets a URI to a custom plugin. Plugins are custom defined pyo classes
+        that encapsulate various generators/operators to form complex instruments.
+        Chaining audio pyo classes from pyospat is currently not supported.
+        The URI is in the form of plugin://<path>
+        @param uri: string
+        """
+        if uri.startswith("plugin://"):
+            plug_name = uri[9:]
+            print("loading a plugin: %s " % (plug_name))
+            
+
     def set_property(self, property_name, value):
+        """
+        Manipulate properties
+        """
         if self._source is not None:
             props = introspection.get_instance_properties(self._source)
             print(props)
