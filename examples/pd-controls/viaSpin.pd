@@ -1,4 +1,4 @@
-#N canvas 753 130 997 597 10;
+#N canvas 751 138 997 597 10;
 #X obj 43 403 s \$0-to-SPIN;
 #N canvas 1062 92 372 319 ViewControl 0;
 #X obj 10 10 inlet;
@@ -51,6 +51,8 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X msg 499 439 /sample setParam setMediaURI file:///usr/share/sounds/alsa/Rear_Left.wav
 \, /sample setParam loop 0;
 #X msg 493 405 deleteNode sample \, createNode sample SoundNode;
+#X text 488 384 does not quite handle the re-instantiation;
+#X msg 660 355 /sample setParam setMediaURI plugin://FMsynth;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -74,3 +76,4 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 31 0 0 0;
 #X connect 32 0 0 0;
 #X connect 33 0 0 0;
+#X connect 35 0 0 0;

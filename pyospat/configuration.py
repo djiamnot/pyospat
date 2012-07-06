@@ -31,4 +31,4 @@ class Configuration(object):
         self.osc_receive_port = 10001
         self.listener_id = "listener0"
         self.layout_name = "STEREO"
-
+        self.plugins_path = ".pyo/plugins"
