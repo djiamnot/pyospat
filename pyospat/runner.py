@@ -27,6 +27,7 @@ from pyospat import application
 from pyospat import configuration
 from pyospat import pyoserver
 from twisted.internet import error
+import os
 import sys
 
 DESCRIPTION = "Python audio renderer for SpatOSC"
@@ -54,6 +55,8 @@ def run():
     s = pyoserver.ServerWrapper(use_twisted=True)
     try:
         app = application.Application(config)
+        user_path = os.path.expanduser("~/")
+        sys.path.append(os.path.join(user_path, config.plugins_path))
     except error.CannotListenError, e:
         print(e)
         sys.exit(1)

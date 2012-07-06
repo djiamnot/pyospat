@@ -23,6 +23,7 @@ The SoundSource class
 from pyospat import introspection
 from pyospat import maths
 import os
+import sys
 import pyo
 
 class SoundSource(object):
@@ -182,6 +183,10 @@ class SoundSource(object):
 #            success = self._set_uri_pyo(uri)
         elif uri.startswith("file://"):
             success = self._set_uri_file(uri)
+        elif uri.startswith("plugin://"):
+            success = self._set_uri_plugin(uri)
+        else:
+            print("{0} is not a known URI path".format(uri))
         if success:
             print("  * {0} was loaded".format(uri))
             self._uri = uri
@@ -190,7 +195,7 @@ class SoundSource(object):
         else:
             print("Failed to set source URI to %s" % (uri))
 
-    def set_uri_plugin(self, uri): 
+    def _set_uri_plugin(self, uri): 
         """
         Sets a URI to a custom plugin. Plugins are custom defined pyo classes
         that encapsulate various generators/operators to form complex instruments.
@@ -200,7 +205,18 @@ class SoundSource(object):
         """
         if uri.startswith("plugin://"):
             plug_name = uri[9:]
-            print("loading a plugin: %s " % (plug_name))
+            print("loading a plugin: {0} ".format(plug_name))
+            print("Searching the folowing paths: ")
+            print(sys.path)
+            
+            # try:
+            #     import plug_name
+            #     del self._source
+            #     self._source = 
+            # except:
+            #     print("Error")
+            
+            
             
 
     def set_property(self, property_name, value):
