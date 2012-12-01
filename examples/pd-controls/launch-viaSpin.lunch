@@ -2,4 +2,5 @@
 
 add_command("spinserver --spatosc BasicTranslator osc.udp://localhost:10001 --scene-id pyospat",
 identifier="spinserver")
+add_command("spinviewer --scene-id pyospat", identifier="spinviewer", env={"DISPLAY":":0.0"})
 add_command("pd-extended -noaudio viaSpin.pd", identifier="pd")

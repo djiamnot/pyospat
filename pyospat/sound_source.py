@@ -208,15 +208,11 @@ class SoundSource(object):
             print("loading a plugin: {0} ".format(plug_name))
             print("Searching the folowing paths: ")
             print(sys.path)
-            
-            # try:
-            #     import plug_name
-            #     del self._source
-            #     self._source = 
-            # except:
-            #     print("Error")
-            
-            
+            from pyospat import plugins
+            # del self._source
+            # # FIXME: potentially dangerous...
+            #self._source = exec(plug_name)
+            print(introspection.get_class(plugins.plug_name))
             
 
     def set_property(self, property_name, value):
