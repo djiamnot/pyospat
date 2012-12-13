@@ -1,58 +1,111 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-3 oscillators FM synthesis class.
+A copy of the Sine class for testing purposes.
 
 """
-import math
-import pyo
+#import math
+from pyo import *
 
-t = pyo.HarmTable([1,0.1])
-class FMsynth(pyo.PyoObject):
+print("module plugins imported")
+
+class Sine2(PyoObject):
     """
-    Frequency modulation synthesizer.
-
-    This is a simple FM synth. The code was taken from some pyo project, IIRC, but cannot recall which....
-    Modified into a "proper" PyoObject class as per the tutorial on creating a flanger effect.
+    A simple sine wave oscillator.
+    
+    Parentclass: PyoObject
+    
+    Parameters:
+    
+    freq : float or PyoObject, optional
+        Frequency in cycles per second. Defaults to 1000.
+    phase : float or PyoObject, optional
+        Phase of sampling, expressed as a fraction of a cycle (0 to 1).
+        Defaults to 0.
+        
+    Methods:
+    
+    setFreq(x) : Replace the `freq` attribute.
+    setPhase(x) : Replace the `phase` attribute.
+    reset() : Resets the reading pointer to 0.
+    
+    Attributes:
+    
+    freq : float or PyoObject, Frequency in cycles per second.
+    phase : float or PyoObject, Phase of sampling (0 -> 1).
+    
+    See also: Sine, Osc, Phasor
+    
+    Examples:
+    
+    >>> s = Server().boot()
+    >>> s.start()
+    >>> sine = Sine2(freq=[400,500], mul=.2).out()
+    
     """
-    def __init__(self, fcar=125.00, ratio1=0.33001, ratio2=2.9993, index1=8, index2=4, mul=1, add=0):
-        print("loading FMsynth")
-        # Init PyoObject's basic attributes
-        pyo.PyoObject.__init__(self)
-        
-        self._fcar = fcar
-        self._ratio1 = ratio1
-        self._ratio2 = ratio2
-        self._index1 = index1
-        self._index2 = index2
-        self._fmod = self._fcar * self._ratio1
-        self._fmodmod = self.fmod * self._ratio2
-        self._amod = self._fmod * self._index1
-        self._amodmod = self._fmodmod * self._index2
-        
+    def __init__(self, freq=1000, phase=0, mul=1, add=0):
+        PyoObject.__init__(self)
+        self._freq = freq
+        self._phase = phase
+        self._mul = mul
+        self._add = add
+        freq, phase, mul, add, lmax = convertArgsToLists(freq, phase, mul, add)
+        self._base_objs = [Sine_base(wrap(freq,i), wrap(phase,i), wrap(mul,i), wrap(add,i)) for i in range(lmax)]
+        print("Loaded Sine2 plugin")
 
-        # I don't understand yet why, but we need to convert all arguments to
-        # lists for "list expansion"
-        fcar, ratio1, ratio2, index1, index2, mul, add, lmax = \
-        pyo.convertArgsToLists(fcar, ratio1, ratio2, index1, index2, mul, add)
+    def __dir__(self):
+        return ['freq', 'phase', 'mul', 'add']
+        
+    def setFreq(self, x):
+        """
+        Replace the `freq` attribute.
+        
+        Parameters:
 
-        # Init some lists to keep track of created objects
-        self._carriers = []
-        self._modulators = []
-        self._out = []
-        # and the special self._base_objs, audio outputs seen byt the outside world
-        # .play(), .out(), .stop() and .mix() methods act on this list of objects
-        # mul and add attributes are also aplied here
-        self._base_objs = []
+        x : float or PyoObject
+            new `freq` attribute.
         
-        # construct our objects:
-        for i in range(lmax):
-            self._carriers.append(pyo.Sine)
+        """
+        self._freq = x
+        x, lmax = convertArgsToLists(x)
+        [obj.setFreq(wrap(x,i)) for i, obj in enumerate(self._base_objs)]
+        
+    def setPhase(self, x):
+        """
+        Replace the `phase` attribute.
+        
+        Parameters:
 
-        self._modmod = pyo.Sine(freq=wrap(self._fmodmod, i), mul=wrap(mul, i))
-        self._mod = pyo.Sine(freq=wrap(self._fmod+self._modmod, i), mul=self._amod)
-        self._car = pyo.Osc(t, fcar+self.mod, mul=.2)
-        self._eq = pyo.EQ(self.car, freq=fcar, q=0.707, boost=-12)
-        self._out = pyo.DCBlock(self.eq).out()
+        x : float or PyoObject
+            new `phase` attribute.
         
+        """
+        self._phase = x
+        x, lmax = convertArgsToLists(x)
+        [obj.setPhase(wrap(x,i)) for i, obj in enumerate(self._base_objs)]
+
+    def reset(self):
+        """
+        Resets current phase to 0.
+
+        """
+        [obj.reset() for i, obj in enumerate(self._base_objs)]
+
+
+    def ctrl(self, map_list=None, title=None, wxnoserver=False):
+        self._map_list = [SLMapFreq(self._freq), SLMapPhase(self._phase), SLMapMul(self._mul)]
+        PyoObject.ctrl(self, map_list, title, wxnoserver)
         
+    @property
+    def freq(self):
+        """float or PyoObject. Frequency in cycles per second.""" 
+        return self._freq
+    @freq.setter
+    def freq(self, x): self.setFreq(x)
+
+    @property
+    def phase(self):
+        """float or PyoObject. Phase of sampling.""" 
+        return self._phase
+    @phase.setter
+    def phase(self, x): self.setPhase(x)
