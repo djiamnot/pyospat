@@ -22,6 +22,7 @@ PyoObjects introspection.
 """
 
 import pyo
+from pyospat import plugins
 
 """
 Module-wide global variable.
@@ -46,7 +47,17 @@ def get_class(name):
         m = getattr(pyo, name)
         return m
     except AttributeError, err:
-        print err        
+        print err
+
+def get_plugin_class(name):
+    """
+    @rtype: pyo object
+    """
+    try:
+        m = getattr(plugins, name)
+        return m
+    except AttributeError, err:
+        print err
 
 def get_instance_properties(instance):
     """
