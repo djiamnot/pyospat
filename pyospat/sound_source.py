@@ -26,6 +26,8 @@ import os
 import sys
 import pyo
 
+from pyospat.plugins import *
+
 class SoundSource(object):
     """
     A sound source node in the renderer
@@ -203,17 +205,19 @@ class SoundSource(object):
         The URI is in the form of plugin://<path>
         @param uri: string
         """
-        if uri.startswith("plugin://"):
-            plug_name = uri[9:]
-            print("loading a plugin: {0} ".format(plug_name))
-            print("Searching the folowing paths: ")
-            print(sys.path)
-            from pyospat import plugins
-            # del self._source
-            # # FIXME: potentially dangerous...
+        plug_name = uri[9:]
+        print("loading a plugin: {0} ".format(plug_name))
+        #print("Searching the folowing paths: ")
+        #print(sys.path)
+        # del self._source
+        # # FIXME: potentially dangerous...
             #self._source = exec(plug_name)
-            print(introspection.get_class(plugins.plug_name))
-            
+        _Pyo_plugin = introspection.get_plugin_class(plug_name)
+        if self._source is not None:
+            del self._source
+        self._source = _Pyo_plugin()
+        print("*** pyospat plugin: instantiated %s" % (self._source))
+        return True
 
     def set_property(self, property_name, value):
         """
