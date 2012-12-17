@@ -116,17 +116,23 @@ This is being simplified.
 
 """
 
-class CHO(object):
+class CHO(PyoObject):
     def __init__(self):
+        PyoObject.__init__(self)
         self._freq = 200
         self._env = Linseg([(0,0), (.01,1), (.19,1), (.2,0)]).stop()
-        self._sin = Sine(freq=self._freq, mul=0)
-        self.out = Pan(self._sin*self._env, pan=.5).out()
+        self._base_objs = [Sine(freq=self._freq, mul=0)]
+        #self.out = Pan(self._sin*self._env, pan=.5).out()
+    #    self.me()
 
     def go(self, fq, mul):
+        print("running with: %d %d" % (fq, mul))
         self._sin.setFreq(fq)
         self._sin.setMul(mul)
         self._env.play()
+        
+    # def me(self):
+    #     return self._sin
 
     def setFreq(self, freq):
         """
