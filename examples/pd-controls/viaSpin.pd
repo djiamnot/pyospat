@@ -68,7 +68,7 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X msg 524 627 /pyoplug setParam freq \$1;
 #X msg 699 540 createNode cho SoundNode;
 #X msg 701 564 /cho setParam setMediaURI plugin://CHO;
-#X msg 699 590 /cho setParam go;
+#X msg 699 590 /cho setParam go 800 0.2;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
