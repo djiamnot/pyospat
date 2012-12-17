@@ -219,7 +219,7 @@ class SoundSource(object):
         print("*** pyospat plugin: instantiated %s" % (self._source))
         return True
 
-    def set_property(self, property_name, value):
+    def set_property(self, property_name, *values):
         """
         Manipulate properties
         """
@@ -227,8 +227,8 @@ class SoundSource(object):
             props = introspection.get_instance_properties(self._source)
             print(props)
             if property_name in props:
-                print("Set %s property %s to %s" %(self._source, property_name, value))
-                introspection.set_instance_property(self._source, property_name, value)
+                #print("Set %s property %s to %s" %(self._source, property_name, *values))
+                introspection.set_instance_property(self._source, property_name, *values)
             else:
                 print("%s does not have %s property" % (self._source, property_name))
 
