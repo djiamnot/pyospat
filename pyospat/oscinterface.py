@@ -26,6 +26,7 @@ def _type_tags_match(message, expected, verbose=False):
     """
     Checks that some typetags string matches the expected.
     """
+    print("type taks are: %s" % (message.getTypeTags()))
     if message.getTypeTags() == expected:
         return True
     else:
@@ -136,14 +137,18 @@ class OSCinterface(object):
             return
         property_name = message.getValues()[0]
         # TODO: handle lists as properties (i.e. a list of frequencies)
-        value = message.getValues()[1]
+        value = message.getValues()[1:]
         if _type_tags_match(message, "sf", verbose=True): # float
             self._renderer.set_node_property(node_id, property_name, value)
         elif _type_tags_match(message, "ss", verbose=True): # string property
             if property_name == "setMediaURI":
-                self._renderer.set_uri(node_id, value)
+                self._renderer.set_uri(node_id, value[0])
             else:
+                print("Property is not seMediaURL")
                 self._renderer.set_node_property(node_id, property_name, value)
+        else:
+            print("propoerty is neither ss nor sf")
+            self._renderer.set_node_property(node_id, property_name, value)
 
     def _handle_create_listener(self, message, address):
         """
