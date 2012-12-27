@@ -226,6 +226,9 @@ class SoundSource(object):
         if self._source is not None:
             props = introspection.get_instance_properties(self._source)
             print(props)
+            if property_name == "go":
+                print("trying to GO: ")
+                self._source.go(*values)
             if property_name in props:
                 #print("Set %s property %s to %s" %(self._source, property_name, *values))
                 introspection.set_instance_property(self._source, property_name, *values)
