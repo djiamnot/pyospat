@@ -116,25 +116,24 @@ This is being simplified.
 
 """
 
-class CHO(PyoObject):
+class blepSynth(PyoObject):
     def __init__(self):
         PyoObject.__init__(self)
         self._freq = 200
+        self._mul = 0
         self._env = Linseg([(0,0), (.01,1), (.19,1), (.2,0)]).stop()
-        self._base_objs = [Sine(freq=self._freq, mul=0)]
+        self._base_objs = [Sine(freq=self._freq, mul=self._env)]
         #self.out = Pan(self._sin*self._env, pan=.5).out()
     #    self.me()
 
-    def go(self, fq, mul):
-        print("running with: %d %d" % (fq, mul))
-        self._sin.setFreq(fq)
-        self._sin.setMul(mul)
+    def go(self):
+        print("running with: frequency %d" % (self._freq))
         self._env.play()
         
     # def me(self):
     #     return self._sin
 
-    def setFreq(self, freq):
+    def setPitch(self, freq):
         """
         set frequency attribute.
 
@@ -145,19 +144,19 @@ class CHO(PyoObject):
         self._freq = freq
 
     @property
-    def freq(self):
+    def pitch(self):
         """
         Set freq property
         @rtype : float
         """
         return self._freq
 
-    @freq.setter
-    def freq(self, freq):
+    @pitch.setter
+    def pitch(self, freq):
         """
         set new frequency
         """
-        self.setFreq(freq)
+        self.setPitch(freq)
 
     # @property
     # def playing(self):

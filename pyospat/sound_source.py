@@ -219,19 +219,19 @@ class SoundSource(object):
         print("*** pyospat plugin: instantiated %s" % (self._source))
         return True
 
-    def set_property(self, property_name, *values):
+    def set_property(self, property_name, value):
         """
         Manipulate properties
         """
         if self._source is not None:
             props = introspection.get_instance_properties(self._source)
             print(props)
-            if property_name == "go":
-                print("trying to GO: ")
-                self._source.go(*values)
+            if property_name == "play":
+                print("trying to play: ")
+                self._source.go()
             if property_name in props:
                 #print("Set %s property %s to %s" %(self._source, property_name, *values))
-                introspection.set_instance_property(self._source, property_name, *values)
+                introspection.set_instance_property(self._source, property_name, value)
             else:
                 print("%s does not have %s property" % (self._source, property_name))
 
