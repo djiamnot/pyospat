@@ -113,7 +113,7 @@ class Renderer(object):
                 delay = 0.0
             self._sources[source_name].set_delay(delay)
 
-    def set_node_property(self, node_id, property_name, *values):
+    def set_node_property(self, node_id, property_name, value):
         """
         handles node property changes.
         """
@@ -126,7 +126,8 @@ class Renderer(object):
                     print(str(e))
         if node_id in self._sources:
             print("%s is in sources..." % (node_id))
-            self._sources[node_id].set_property(property_name, *values)
+            print("setting %s's property %s to %d" % (node_id, property_name, value))
+            self._sources[node_id].set_property(property_name, value)
 
     def _set_spread(self, spread=2.0):
         """
