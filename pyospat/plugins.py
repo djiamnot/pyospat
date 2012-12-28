@@ -117,12 +117,14 @@ This is being simplified.
 """
 
 class blepSynth(PyoObject):
-    def __init__(self):
+    def __init__(self, freq=200, mul=0):
         PyoObject.__init__(self)
-        self._freq = 200
-        self._mul = 0
+        self._freq = freq
+        self._mul = mul
         self._env = Linseg([(0,0), (.01,1), (.19,1), (.2,0)]).stop()
-        self._base_objs = [Sine(freq=self._freq, mul=self._env)]
+        freq, lmax = convertArgsToLists(freq)
+        self._base_objs = [Sine(wrap(freq,i), mul=self._env) for i in range(lmax)]
+        #self._base_objs = [Sine(freq=self._freq, mul=self._env)]
         #self.out = Pan(self._sin*self._env, pan=.5).out()
     #    self.me()
 
@@ -142,6 +144,8 @@ class blepSynth(PyoObject):
         freq : float - new frequency
         """
         self._freq = freq
+        x, lmax = convertArgsToLists(freq)
+        [obj.setFreq(wrap(x,i)) for i, obj in enumerate(self._base_objs)]
 
     @property
     def pitch(self):
