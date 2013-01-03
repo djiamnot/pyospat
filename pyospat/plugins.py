@@ -157,11 +157,42 @@ class blepSynth(PyoObject):
 
     @pitch.setter
     def pitch(self, freq):
-        """
-        set new frequency
-        """
+    
         self.setPitch(freq)
 
+
+class AddSynth(PyoObject):
+    """
+    Additive synthesis.
+    
+    Additive synthesis created by the addition of four looped sine waves.
+    
+    Parameters:
+    
+    Transposition : Transposition, in semitones, of the pitches played on the keyboard.
+    Spread : Spreading factor of the sine wave frequencies.
+    Feedback : Amount of output signal sent back in the waveform calculation.
+    
+    _______________________________________________________________________________________
+    Author : Olivier Bélanger - 2011
+    Adapted for pyospat : Michal Seta
+    _______________________________________________________________________________________
+    """
+
+    import random
+
+    def __init__(self):
+        PyoObject.__init__(self)    
+        self.fac = Pow(range(1,6), 1, mul=[random.uniform(.995,1.005) for i in range(4)])
+        self.feedrnd = Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)])
+        self.amp = 0.1
+        self.feedback = 0.5
+        self.pitch = 440
+        self.sine1 = SineLoop(freq=self.pitch*self.fac[0], feedback=self.feedback*self.feedrnd[0], mul=self.amp).mix()
+        self.sine2 = SineLoop(freq=self.pitch*self.fac[1], feedback=self.feedback*self.feedrnd[1], mul=self.amp).mix()
+        self.sine3 = SineLoop(freq=self.pitch*self.fac[2], feedback=self.feedback*self.feedrnd[2], mul=self.amp).mix()
+        self.sine4 = SineLoop(freq=self.pitch*self.fac[3], feedback=self.feedback*self.feedrnd[3], mul=self.amp).mix()
+        self._base_objs = [Mix([self.sine1, self.sine2, self.sine3, self.sine4], voices=2)]
 
 class BaseSynth:
     def __init__(self):
@@ -241,34 +272,34 @@ class FmSynth(BaseSynth):
         self.filt2 = Biquadx(self.fm2+self.fm4, freq=self.p3, q=1, type=0, stages=2).mix()
         self.out = Mix([self.filt1, self.filt2], voices=2)
 
-class AddSynth(BaseSynth):
-    """
-    Additive synthesis.
+# class AddSynth(BaseSynth):
+#     """
+#     Additive synthesis.
     
-    Additive synthesis created by the addition of four looped sine waves.
+#     Additive synthesis created by the addition of four looped sine waves.
 
-    Parameters:
+#     Parameters:
 
-        Transposition : Transposition, in semitones, of the pitches played on the keyboard.
-        Spread : Spreading factor of the sine wave frequencies.
-        Feedback : Amount of output signal sent back in the waveform calculation.
+#         Transposition : Transposition, in semitones, of the pitches played on the keyboard.
+#         Spread : Spreading factor of the sine wave frequencies.
+#         Feedback : Amount of output signal sent back in the waveform calculation.
     
-    _______________________________________________________________________________________
-    Author : Olivier Bélanger - 2011
-    _______________________________________________________________________________________
-    """
-    def __init__(self, config):
-        BaseSynth.__init__(self, config, mode=1)
-        self.fac = Pow(range(1,6), self.p2, mul=[random.uniform(.995,1.005) for i in range(4)])
-        self.feedrnd = Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)])
-        self.norm_amp = self.amp * 0.1
-        self.leftamp = self.norm_amp*self.panL
-        self.rightamp = self.norm_amp*self.panR
-        self.sine1 = SineLoop(freq=self.pitch*self.fac[0], feedback=self.p3*self.feedrnd[0], mul=self.leftamp).mix()
-        self.sine2 = SineLoop(freq=self.pitch*self.fac[1], feedback=self.p3*self.feedrnd[1], mul=self.rightamp).mix()
-        self.sine3 = SineLoop(freq=self.pitch*self.fac[2], feedback=self.p3*self.feedrnd[2], mul=self.leftamp).mix()
-        self.sine4 = SineLoop(freq=self.pitch*self.fac[3], feedback=self.p3*self.feedrnd[3], mul=self.rightamp).mix()
-        self.out = Mix([self.sine1, self.sine2, self.sine3, self.sine4], voices=2)
+#     _______________________________________________________________________________________
+#     Author : Olivier Bélanger - 2011
+#     _______________________________________________________________________________________
+#     """
+#     def __init__(self, config):
+#         BaseSynth.__init__(self, config, mode=1)
+#         self.fac = Pow(range(1,6), self.p2, mul=[random.uniform(.995,1.005) for i in range(4)])
+#         self.feedrnd = Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)])
+#         self.norm_amp = self.amp * 0.1
+#         self.leftamp = self.norm_amp*self.panL
+#         self.rightamp = self.norm_amp*self.panR
+#         self.sine1 = SineLoop(freq=self.pitch*self.fac[0], feedback=self.p3*self.feedrnd[0], mul=self.leftamp).mix()
+#         self.sine2 = SineLoop(freq=self.pitch*self.fac[1], feedback=self.p3*self.feedrnd[1], mul=self.rightamp).mix()
+#         self.sine3 = SineLoop(freq=self.pitch*self.fac[2], feedback=self.p3*self.feedrnd[2], mul=self.leftamp).mix()
+#         self.sine4 = SineLoop(freq=self.pitch*self.fac[3], feedback=self.p3*self.feedrnd[3], mul=self.rightamp).mix()
+#         self.out = Mix([self.sine1, self.sine2, self.sine3, self.sine4], voices=2)
 
 class WindSynth(BaseSynth):
     """
@@ -675,4 +706,11 @@ class Degradation(BaseSynth):
         self.mix = Mix([self.filt1, self.filt2], voices=2)
         self.out = DCBlock(self.mix)
 
+# try to run a test
 
+if __name__ == "__main__":
+    s = Server(sr=48000, audio="pa").boot()
+    s.start()
+    # additive = AddSynth()
+    # additive.out()
+    
