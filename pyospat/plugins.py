@@ -162,22 +162,6 @@ class blepSynth(PyoObject):
         """
         self.setPitch(freq)
 
-    # @property
-    # def playing(self):
-    #     """
-    #     Playing active or stopped?
-    #     @rtype: boolean
-    #     """
-    #     return self._env
-    # @playing.setter
-    # def playing(self, freq=800, mul=0.5):
-    #     """
-    #     Make it play
-    #     """
-    #     self.go(freq, mul)
-
-    
-    
 
 class BaseSynth:
     def __init__(self):
