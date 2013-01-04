@@ -118,7 +118,7 @@ This is being simplified.
 
 class blepSynth(PyoObject):
     def __init__(self, freq=200, mul=0, add=0):
-        PyoObject.__init__(self)
+        #PyoObject.__init__(self)
         self._freq = freq
         self._mul = mul
         self._add = add
