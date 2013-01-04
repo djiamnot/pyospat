@@ -117,18 +117,25 @@ This is being simplified.
 """
 
 class blepSynth(PyoObject):
-    def __init__(self, freq=200, mul=0):
+    def __init__(self, freq=200, mul=0, add=0):
         PyoObject.__init__(self)
         self._freq = freq
         self._mul = mul
-        self._env = Linseg([(0,0), (.01,1), (.19,1), (.2,0)]).stop()
-        freq, lmax = convertArgsToLists(freq)
-        self._base_objs = [Sine(wrap(freq,i), mul=self._env) for i in range(lmax)]
+        self._add = add
+        self._envs = []
+        self._outs = []
+        self._base_objs = []
 
-    def go(self):
-        print("running with: frequency %d" % (self._freq))
-        self._env.play()
-        
+        freq, mul, add, lmax = convertArgsToLists(freq, mul, add)
+        for i in range(lmax):
+            self._envs.append(Linseg([(0,0), (.01,1), (.19,1), (.2,0)]).stop())
+            self._outs.append(Sine(wrap(freq,i), mul=self._envs))
+            self._base_objs.extend(self._outs[-1].getBaseObjects())
+
+    def __dir__(self):
+        return ["freq", "mul", "add"]
+
+
     def setPitch(self, freq):
         """
         set frequency attribute.
@@ -140,19 +147,45 @@ class blepSynth(PyoObject):
         self._freq = freq
         x, lmax = convertArgsToLists(freq)
         [obj.setFreq(wrap(x,i)) for i, obj in enumerate(self._base_objs)]
+        
 
     @property
-    def pitch(self):
+    def freq(self):
         """
         Set freq property
         @rtype : float
         """
         return self._freq
 
-    @pitch.setter
-    def pitch(self, freq):
+    @freq.setter
+    def freq(self, freq):
     
         self.setPitch(freq)
+
+    # override some methods
+    def play(self, dur=0, delay=0):
+        print("running with: frequency %d" % (self._freq))
+        #self._envs.play()
+        dur, delay, lmax = convertArgsToLists(dur, delay)
+        [obj.play(wrap(dur,i),wrap(delay,i)) for i, obj in enumerate(self._envs)]
+        self._base_objs = [obj.play(wrap(dur,i), wrap(delay,i)) for i, obj in enumerate(self._base_objs)]
+        return self
+
+    def stop(self):
+        [obj.stop() for obj in self._envs]
+        [obj.stop() for obj in self._base_objs]
+
+    def out(self, chnl=0, inc=1, dur=0, delay=0):
+        dur, delay, lmax = convertArgsToLists(dur, delay)
+        [obj.play(wrap(dur,i), wrap(delay,i)) for obj in self._envs]
+        if type(chnl) == ListType:
+            self._base_objs = [obj.out(wrap(chnl,i), wrap(dur,i), wrap(delay, i)) for i, obj in enumerate(self._base_objs)]
+        else:
+            if  chnl < 0:
+                self._base_objs = [obj.out(i*inc, wrap(dur,i), wrap(delay,i)) for i, obj in enumerate(random.sample(self._base_objs, len(self._base_objs)))]
+            else:
+                self._base_objs = [obj.out(chnl+i*inc, wrap(dur,i), wrap(delay,i)) for i, obj in enumerate(self._base_objs)]
+        return self
 
 
 class AddSynth(PyoObject):

@@ -228,8 +228,11 @@ class SoundSource(object):
             print(props)
             if property_name == "play":
                 print("trying to play: ")
-                self._source.go()
-            if property_name in props:
+                try:
+                    self._source.play()
+                except TypeError, e:
+                    print e
+            elif property_name in props:
                 #print("Set %s property %s to %s" %(self._source, property_name, *values))
                 introspection.set_instance_property(self._source, property_name, value)
             else:
