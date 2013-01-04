@@ -1,4 +1,4 @@
-#N canvas 2676 286 997 802 10;
+#N canvas 87 253 997 802 10;
 #X obj 43 699 s \$0-to-SPIN;
 #N canvas 1058 96 372 319 ViewControl 0;
 #X obj 10 10 inlet;
