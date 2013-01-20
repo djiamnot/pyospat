@@ -208,18 +208,47 @@ class AddSynth(PyoObject):
 
     import random
 
-    def __init__(self):
-        PyoObject.__init__(self)    
-        self.fac = Pow(range(1,6), 1, mul=[random.uniform(.995,1.005) for i in range(4)])
-        self.feedrnd = Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)])
-        self.amp = 0.1
-        self.feedback = 0.5
-        self.pitch = 440
-        self.sine1 = SineLoop(freq=self.pitch*self.fac[0], feedback=self.feedback*self.feedrnd[0], mul=self.amp).mix()
-        self.sine2 = SineLoop(freq=self.pitch*self.fac[1], feedback=self.feedback*self.feedrnd[1], mul=self.amp).mix()
-        self.sine3 = SineLoop(freq=self.pitch*self.fac[2], feedback=self.feedback*self.feedrnd[2], mul=self.amp).mix()
-        self.sine4 = SineLoop(freq=self.pitch*self.fac[3], feedback=self.feedback*self.feedrnd[3], mul=self.amp).mix()
-        self._base_objs = [Mix([self.sine1, self.sine2, self.sine3, self.sine4], voices=2)]
+    def __init__(self, freq=440, feedback=0.5, mul=0.25, add=0):
+        #PyoObject.__init__(self)
+        self._freq = freq
+        self._feedback = feedback
+        self._mul = mul
+        self._add = add
+        self._fac = []
+        self._feedrnd = []
+        self._sine1 = []
+        self._sine2 = []
+        self._sine3 = []
+        self._sine4 = []
+        self._outs = []
+        self._base_objs = []
+
+        freq, feedback, mul, add, lmax = convertArgsToLists(freq, feedback, mul, add)
+        
+        for i in range(lmax):
+            self._fac.append(Pow(range(1,6), 1, mul=[random.uniform(.995,1.005) for i in range(4)]))
+            self.feedrnd = Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)])
+            self._sine1.append(SineLoop(freq=wrap(freq,i)*self._fac[0], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[0], mul=wrap(mul,i)))
+            self._sine2.append(SineLoop(freq=wrap(freq,i)*self._fac[1], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[1], mul=wrap(mul,i)))
+            self._sine3.append(SineLoop(freq=wrap(freq,i)*self._fac[2], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[2], mul=wrap(mul,i)))
+            self._sine4.append(SineLoop(freq=wrap(freq, i)*self._fac[3], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[3], mul=wrap(mul, i)))
+            self._outs.append(Mix([self._sine1, self._sine2, self._sine3, self._sine4], voices=1))
+            self._base_objs.extend(self._outs[-1].getBaseObjects())
+
+    def __dir__(self):
+        return ["freq", "feedback", "mul" , "add"]
+
+    def setFreq(self, f):
+        f, lmax = convertArgsToLists(f)
+        [obj.setFreq(wrap(f,i)) for i, obj in enumerate(self._base_objs)]
+
+    
+
+        
 
 class BaseSynth:
     def __init__(self):
