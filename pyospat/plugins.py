@@ -208,7 +208,7 @@ class AddSynth(PyoObject):
 
     import random
 
-    def __init__(self, freq=440, feedback=0.5, mul=0.25, add=0):
+    def __init__(self, freq=440, feedback=0.5, mul=0.5, add=1):
         #PyoObject.__init__(self)
         self._freq = freq
         self._feedback = feedback
@@ -227,16 +227,16 @@ class AddSynth(PyoObject):
         
         for i in range(lmax):
             self._fac.append(Pow(range(1,6), 1, mul=[random.uniform(.995,1.005) for i in range(4)]))
-            self.feedrnd = Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)])
+            self._feedrnd.append(Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)]))
             self._sine1.append(SineLoop(freq=wrap(freq,i)*self._fac[0], 
                                         feedback=wrap(feedback,i)*self._feedrnd[0], mul=wrap(mul,i)))
-            self._sine2.append(SineLoop(freq=wrap(freq,i)*self._fac[1], 
-                                        feedback=wrap(feedback,i)*self._feedrnd[1], mul=wrap(mul,i)))
-            self._sine3.append(SineLoop(freq=wrap(freq,i)*self._fac[2], 
-                                        feedback=wrap(feedback,i)*self._feedrnd[2], mul=wrap(mul,i)))
-            self._sine4.append(SineLoop(freq=wrap(freq, i)*self._fac[3], 
-                                        feedback=wrap(feedback,i)*self._feedrnd[3], mul=wrap(mul, i)))
-            self._outs.append(Mix([self._sine1, self._sine2, self._sine3, self._sine4], voices=1))
+            self._sine2.append(SineLoop(freq=wrap(freq,i)*self._fac[0], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[0], mul=wrap(mul,i)))
+            self._sine3.append(SineLoop(freq=wrap(freq,i)*self._fac[0], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[0], mul=wrap(mul,i)))
+            self._sine4.append(SineLoop(freq=wrap(freq, i)*self._fac[0], 
+                                        feedback=wrap(feedback,i)*self._feedrnd[0], mul=wrap(mul, i)))
+            self._outs.append(Interp(Interp(self._sine1[-1], self._sine2[-1], mul=wrap(mul,i), add=wrap(add,i)), Interp(self._sine3[-1], self._sine4[-1], mul=wrap(mul,i), add=wrap(add,i)), mul=wrap(mul,i), add=wrap(add,i)))
             self._base_objs.extend(self._outs[-1].getBaseObjects())
 
     def __dir__(self):
