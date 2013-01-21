@@ -542,7 +542,7 @@ class Wave(BaseSynth):
         self.wav3.type = typ
         self.wav4.type = typ
 
-class PluckedString(BaseSynth):
+class PluckedString(PyoObject):
     """
     Simple plucked string synthesis model.
     
@@ -559,8 +559,21 @@ class PluckedString(BaseSynth):
     Author : Olivier Bélanger - 2011
     _______________________________________________________________________________________
     """
-    def __init__(self, config):
-        BaseSynth.__init__(self, config, mode=1)
+    def __init__(self, freq=220, dur=1, deviation=1, mul=0, add=1):
+        
+        self._freq = freq
+        self._mul = mul
+        self._add = add
+        self._dur = dur
+        self._depth = depth
+        self._deviations = []
+        self._table = []
+        self._impulses = []
+        self._noises = []
+        self._waves = []
+        self._outs = []
+        self._base_objs = []
+        
         self.deviation = Randi(min=0.-self.p3, max=self.p3, freq=[random.uniform(2,4) for i in range(2)], add=1)
         self.table = CosTable([(0,0),(50,1),(300,0),(8191,0)])
         self.impulse = TrigEnv(self.trig, table=self.table, dur=.1)
