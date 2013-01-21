@@ -81,7 +81,7 @@ And we need to convert the degrees to radians:
 # SAT dome specific coordinate offsets
 TOP_OFFSET = 0
 HIGH_OFFSET = -7.5
-MID_OFFSET = -7.5
+MID_OFFSET = 7.5
 LOW_OFFSET = 7.5
 
 DOME8x8 = [
