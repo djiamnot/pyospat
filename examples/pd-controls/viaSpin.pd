@@ -1,4 +1,4 @@
-#N canvas 820 75 1004 1122 10;
+#N canvas 820 22 1004 1122 10;
 #X obj 43 699 s \$0-to-SPIN;
 #N canvas 1058 96 372 319 ViewControl 0;
 #X obj 10 10 inlet;
@@ -78,6 +78,21 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X floatatom 530 825 5 0 0 0 - - -;
 #X floatatom 568 866 5 0 0 0 - - -;
 #X msg 383 867 /pluck setParam deviation \$1;
+#X obj 400 688 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 403 714 metro 300;
+#X msg 65 809 createNode spinner GroupNode;
+#X msg 101 954 /spinner setSpin 0 0 \$1;
+#X floatatom 101 934 5 0 0 1 (deg/sec) - -;
+#X msg 100 911 50;
+#X msg 130 911 0;
+#X text 79 845 Offset the sound by 4m along the y-axis so that it appears
+to orbit around the spinner:;
+#X obj 61 908 cnv 15 24 24 empty empty 8 4 12 1 24 -99865 -262144 0
+;
+#X text 162 911 <- set the spinner speed;
+#X msg 75 876 /pluck setParent spinner \, /snd setTranslation 0 4 0
+;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -119,3 +134,11 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 54 0 53 0;
 #X connect 55 0 56 0;
 #X connect 56 0 0 0;
+#X connect 57 0 58 0;
+#X connect 58 0 50 0;
+#X connect 59 0 0 0;
+#X connect 60 0 0 0;
+#X connect 61 0 60 0;
+#X connect 62 0 61 0;
+#X connect 63 0 61 0;
+#X connect 67 0 0 0;
