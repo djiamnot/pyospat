@@ -594,24 +594,33 @@ class PluckedString(PyoObject):
         self._mul = mul
         self._add = add
         self._dur = dur
-        self._depth = depth
+        self._deviation = deviation
         self._deviations = []
-        self._table = []
+        self._tables = []
         self._impulses = []
         self._noises = []
         self._waves = []
         self._outs = []
         self._base_objs = []
         
-        self.deviation = Randi(min=0.-self.p3, max=self.p3, freq=[random.uniform(2,4) for i in range(2)], add=1)
-        self.table = CosTable([(0,0),(50,1),(300,0),(8191,0)])
-        self.impulse = TrigEnv(self.trig, table=self.table, dur=.1)
-        self.noise = Biquad(Noise(self.impulse), freq=2500)
-        self.leftamp = self.amp*self.panL
-        self.rightamp = self.amp*self.panR
-        self.wave1 = Waveguide(self.noise, freq=self.pitch*self.deviation[0], dur=self.p2, minfreq=.5, mul=self.leftamp).mix()
-        self.wave2 = Waveguide(self.noise, freq=self.pitch*self.deviation[1], dur=self.p2, minfreq=.5, mul=self.rightamp).mix()
-        self.out = Mix([self.wave1, self.wave2], voices=2)
+        freq, dur, deviation, mul, add, lmax = convertArgsToLists(freq, dur, deviation, mul, add)
+        
+        for i in range (lmax):
+            self._deviations.append(Randi(
+                    min=0.-wrap(deviation, i), 
+                    max=wrap(deviation, i), 
+                    freq=random.uniform(2,4) , 
+                    add=1))
+            self._tables.append(CosTable([(0,0),(50,1),(300,0),(8191,0)]))
+            self._impulses.append((TrigEnv(self.trig, table=self._tables, dur=.1)))
+            self._noises.append(Biquad(Noise(self._impulses), freq=2500))
+            self._outs.append(Waveguide(
+                    self.noise, 
+                    freq=wrap(freq,i)*wrap(deviation,i), 
+                    dur=wrap(dur,i), 
+                    minfreq=.5, 
+                    mul=wrap(mul,i)))
+            self._base_objs.extend(self._outs[-1].getBaseObjects())
 
 class Reson(BaseSynth):
     """
