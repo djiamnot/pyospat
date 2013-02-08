@@ -32,3 +32,4 @@ class Configuration(object):
         self.listener_id = "listener0"
         self.layout_name = "STEREO"
         self.plugins_path = ".pyo/plugins"
+        self.pa_device = 0
