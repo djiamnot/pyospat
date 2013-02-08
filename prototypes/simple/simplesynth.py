@@ -5,7 +5,7 @@ import pyo
 S_RATE = 44100
 BACKEND = 'portaudio'
 
-class Pluck(object):
+class BiSine(object):
     def __init__(self):
 
         self.table = None
@@ -22,8 +22,8 @@ if __name__ == '__main__':
     server = pyo.Server(sr=S_RATE, nchnls=2).boot()
     server.start()
 
-    pluck = Pluck()
-    pluck.run()
+    bs = BiSine()
+    bs.run()
     try:
         while True:
             time.sleep(0.1)

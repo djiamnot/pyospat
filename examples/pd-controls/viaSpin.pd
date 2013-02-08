@@ -1,6 +1,6 @@
-#N canvas 682 426 997 597 10;
-#X obj 43 403 s \$0-to-SPIN;
-#N canvas 1062 92 372 319 ViewControl 0;
+#N canvas 2771 63 1004 1122 10;
+#X obj 43 699 s \$0-to-SPIN;
+#N canvas 1058 96 372 319 ViewControl 0;
 #X obj 10 10 inlet;
 #X text 126 36 list: x y z p r y;
 #X msg 8 256 createNode grid GridNode;
@@ -11,11 +11,11 @@
 #X connect 0 0 2 0;
 #X connect 2 0 3 0;
 #X connect 5 0 4 0;
-#X restore 763 40 pd ViewControl;
-#X obj 763 20 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X text 784 17 set view for this example;
-#X obj 19 28 widget-spinConnect \$0;
+#X restore 828 238 pd ViewControl;
+#X obj 828 218 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 849 215 set view for this example;
+#X obj 19 27 widget-spinConnect \$0;
 #X msg 92 428 debug spatosc;
 #X msg 93 471 debug;
 #X msg 92 450 debug nodes;
@@ -31,7 +31,7 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X msg 134 288 createNode snd0 SoundNode;
 #X text 18 94 spinserver --spatosc BasicTranslator osc.udp://localhost:10001
 ;
-#X msg 120 256 createNode listener0 Listener;
+#X msg 43 205 createNode listener0 Listener;
 #X msg 149 358 /snd0 setParam setMediaURI file:///usr/share/sounds/alsa/Rear_Left.wav
 ;
 #X msg 150 398 /snd0 setParam setMediaURI pyo://Sine;
@@ -40,9 +40,61 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X floatatom 350 465 0 0 0 0 - - -;
 #X msg 185 465 /snd0 setParam mul \$1;
 #X msg 139 308 /snd0 setParam setMediaURI pyo://Input;
-#X msg 493 405 createNode sample SoundNode;
-#X msg 497 439 /sample setParam setMediaURI pyo://SfPlayer;
-#X msg 215 522 /snd0 setParam freq 200 300 400;
+#X msg 495 488 /sample setParam mul \$1;
+#X floatatom 653 482 5 0 0 0 - - -;
+#X obj 505 521 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 505 540 /sample setParam loop \$1;
+#X obj 184 519 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 184 538 /snd0 setParam loop \$1;
+#X msg 499 439 /sample setParam setMediaURI file:///usr/share/sounds/alsa/Rear_Left.wav
+\, /sample setParam loop 0;
+#X text 488 352 does not quite handle the re-instantiation;
+#X msg 236 502 deleteNode snd0;
+#X obj 10 175 cnv 15 24 24 empty empty 1 4 12 1 24 -99865 -262144 0
+;
+#X obj 464 398 cnv 15 24 24 empty empty 3 4 12 1 24 -99865 -262144
+0;
+#X obj 101 275 cnv 15 24 24 empty empty 4 4 12 1 24 -99865 -262144
+0;
+#X obj 464 354 cnv 15 24 24 empty empty 2 4 12 1 24 -99865 -262144
+0;
+#X msg 493 371 deleteNode pyoplug \, createNode pyoplug SoundNode;
+#X msg 493 399 /pyoplug setParam setMediaURI plugin://Sine2;
+#X floatatom 523 599 5 0 0 0 - - -;
+#X msg 699 540 createNode blep SoundNode;
+#X msg 701 564 /blep setParam setMediaURI plugin://blepSynth;
+#X msg 524 626 /blep setParam pitch \$1;
+#X msg 699 588 /blep setParam play 1;
+#X msg 559 675 createNode addsynth SoundNode;
+#X msg 559 696 /addsynth setParam setMediaURI plugin://AddSynth;
+#X msg 574 735 createNode pluck SoundNode;
+#X msg 574 758 /pluck setParam setMediaURI plugin://PluckedString;
+#X msg 357 754 /pluck setParam play 1;
+#X msg 364 788 /pluck setParam freq \$1;
+#X floatatom 550 789 5 0 0 0 - - -;
+#X msg 376 834 /pluck setParam dur \$1;
+#X floatatom 530 825 5 0 0 0 - - -;
+#X floatatom 568 866 5 0 0 0 - - -;
+#X msg 383 867 /pluck setParam deviation \$1;
+#X obj 400 688 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 403 714 metro 300;
+#X msg 65 809 createNode spinner GroupNode;
+#X msg 101 954 /spinner setSpin 0 0 \$1;
+#X floatatom 101 934 5 0 0 1 (deg/sec) - -;
+#X msg 100 911 50;
+#X msg 130 911 0;
+#X text 79 845 Offset the sound by 4m along the y-axis so that it appears
+to orbit around the spinner:;
+#X obj 61 908 cnv 15 24 24 empty empty 8 4 12 1 24 -99865 -262144 0
+;
+#X text 162 911 <- set the spinner speed;
+#X msg 75 876 /pluck setParent spinner \, /snd setTranslation 0 4 0
+;
+#X msg 635 802 /pluck setParam spread \$1;
+#X floatatom 800 802 5 0 0 0 - - -;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -59,5 +111,38 @@ via UDP on port 18032) - spin won't propegate message via spatOSC;
 #X connect 24 0 0 0;
 #X connect 25 0 0 0;
 #X connect 26 0 0 0;
-#X connect 27 0 0 0;
-#X connect 28 0 0 0;
+#X connect 27 0 26 0;
+#X connect 28 0 29 0;
+#X connect 29 0 0 0;
+#X connect 30 0 31 0;
+#X connect 31 0 0 0;
+#X connect 32 0 0 0;
+#X connect 34 0 0 0;
+#X connect 39 0 0 0;
+#X connect 40 0 0 0;
+#X connect 41 0 44 0;
+#X connect 42 0 0 0;
+#X connect 43 0 0 0;
+#X connect 44 0 0 0;
+#X connect 45 0 0 0;
+#X connect 46 0 0 0;
+#X connect 47 0 0 0;
+#X connect 48 0 0 0;
+#X connect 49 0 0 0;
+#X connect 50 0 0 0;
+#X connect 51 0 0 0;
+#X connect 52 0 51 0;
+#X connect 53 0 0 0;
+#X connect 54 0 53 0;
+#X connect 55 0 56 0;
+#X connect 56 0 0 0;
+#X connect 57 0 58 0;
+#X connect 58 0 50 0;
+#X connect 59 0 0 0;
+#X connect 60 0 0 0;
+#X connect 61 0 60 0;
+#X connect 62 0 61 0;
+#X connect 63 0 61 0;
+#X connect 67 0 0 0;
+#X connect 68 0 0 0;
+#X connect 69 0 68 0;
