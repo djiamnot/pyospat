@@ -71,7 +71,8 @@ class ServerWrapper(object):
     """
     def __init__(self, config_file_name=None, use_twisted=False):
         parser = PrefParser(config_file_name)
-        self._server = pyo.Server(**parser.get_kwargs()).boot()
+        self._server = pyo.Server(**parser.get_kwargs())
+        self._server.boot()
         self._server.start()
         self._running = False
         self._use_twisted = use_twisted
