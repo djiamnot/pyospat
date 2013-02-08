@@ -1,4 +1,4 @@
-#N canvas 820 22 1004 1122 10;
+#N canvas 2771 63 1004 1122 10;
 #X obj 43 699 s \$0-to-SPIN;
 #N canvas 1058 96 372 319 ViewControl 0;
 #X obj 10 10 inlet;
@@ -93,6 +93,8 @@ to orbit around the spinner:;
 #X text 162 911 <- set the spinner speed;
 #X msg 75 876 /pluck setParent spinner \, /snd setTranslation 0 4 0
 ;
+#X msg 635 802 /pluck setParam spread \$1;
+#X floatatom 800 802 5 0 0 0 - - -;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
@@ -142,3 +144,5 @@ to orbit around the spinner:;
 #X connect 62 0 61 0;
 #X connect 63 0 61 0;
 #X connect 67 0 0 0;
+#X connect 68 0 0 0;
+#X connect 69 0 68 0;
