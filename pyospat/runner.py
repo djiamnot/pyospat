@@ -27,6 +27,7 @@ from pyospat import application
 from pyospat import configuration
 from pyospat import pyoserver
 from twisted.internet import error
+import os
 import sys
 
 DESCRIPTION = "Python audio renderer for SpatOSC"
@@ -40,6 +41,8 @@ def run():
     parser.add_option("-p", "--osc-receive-port", type="int", default=10001, help="UDP port to listen to for OSC messages. Default is 10001")
     parser.add_option("-l", "--listener-id", type="string", default="listener0", help="ID of the listener in the spatosc scene")
     parser.add_option("-L", "--layout", type="string", default="STEREO", help="Speakers layout. One of STEREO, QUAD, OCTO")
+    parser.add_option("-d", "--list-devices", action="store_true", help="List audio devices")
+    parser.add_option("-D", "--device", type="int", default=0, help="Use the specified devices (see option -d|--list-devices). Default is 0")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     if options.verbose:
@@ -50,10 +53,18 @@ def run():
         config.listener_id = options.listener_id
     if options.layout:
         config.layout_name = options.layout
+    if options.device:
+        config.pa_device = options.device
+    if options.list_devices:
+        print("Listing devices:")
+        pyoserver.list_devices()
+        sys.exit(1)
 
-    s = pyoserver.ServerWrapper(use_twisted=True)
+    s = pyoserver.ServerWrapper(config, use_twisted=True)
     try:
         app = application.Application(config)
+        user_path = os.path.expanduser("~/")
+        sys.path.append(os.path.join(user_path, config.plugins_path))
     except error.CannotListenError, e:
         print(e)
         sys.exit(1)

@@ -1,2 +1,2 @@
 #!/bin/bash
-pdextended -jack -channels 8 -path ./:~/src/spatosc/examples/pd-external/ pd-controls.pd
+pd-extended -noaudio -path ./:~/src/spatosc/examples/pd-external/ pd-controls.pd

@@ -117,7 +117,7 @@ class Renderer(object):
         """
         handles node property changes.
         """
-        print("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, value))
+        #print("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, value))
         if node_id == self._listener_id:
             if property_name == PROPERTY_SPREAD:
                 try:
@@ -126,7 +126,8 @@ class Renderer(object):
                     print(str(e))
         if node_id in self._sources:
             print("%s is in sources..." % (node_id))
-            self._sources[node_id].set_property(property_name, float(value))
+            print("setting %s's property %s to %d" % (node_id, property_name, value))
+            self._sources[node_id].set_property(property_name, value)
 
     def _set_spread(self, spread=2.0):
         """
