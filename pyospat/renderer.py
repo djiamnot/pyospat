@@ -121,7 +121,7 @@ class Renderer(object):
         if node_id == self._listener_id:
             if property_name == PROPERTY_SPREAD:
                 try:
-                    _set_spread(float(value))
+                    self._set_spread(float(value))
                 except ValueError, e:
                     print(str(e))
         if node_id in self._sources:
