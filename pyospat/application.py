@@ -23,9 +23,11 @@ The Application class.
 """
 from pyospat import renderer
 from pyospat import speakerlayouts as layouts
+from pyospat import logger
 from pyospat import oscinterface as OSC
 import math
 
+log = logger.start(name="application")
 
 class Application(object):
     """
@@ -36,8 +38,8 @@ class Application(object):
         @param configuration: Instance of a Configuration.
         """
         self._configuration = configuration
-        print("*** starting with configuration:")
-        print(self._configuration)
+        log.debug("*** starting with configuration:")
+        log.debug(self._configuration)
         self._speakers_angles = [
             [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
             [math.pi / 4.0, 0.0, 1.0]

@@ -21,12 +21,15 @@
 The SoundSource class
 """
 from pyospat import introspection
+from pyospat import logger
 from pyospat import maths
 import os
 import sys
 import pyo
 
 from pyospat.plugins import *
+
+log = logger.start(name="sound_source")
 
 class SoundSource(object):
     """
@@ -37,17 +40,16 @@ class SoundSource(object):
         @param outs: number of outputs
         @type outs: int
         """
-        print("instantiating a SoundSource... ")
+        log.debug("instantiating a soundsource... ")
         self._source = None
         self._is_connected_to_listener = False
         self._number_of_outputs = outs
         self._uri = None
-        #TODO: self._delay = pyo.Delay()
+        #todo: self._delay = pyo.delay()
         self._mixer = pyo.Mixer(outs=self._number_of_outputs, chnls=1, time=0.050)
         self._previous_aed = [0.0, 0.0, 0.0]
         self._previous_speakers_angles = []
         self._spread = 2.0
-        print("Done")
 
     def __del__(self):
         del self._source
@@ -63,7 +65,7 @@ class SoundSource(object):
 
     def get_connected(self):
         """
-        Check if connected
+        check if connected
         """
         if self._is_connected_to_listener:
             return True
@@ -72,12 +74,12 @@ class SoundSource(object):
 
     def set_delay(self, delay):
         """
-        Set delay time
+        set delay time
         @param del: delay time
         @type del: float
         """
-        print("TODO: SoundSource::setDelay(%f)" % (delay))
-        # self._delay.setDelay(delay)
+        log.debug("todo: soundsource::setdelay(%f)" % (delay))
+        # self._delay.setdelay(delay)
 
     def _set_uri_adc(self, uri):
         """
@@ -85,17 +87,17 @@ class SoundSource(object):
         """
         try:
             adc_num = int(uri.split("/")[-1])
-        except IndexError, e:
+        except indexerror, e:
             print(e)
             return False
-        except TypeError, e:
+        except typeerror, e:
             print(e)
             return False
         else:
             del self._source
-            # TODO: check if adc_num is a valid audio input
-            print(" set URI ADC: %d" % (adc_num))
-            self._source = pyo.Input(chnl=adc_num)
+            # todo: check if adc_num is a valid audio input
+            log.debug(" set uri adc: %d" % (adc_num))
+            self._source = pyo.input(chnl=adc_num)
             return True
 
     def _set_uri_pyo_generator(self, uri):
@@ -103,23 +105,23 @@ class SoundSource(object):
         @rtype: bool
         """
         try:
-            print("*** pyo generator: Trying to instantiate %s"%(uri))
+            log.debug("*** pyo generator: trying to instantiate %s"%(uri))
             obj_name = uri.split("/")[-1]
-            print("*** Object name is %s"%(obj_name))
-            _Pyobj = introspection.get_class(obj_name)
-            print("*** We got an object %s..."%(_Pyobj))
-            if introspection.class_has_property(_Pyobj, 'input') and _Pyobj is not "Input":
-                print obj_name, "is not a generator."
+            log.debug("*** object name is %s"%(obj_name))
+            _pyobj = introspection.get_class(obj_name)
+            log.debug("*** we got an object %s..."%(_pyobj))
+            if introspection.class_has_property(_pyobj, 'input') and _pyobj is not "input":
+                log.debug(obj_name, "is not a generator.")
                 return False
             else:
                 if self._source is not None:
                     #self._source().stop()
                     del self._source
-                #FIXME: handle things like SfPlayer which need to be instantiated with some arguments...
-                self._source = _Pyobj()
-                print("*** pyo generator: instantiated %s" % (self._source))
+                #fixme: handle things like sfplayer which need to be instantiated with some arguments...
+                self._source = _pyobj()
+                log.debug("*** pyo generator: instantiated %s" % (self._source))
                 return True
-        except IndexError, e:
+        except indexerror, e:
             print(e)
             return False
 
@@ -129,20 +131,20 @@ class SoundSource(object):
         """
         try:
             obj_name = uri.split("/")[-1]
-        except IndexError, e:
+        except indexerror, e:
             print(e)
             return False
-        if obj_name == "Noise":
-            print("Got Noise!")
+        if obj_name == "noise":
+            log.debug("got noise!")
             if self._source is not None:
-                print("try to delete any existing source")
+                log.debug("try to delete any existing source")
                 del self._source
-            print("Create noise")
-            self._source = pyo.Noise()
-            print("Noise created at %s" %(self._source))
+            log.debug("create noise")
+            self._source = pyo.noise()
+            log.debug("noise created at %s" %(self._source))
             return True
         else:
-            print("Pyo object {0} not supported, yet!".format(obj_name))
+            log.warning("Pyo object {0} not supported, yet!".format(obj_name))
             return False
 
     def _set_uri_file(self, uri):
@@ -153,14 +155,14 @@ class SoundSource(object):
         if os.path.exists(f_name):
             if self._source is not None:
                 del(self._source)
-                print("Playing sound file: {0}".format(f_name))
+                log.debug("Playing sound file: {0}".format(f_name))
                 self._source = pyo.SfPlayer(f_name, loop=True)
             else:
-                print("Playing sound file: {0}".format(f_name))
+                log.debug("Playing sound file: {0}".format(f_name))
                 self._source = pyo.SfPlayer(f_name, loop=True)
             return True
         else:
-            print("File {0} does not exist.".format(f_name))
+            log.debug("File {0} does not exist.".format(f_name))
             return False
 
     def set_uri(self, uri):
@@ -171,7 +173,7 @@ class SoundSource(object):
         * pyo://
         * file://
         """
-        print("setting URI to %s" % (uri))
+        log.debug("setting URI to %s" % (uri))
         if self._uri == uri:
             return
         success = False
@@ -180,7 +182,7 @@ class SoundSource(object):
         # elif uri.startswith("pyo://"):
         #     success = self._set_uri_pyo(uri)
         elif uri.startswith("pyo://"):
-            print("*** Entering _set_uri_pyo_generator ***")
+            log.debug("*** Entering _set_uri_pyo_generator ***")
             success = self._set_uri_pyo_generator(uri)
 #            success = self._set_uri_pyo(uri)
         elif uri.startswith("file://"):
@@ -188,14 +190,14 @@ class SoundSource(object):
         elif uri.startswith("plugin://"):
             success = self._set_uri_plugin(uri)
         else:
-            print("{0} is not a known URI path".format(uri))
+            log.debug("{0} is not a known URI path".format(uri))
         if success:
-            print("  * {0} was loaded".format(uri))
+            log.debug("  * {0} was loaded".format(uri))
             self._uri = uri
             self._connect()
             self._set_aed_to_previous()
         else:
-            print("Failed to set source URI to %s" % (uri))
+            log.debug("Failed to set source URI to %s" % (uri))
 
     def _set_uri_plugin(self, uri): 
         """
@@ -206,7 +208,7 @@ class SoundSource(object):
         @param uri: string
         """
         plug_name = uri[9:]
-        print("loading a plugin: {0} ".format(plug_name))
+        log.debug("loading a plugin: {0} ".format(plug_name))
         #print("Searching the folowing paths: ")
         #print(sys.path)
         # del self._source
@@ -216,7 +218,7 @@ class SoundSource(object):
         if self._source is not None:
             del self._source
         self._source = _Pyo_plugin()
-        print("*** pyospat plugin: instantiated %s" % (self._source))
+        log.debug("*** pyospat plugin: instantiated %s" % (self._source))
         return True
 
     def set_property(self, property_name, value):
@@ -225,9 +227,9 @@ class SoundSource(object):
         """
         if self._source is not None:
             props = introspection.get_instance_properties(self._source)
-            print(props)
+            log.debug(props)
             if property_name == "play":
-                print("trying to play: ")
+                log.debug("trying to play: ")
                 try:
                     self._source.play()
                 except TypeError, e:
@@ -236,7 +238,7 @@ class SoundSource(object):
                 #print("Set %s property %s to %s" %(self._source, property_name, *values))
                 introspection.set_instance_property(self._source, property_name, value)
             else:
-                print("%s does not have %s property" % (self._source, property_name))
+                log.debug("%s does not have %s property" % (self._source, property_name))
 
     def _set_aed_to_previous(self):
         self.set_relative_aed(self._previous_aed, self._previous_speakers_angles)
@@ -256,15 +258,15 @@ class SoundSource(object):
         for angle in speaker_angles:
             factor = maths.angles_to_attenuation(aed, angle, self._spread)
             self._mixer.setAmp(0, index, factor)
-            print("factor[%d]: %f" % (index, factor))
+            log.debug("factor[%d]: %f" % (index, factor))
             index += 1
         self._previous_aed = aed
         self._previous_speakers_angles = speaker_angles
         
     def _connect(self):
-        print("%s attempts to connect %s" % (self, self._source))
+        log.debug("%s attempts to connect %s" % (self, self._source))
         if self._source is not None:
-            print("%s is not empty so it should connect to mixer" % (self._source))
+            log.debug("%s is not empty so it should connect to mixer" % (self._source))
             self._mixer.addInput(0, self._source)
         # self._mixer.setAmp(0, 0, 0.5)
         # self._mixer.setAmp(0, 1, 0.5)
