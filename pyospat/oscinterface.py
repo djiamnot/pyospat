@@ -21,17 +21,20 @@
 from txosc import async
 from txosc import dispatch
 from twisted.internet import reactor
+from pyospat import logger
+
+log = logger.start(name="oscinterface")
     
 def _type_tags_match(message, expected, verbose=False):
     """
     Checks that some typetags string matches the expected.
     """
-    print("type tags are: %s" % (message.getTypeTags()))
+    log.debug("type tags are: %s" % (message.getTypeTags()))
     if message.getTypeTags() == expected:
         return True
     else:
         if verbose:
-            print("Bad type tags for message %s. Expected %s" % (message, expected))
+            log.info("Bad type tags for message %s. Expected %s" % (message, expected))
         return False
 
 def get_connection_id(message):
@@ -73,7 +76,7 @@ class OSCinterface(object):
         self._receiver = dispatch.Receiver()
         self._server_port = reactor.listenUDP(
             port_number, async.DatagramServerProtocol(self._receiver))
-        print("Listening on osc.udp://localhost:%s" % (port_number))
+        log.debug("Listening on osc.udp://localhost:%s" % (port_number))
         self._renderer = renderer
         self._setup_osc_callbacks()
     
@@ -95,7 +98,7 @@ class OSCinterface(object):
         Handles /spatosc/core ,ss command arg
         """
         # this seems to be different from the previous spatosc behaviour?
-        print("  Got {0} from {1}".format(message, address))
+        log.debug("  Got {0} from {1}".format(message, address))
         command = message.getValues()[0]
         if _type_tags_match(message, "s"):
             if command == "clear":
@@ -107,7 +110,7 @@ class OSCinterface(object):
                 #self._renderer.set_uri(node_id, "pyo://Noise")
             elif command == "createListener":
                 arg = message.getValues()[1]
-                print("create listener: %s" % (arg))
+                log.debug("create listener: %s" % (arg))
                 self._renderer.add_listener(arg)
                 del arg
             elif command == "deleteNode":
@@ -119,9 +122,9 @@ class OSCinterface(object):
             if command == "connect":
                 # TODO: handle connections
                 source_name = message.getValues()[1]
-                print("*** source name: %s" % (source_name))
+                log.debug("*** source name: %s" % (source_name))
                 listener_name = message.getValues()[2]
-                print("*** listener name: %s" % (listener_name))
+                log.debug("*** listener name: %s" % (listener_name))
                 self._renderer.set_connected(source_name, listener_name)
 
     def _handle_node_property(self, message, address):
@@ -129,11 +132,11 @@ class OSCinterface(object):
         Handles /spatosc/core/<type>/<node>/prop ,s[sfi] command arg
         """
         # this seems to be different from the previous spatosc behaviour?
-        print("  Got {0} from {1}".format(message, address))
+        log.debug("  Got {0} from {1}".format(message, address))
         node_id = message.address.split("/")[4]
         if not self._renderer.has_source(node_id):
-            print("No such source node: " + node_id)
-            print(str(self._renderer))
+            log.debug("No such source node: " + node_id)
+            log.debug(str(self._renderer))
             return
         property_name = message.getValues()[0]
         # TODO: handle lists as properties (i.e. a list of frequencies)
@@ -144,30 +147,30 @@ class OSCinterface(object):
             if property_name == "setMediaURI":
                 self._renderer.set_uri(node_id, value[1])
             else:
-                print("Property is: %s and value is: %s" % (property_name, value))
+                log.debug("Property is: %s and value is: %s" % (property_name, value))
         else:
-            print("Property is neither ss nor sf")
+            log.debug("Property is neither ss nor sf")
 
     def _handle_create_listener(self, message, address):
         """
         Handles /spatosc/core/scene/create_listener ,s node_id
         """
-        print("  Got {} from {}".format(message, address))
+        log.debug("  Got {} from {}".format(message, address))
         if not _type_tags_match(message, "s", verbose=True):
             return
         node_id = message.getValues()[0]
-        print("Created listener: ", node_id)
+        log.debug("Created listener: ", node_id)
 
     def _handle_create_source(self, message, address):
         """
         Handles /spatosc/core/scene/create_source ,s node_id
         """
-        print("  Got {} from {}".format(message, address))
+        log.debug("  Got {} from {}".format(message, address))
         if not _type_tags_match(message, "ss", verbose=True):
             return
         node_id = message.getValues()[0]
         self._renderer.add_source(node_id)
-        print("Created source: ", node_id)
+        log.debug("Created source: ", node_id)
 
     def _handle_connection_delay(self, message, address):
         """
@@ -192,7 +195,7 @@ class OSCinterface(object):
         Handles /spatosc/core/connection/*/aed ,fff azimuth elevation distance
         Azimuth and elevation are in radians.
         """
-        print("  Got %s from %s" % (message, address))
+        log.debug("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "fff", verbose=True):
             return
         connection_id = get_connection_id(message)
@@ -200,13 +203,13 @@ class OSCinterface(object):
             try:
                 from_id = connection_id.split("->")[0] #FIXME
                 to_id = connection_id.split("->")[1] #FIXME
-                print("Connecting from %s to %s" % (from_id, to_id))
+                log.debug("Connecting from %s to %s" % (from_id, to_id))
                 if self._renderer.get_listener_id() == to_id:
                     aed = message.getValues() # 3 floats list
-                    print("%s -> %s has AED: %s" % (from_id, to_id, aed))
+                    log.debug("%s -> %s has AED: %s" % (from_id, to_id, aed))
                     self._renderer.set_aed(from_id, aed)
                 else:
-                    print("%s No such node: %s" % (self, from_id))
+                    log.debug("%s No such node: %s" % (self, from_id))
             except KeyError, e:
                 print(e)
 
@@ -225,4 +228,4 @@ class OSCinterface(object):
         """
         Fallback for any unhandled message
         """
-        print("  fallback: Got %s from %s" % (message, address))
+        log.debug("  fallback: Got %s from %s" % (message, address))
