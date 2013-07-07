@@ -23,7 +23,10 @@ The SoundSource class
 from pyospat import introspection
 from pyospat import maths
 import os
+import sys
 import pyo
+
+from pyospat.plugins import *
 
 class SoundSource(object):
     """
@@ -148,12 +151,16 @@ class SoundSource(object):
         """
         f_name = uri[7:]
         if os.path.exists(f_name):
-            del self._source
-            print("Playing sound file: %s" % (f_name))
-            self._source = pyo.SfPlayer(f_name, loop=True)
+            if self._source is not None:
+                del(self._source)
+                print("Playing sound file: {0}".format(f_name))
+                self._source = pyo.SfPlayer(f_name, loop=True)
+            else:
+                print("Playing sound file: {0}".format(f_name))
+                self._source = pyo.SfPlayer(f_name, loop=True)
             return True
         else:
-            print("Sound file %s does not exist." % (f_name))
+            print("File {0} does not exist.".format(f_name))
             return False
 
     def set_uri(self, uri):
@@ -178,19 +185,55 @@ class SoundSource(object):
 #            success = self._set_uri_pyo(uri)
         elif uri.startswith("file://"):
             success = self._set_uri_file(uri)
+        elif uri.startswith("plugin://"):
+            success = self._set_uri_plugin(uri)
+        else:
+            print("{0} is not a known URI path".format(uri))
         if success:
+            print("  * {0} was loaded".format(uri))
             self._uri = uri
             self._connect()
             self._set_aed_to_previous()
         else:
             print("Failed to set source URI to %s" % (uri))
 
+    def _set_uri_plugin(self, uri): 
+        """
+        Sets a URI to a custom plugin. Plugins are custom defined pyo classes
+        that encapsulate various generators/operators to form complex instruments.
+        Chaining audio pyo classes from pyospat is currently not supported.
+        The URI is in the form of plugin://<path>
+        @param uri: string
+        """
+        plug_name = uri[9:]
+        print("loading a plugin: {0} ".format(plug_name))
+        #print("Searching the folowing paths: ")
+        #print(sys.path)
+        # del self._source
+        # # FIXME: potentially dangerous...
+            #self._source = exec(plug_name)
+        _Pyo_plugin = introspection.get_plugin_class(plug_name)
+        if self._source is not None:
+            del self._source
+        self._source = _Pyo_plugin()
+        print("*** pyospat plugin: instantiated %s" % (self._source))
+        return True
+
     def set_property(self, property_name, value):
+        """
+        Manipulate properties
+        """
         if self._source is not None:
             props = introspection.get_instance_properties(self._source)
             print(props)
-            if property_name in props:
-                print("Set %s property %s to %s" %(self._source, property_name, value))
+            if property_name == "play":
+                print("trying to play: ")
+                try:
+                    self._source.play()
+                except TypeError, e:
+                    print e
+            elif property_name in props:
+                #print("Set %s property %s to %s" %(self._source, property_name, *values))
                 introspection.set_instance_property(self._source, property_name, value)
             else:
                 print("%s does not have %s property" % (self._source, property_name))
