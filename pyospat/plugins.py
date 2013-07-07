@@ -271,7 +271,9 @@ class AddSynth(PyoObject):
     def feedback(self, fb):
         self._feedback = fb
 
-        
+    # def setFreq(self, f):
+    #     f, lmax = convertArgsToLists(f)
+    #     [obj.setFreq(wrap(f,i)) for i, obj in enumerate(self._base_objs)]
 
 class BaseSynth:
     def __init__(self):
