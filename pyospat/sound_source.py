@@ -232,6 +232,11 @@ class SoundSource(object):
                     self._source.play()
                 except TypeError, e:
                     print e
+            elif property_name == "stop":
+                try:
+                    self._source.stop()
+                except TypeError, e:
+                    print("Cannot stop because of {0}".format(e))
             elif property_name in props:
                 #print("Set %s property %s to %s" %(self._source, property_name, *values))
                 introspection.set_instance_property(self._source, property_name, value)
