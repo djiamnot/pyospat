@@ -658,6 +658,11 @@ class PluckedString(PyoObject):
         x, lmax = convertArgsToLists(freq)
         [obj.setFreq(wrap(x,1)) for i, obj in enumerate(self._base_objs)]
 
+    def setDur(self, dur):
+        self._dur = dur
+        x, lmax = convertArgsToLists(dur)
+        [obj.setFreq(wrap(x,1)) for i, obj in enumerate(self._base_objs)]
+
     @property
     def freq(self):
         """
