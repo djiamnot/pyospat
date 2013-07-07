@@ -36,6 +36,8 @@ class Application(object):
         @param configuration: Instance of a Configuration.
         """
         self._configuration = configuration
+        print("*** starting with configuration:")
+        print(self._configuration)
         self._speakers_angles = [
             [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
             [math.pi / 4.0, 0.0, 1.0]
@@ -46,6 +48,11 @@ class Application(object):
             self._speakers_angles = layouts.QUAD
         if self._configuration.layout_name == "OCTO":
             self._speakers_angles = layouts.OCTO
+        if self._configuration.layout_name == "SATDOME":
+            self._speakers_angles = layouts.SATDOME
+        if self._configuration.layout_name == "DOME8x8":
+            self._speakers_angles = layouts.DOME8x8
+
         self._renderer = renderer.Renderer(configuration.listener_id, self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         OSC.OSCinterface(port_number, self._renderer)
