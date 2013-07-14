@@ -245,13 +245,38 @@ class AddSynth(PyoObject):
     def __dir__(self):
         return ["freq", "feedback", "mul" , "add"]
 
-    def setFreq(self, f):
-        f, lmax = convertArgsToLists(f)
-        [obj.setFreq(wrap(f,i)) for i, obj in enumerate(self._base_objs)]
+    def setPitch(self, f):
+        self._freq = f
+        #freq, lmax = convertArgsToLists(f)
+        #[obj.setFreq(wrap(freq,i)) for i, obj in enumerate(self._base_objs)]
 
-    
+    @property
+    def freq(self):
+        """
+        freq property
+        @rtype : float
+        """
+        return self._freq
 
-        
+    @property
+    def feedback(self):
+        """
+        Feedback property
+        @rtype : float
+        """
+        return self._feedback
+
+    @freq.setter
+    def freq(self, freq):
+        self.setPitch(freq)
+
+    @feedback.setter
+    def feedback(self, fb):
+        self._feedback = fb
+
+    # def setFreq(self, f):
+    #     f, lmax = convertArgsToLists(f)
+    #     [obj.setFreq(wrap(f,i)) for i, obj in enumerate(self._base_objs)]
 
 class BaseSynth:
     def __init__(self):
@@ -634,6 +659,11 @@ class PluckedString(PyoObject):
     def setPitch(self, freq):
         self._freq = freq
         x, lmax = convertArgsToLists(freq)
+        [obj.setFreq(wrap(x,1)) for i, obj in enumerate(self._base_objs)]
+
+    def setDur(self, dur):
+        self._dur = dur
+        x, lmax = convertArgsToLists(dur)
         [obj.setFreq(wrap(x,1)) for i, obj in enumerate(self._base_objs)]
 
     @property
