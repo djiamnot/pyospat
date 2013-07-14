@@ -25,12 +25,19 @@ from optparse import OptionParser
 from pyospat import __version__
 from pyospat import application
 from pyospat import configuration
+from pyospat import logger
 from pyospat import pyoserver
 from twisted.internet import error
 import os
 import sys
 
 DESCRIPTION = "Python audio renderer for SpatOSC"
+
+log = None
+
+def start_logging(level="warning"):
+    global log
+    log = logger.start(level=level)
 
 def run():
     """
@@ -43,10 +50,13 @@ def run():
     parser.add_option("-L", "--layout", type="string", default="STEREO", help="Speakers layout. One of STEREO, QUAD, OCTO")
     parser.add_option("-d", "--list-devices", action="store_true", help="List audio devices")
     parser.add_option("-D", "--device", type="int", default=0, help="Use the specified devices (see option -d|--list-devices). Default is 0")
+    parser.add_option("-w", "--debug", action="store_true", help="print some debug messages")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     if options.verbose:
         config.verbose = True
+        level = "info"
+        start_logging(level)
     if options.osc_receive_port:
         config.osc_receive_port = options.osc_receive_port
     if options.listener_id:
@@ -55,6 +65,9 @@ def run():
         config.layout_name = options.layout
     if options.device:
         config.pa_device = options.device
+    if options.debug:
+        level = "debug"
+        start_logging(level)
     if options.list_devices:
         print("Listing devices:")
         pyoserver.list_devices()

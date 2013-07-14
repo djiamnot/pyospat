@@ -6,8 +6,11 @@ A copy of the Sine class for testing purposes.
 """
 #import math
 from pyo import *
+from pyospat import logger
 
-print("module plugins imported")
+log = logger.start(name="plugins")
+
+log.debug("plugins module imported")
 
 class Sine2(PyoObject):
     """
@@ -51,7 +54,7 @@ class Sine2(PyoObject):
         self._add = add
         freq, phase, mul, add, lmax = convertArgsToLists(freq, phase, mul, add)
         self._base_objs = [Sine_base(wrap(freq,i), wrap(phase,i), wrap(mul,i), wrap(add,i)) for i in range(lmax)]
-        print("Loaded Sine2 plugin")
+        log.debug("Loaded Sine2 plugin")
 
     def __dir__(self):
         return ['freq', 'phase', 'mul', 'add']
@@ -164,7 +167,7 @@ class blepSynth(PyoObject):
 
     # override some methods
     def play(self, dur=0, delay=0):
-        print("running with: frequency %d" % (self._freq))
+        #print("running with: frequency %d" % (self._freq))
         #self._envs.play()
         dur, delay, lmax = convertArgsToLists(dur, delay)
         [obj.play(wrap(dur,i),wrap(delay,i)) for i, obj in enumerate(self._envs)]
@@ -703,7 +706,7 @@ class PluckedString(PyoObject):
 
     # override some methods
     def play(self, dur=0, delay=0):
-        print("running with: frequency %d" % (self._freq))
+        #print("running with: frequency %d" % (self._freq))
         #self._envs.play()
         dur, delay, lmax = convertArgsToLists(dur, delay)
         [obj.play(wrap(dur,i),wrap(delay,i)) for i, obj in enumerate(self._trig)]
