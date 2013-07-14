@@ -177,6 +177,7 @@ class OSCinterface(object):
         Handles /spatosc/core/connection/*/delay ,f delay
         """
         # print("  Got %s from %s" % (message, address))
+        log.debug("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "f", verbose=True):
             return
         connection_id = get_connection_id(message)
@@ -218,6 +219,7 @@ class OSCinterface(object):
         Handles /spatosc/core/*/*/xyz ,fff x y z
         """
         # print("  Got %s from %s" % (message, address))
+        log.debug("  Got %s from %s" % (message, address))
         if not _type_tags_match(message, "fff", verbose=True):
             return
         node_id = _get_node_id(message)
