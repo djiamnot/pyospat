@@ -233,7 +233,7 @@ class SoundSource(object):
                 try:
                     self._source.play()
                 except TypeError, e:
-                    print e
+                    print(e)
             elif property_name == "stop":
                 try:
                     self._source.stop()

@@ -24,7 +24,10 @@ The ServerWrapper and PrefParser classes.
 import pyo
 import time
 import os
+from pyospat import logger
 from xml.dom import minidom
+
+log = logger.start(name="oscinterface")
 
 def list_devices():
     pyo.pa_list_devices()
@@ -60,7 +63,7 @@ class PrefParser(object):
                 _type = type(self._constructor_arguments[key])
                 text = elements[0].childNodes[0].toxml()
                 self._constructor_arguments[key] = _type(text)
-        print(self._constructor_arguments)
+        log.debug(self._constructor_arguments)
     
     def get_kwargs(self):
         """
