@@ -22,7 +22,10 @@ PyoObjects introspection.
 """
 
 import pyo
+from pyospat import logger
 from pyospat import plugins
+
+log = logger.start(name="introspection")
 
 """
 Module-wide global variable.
@@ -125,10 +128,10 @@ def set_instance_property(instance, name, value):
         return True
     except ValueError, e:
         if VERBOSE:
-            print("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, value.__name__, e))
+            log.info("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, value.__name__, e))
             return False
     else:
         if VERBOSE:
-            print("pyo.%s does not have property %s." % (instance.__class__.__name__, name))
+            log.info("pyo.%s does not have property %s." % (instance.__class__.__name__, name))
         return False
 
