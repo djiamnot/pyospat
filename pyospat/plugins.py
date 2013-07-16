@@ -211,13 +211,14 @@ class AddSynth(PyoObject):
 
     import random
 
-    def __init__(self, freq=440, feedback=0.5, mul=0.5, add=1):
+    def __init__(self, freq=440, feedback=0.5, spread=1, mul=0.5, add=1):
         #PyoObject.__init__(self)
         self._freq = freq
         self._feedback = feedback
         self._mul = mul
         self._add = add
         self._fac = []
+        self._spread = []
         self._feedrnd = []
         self._sine1 = []
         self._sine2 = []
@@ -226,9 +227,10 @@ class AddSynth(PyoObject):
         self._outs = []
         self._base_objs = []
 
-        freq, feedback, mul, add, lmax = convertArgsToLists(freq, feedback, mul, add)
+        freq, feedback, spread, mul, add, lmax = convertArgsToLists(freq, feedback, spread, mul, add)
         
         for i in range(lmax):
+            #self._spread.append()
             self._fac.append(Pow(range(1,6), 1, mul=[random.uniform(.995,1.005) for i in range(4)]))
             self._feedrnd.append(Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)]))
             self._sine1.append(SineLoop(freq=wrap(freq,i)*self._fac[0], 
@@ -243,12 +245,12 @@ class AddSynth(PyoObject):
             self._base_objs.extend(self._outs[-1].getBaseObjects())
 
     def __dir__(self):
-        return ["freq", "feedback", "mul" , "add"]
+        return ["freq", "feedback", spread, "mul" , "add"]
 
     def setPitch(self, f):
         self._freq = f
-        #freq, lmax = convertArgsToLists(f)
-        #[obj.setFreq(wrap(freq,i)) for i, obj in enumerate(self._base_objs)]
+        x, lmax = convertArgsToLists(f)
+        [obj.setFreq(wrap(x,i)) for i, obj in enumerate(self._base_objs)]
 
     @property
     def freq(self):
@@ -277,6 +279,46 @@ class AddSynth(PyoObject):
     # def setFreq(self, f):
     #     f, lmax = convertArgsToLists(f)
     #     [obj.setFreq(wrap(f,i)) for i, obj in enumerate(self._base_objs)]
+
+
+# class PulsarSynth(BaseSynth):
+#     """
+#     Pulsar synthesis.
+    
+#     Pulsar synthesis is a method of electronic music synthesis based on the generation of 
+#     trains of sonic particles. Pulsar synthesis can produce either rhythms or tones as it 
+#     criss‐crosses perceptual time spans.
+    
+#     Parameters:
+
+#         Harmonics : Number of harmonics of the waveform table.
+#         Transposition : Transposition, in semitones, of the pitches played on the keyboard.
+#         LFO Frequency : Speed of the LFO modulating the ratio waveform / silence.
+    
+#     ______________________________________________________________________________________
+#     Author : Olivier Bélanger - 2011
+#     Modified for PyoObject: Michal Seta - 2013
+#     ______________________________________________________________________________________
+#     """
+#     def __init__(self, config):
+#         BaseSynth.__init__(self, config, mode=1)
+#         self.table = SawTable(order=10, size=2048)
+#         self.change = Change(self.p1)
+#         self.trigChange = TrigFunc(self.change, function=self.changeOrder)
+#         self.env = HannTable()
+#         self.lfo = Sine(freq=self.p3, mul=.25, add=.7)
+#         self.norm_amp = self.amp * 0.2
+#         self.leftamp = self.norm_amp*self.panL
+#         self.rightamp = self.norm_amp*self.panR
+#         self.pulse1 = Pulsar(table=self.table, env=self.env, freq=self.pitch, frac=self.lfo, mul=self.leftamp).mix()
+#         self.pulse2 = Pulsar(table=self.table, env=self.env, freq=self.pitch*.998, frac=self.lfo, mul=self.rightamp).mix()
+#         self.pulse3 = Pulsar(table=self.table, env=self.env, freq=self.pitch*.997, frac=self.lfo, mul=self.leftamp).mix()
+#         self.pulse4 = Pulsar(table=self.table, env=self.env, freq=self.pitch*1.002, frac=self.lfo, mul=self.rightamp).mix()
+#         self.out = Mix([self.pulse1, self.pulse2, self.pulse3, self.pulse4], voices=2)
+    
+#     def changeOrder(self):
+#         order = int(self.p1.get())
+#         self.table.order = order
 
 class BaseSynth:
     def __init__(self):
