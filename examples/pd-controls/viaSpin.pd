@@ -1,4 +1,4 @@
-#N canvas 330 73 948 906 10;
+#N canvas 899 64 948 906 10;
 #X obj 363 279 cnv 15 400 430 empty empty empty 20 12 0 14 -233017
 -66577 0;
 #X obj 58 281 cnv 15 300 300 empty empty empty 20 12 0 14 -233017 -66577
@@ -44,8 +44,8 @@
 0;
 #X obj 58 282 cnv 15 24 24 empty empty 2 4 12 1 24 -99865 -262144 0
 ;
-#X msg 383 756 createNode addsynth SoundNode;
-#X msg 383 777 /addsynth setParam setMediaURI plugin://AddSynth;
+#X msg 366 736 createNode addsynth SoundNode;
+#X msg 366 757 /addsynth setParam setMediaURI plugin://AddSynth;
 #X msg 373 326 /pluck setParam setMediaURI plugin://PluckedString;
 #X msg 469 473 /pluck setParam play 1;
 #X msg 385 371 /pluck setParam freq \$1;
@@ -54,7 +54,7 @@
 #X floatatom 535 394 5 0 0 0 - - -;
 #X floatatom 578 415 5 0 0 0 - - -;
 #X msg 399 414 /pluck setParam deviation \$1;
-#X obj 469 435 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 469 435 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 469 453 metro 300;
 #X msg 399 523 createNode spinner GroupNode;
@@ -71,8 +71,8 @@ appears to orbit around the spinner:;
 #X floatatom 539 346 5 0 0 0 - - -;
 #X text 18 93 spinserver --spatosc BasicTranslator osc.udp://localhost:18032
 ;
-#X floatatom 359 800 0 0 0 0 - - -;
-#X msg 383 798 /addsynth setParam freq \$1;
+#X floatatom 532 808 0 0 0 0 - - -;
+#X msg 366 808 /addsynth setParam freq \$1;
 #X msg 77 464 /snd0 setParam speed \$1;
 #X floatatom 224 465 5 0 0 0 - - -;
 #X msg 77 423 /snd0 setParam play 1;
@@ -93,6 +93,7 @@ appears to orbit around the spinner:;
 #X text 414 282 Pluck example (with optional spin through multichannel)
 ;
 #X text 388 712 simple additive synth (FIXME);
+#X msg 367 778 /addsynth setTranslation -0.2 0.5 0.7;
 #X connect 5 0 4 0;
 #X connect 8 0 3 0;
 #X connect 9 0 3 0;
@@ -132,3 +133,4 @@ appears to orbit around the spinner:;
 #X connect 52 0 3 0;
 #X connect 53 0 3 0;
 #X connect 55 0 56 0;
+#X connect 69 0 54 0;
