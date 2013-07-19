@@ -28,7 +28,7 @@ class Configuration(object):
     """
     def __init__(self):
         self.verbose = False
-        self.osc_receive_port = 18033
+        self.osc_receive_port = 18032
         self.listener_id = "listener0"
         self.layout_name = "STEREO"
         self.plugins_path = ".pyo/plugins"
