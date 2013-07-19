@@ -211,14 +211,13 @@ class AddSynth(PyoObject):
 
     import random
 
-    def __init__(self, freq=440, feedback=0.5, spread=1, mul=0.5, add=1):
+    def __init__(self, freq=440, feedback=0.5, mul=0.5, add=1):
         #PyoObject.__init__(self)
         self._freq = freq
         self._feedback = feedback
         self._mul = mul
         self._add = add
         self._fac = []
-        self._spread = []
         self._feedrnd = []
         self._sine1 = []
         self._sine2 = []
@@ -227,11 +226,13 @@ class AddSynth(PyoObject):
         self._outs = []
         self._base_objs = []
 
-        freq, feedback, spread, mul, add, lmax = convertArgsToLists(freq, feedback, spread, mul, add)
+        freq, feedback, mul, add, lmax = convertArgsToLists(freq, feedback, mul, add)
         
         for i in range(lmax):
-            #self._spread.append()
-            self._fac.append(Pow(range(1,6), 1, mul=[random.uniform(.995,1.005) for i in range(4)]))
+            #self._fac.append(Pow(range(1,6), [1,2,3,4], mul=[random.uniform(.995,1.005) for i in range(4)]))
+            self._fac = Pow(range(1,6), [1,2,3,4], mul=[random.uniform(.995,1.005) for i in range(4)])
+            print("fac is: ")
+            print(self._fac[0])
             self._feedrnd.append(Randi(min=.15, max=.25, freq=[random.uniform(.5,2) for i in range(4)]))
             self._sine1.append(SineLoop(freq=wrap(freq,i)*self._fac[0], 
                                         feedback=wrap(feedback,i)*self._feedrnd[0], mul=wrap(mul,i)))
@@ -245,12 +246,15 @@ class AddSynth(PyoObject):
             self._base_objs.extend(self._outs[-1].getBaseObjects())
 
     def __dir__(self):
-        return ["freq", "feedback", spread, "mul" , "add"]
+        return ["freq", "feedback", "mul" , "add"]
 
     def setPitch(self, f):
         self._freq = f
-        x, lmax = convertArgsToLists(f)
-        [obj.setFreq(wrap(x,i)) for i, obj in enumerate(self._base_objs)]
+        #x, lmax = convertArgsToLists(f)
+        [obj.setFreq(f) for i, obj in enumerate(self._sine1)]
+        [obj.setFreq(f) for i, obj in enumerate(self._sine2)]
+        [obj.setFreq(f) for i, obj in enumerate(self._sine3)]
+        [obj.setFreq(f) for i, obj in enumerate(self._sine4)]
 
     @property
     def freq(self):
