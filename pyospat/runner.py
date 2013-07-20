@@ -35,7 +35,7 @@ DESCRIPTION = "Python audio renderer for SpatOSC"
 
 log = None
 
-def start_logging(level="warning"):
+def start_logging(level="debug"):
     global log
     log = logger.start(level=level)
 
@@ -45,7 +45,7 @@ def run():
     """
     parser = OptionParser(usage="%prog [options]", version="%prog " + __version__, description=DESCRIPTION)
     parser.add_option("-v", "--verbose", action="store_true", help="Makes the output verbose.")
-    parser.add_option("-p", "--osc-receive-port", type="int", default=10001, help="UDP port to listen to for OSC messages. Default is 10001")
+    parser.add_option("-p", "--osc-receive-port", type="int", default=18032, help="UDP port to listen to for OSC messages. Default is 10001")
     parser.add_option("-l", "--listener-id", type="string", default="listener0", help="ID of the listener in the spatosc scene")
     parser.add_option("-L", "--layout", type="string", default="STEREO", help="Speakers layout. One of STEREO, QUAD, OCTO")
     parser.add_option("-d", "--list-devices", action="store_true", help="List audio devices")
@@ -53,10 +53,10 @@ def run():
     parser.add_option("-w", "--debug", action="store_true", help="print some debug messages")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
+    level = "warning"
     if options.verbose:
         config.verbose = True
         level = "info"
-        start_logging(level)
     if options.osc_receive_port:
         config.osc_receive_port = options.osc_receive_port
     if options.listener_id:
@@ -67,12 +67,12 @@ def run():
         config.pa_device = options.device
     if options.debug:
         level = "debug"
-        start_logging(level)
     if options.list_devices:
         print("Listing devices:")
         pyoserver.list_devices()
         sys.exit(1)
-
+        
+    start_logging(level)
     s = pyoserver.ServerWrapper(config, use_twisted=True)
     try:
         app = application.Application(config)
@@ -81,7 +81,15 @@ def run():
     except error.CannotListenError, e:
         print(e)
         sys.exit(1)
-    s.run()
-    del app
+    else:
+        try:
+            # start  the application
+            s.run()
+            reactor.run()
+        except KeyboardInterrupt:
+            pass
+        log.info("Goodbye.")
+        #del app
+        sys.exit(0)
     # why does it often end with a segmentation fault?
 
