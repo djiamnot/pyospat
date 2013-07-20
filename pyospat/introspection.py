@@ -23,7 +23,7 @@ PyoObjects introspection.
 
 import pyo
 from pyospat import logger
-from pyospat import plugins
+#from pyospat import plugins
 
 log = logger.start(name="introspection")
 
@@ -52,15 +52,15 @@ def get_class(name):
     except AttributeError, err:
         print err
 
-def get_plugin_class(name):
-    """
-    @rtype: pyo object
-    """
-    try:
-        m = getattr(plugins, name)
-        return m
-    except AttributeError, err:
-        print err
+# def get_plugin_class(name):
+#     """
+#     @rtype: pyo object
+#     """
+#     try:
+#         m = getattr(plugins, name)
+#         return m
+#     except AttributeError, err:
+#         print err
 
 def get_instance_properties(instance):
     """
