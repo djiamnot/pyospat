@@ -27,7 +27,7 @@ import os
 import sys
 import pyo
 
-from pyospat.plugins import *
+from pyospat.plugins import SimpleSin
 
 log = logger.start(name="sound_source")
 
@@ -207,17 +207,24 @@ class SoundSource(object):
         The URI is in the form of plugin://<path>
         @param uri: string
         """
+        imported_plugin = ""
         plug_name = uri[9:]
+        import_name = "pyospat.plugins." + plug_name
         log.debug("loading a plugin: {0} ".format(plug_name))
         #print("Searching the folowing paths: ")
         #print(sys.path)
         # del self._source
         # # FIXME: potentially dangerous...
             #self._source = exec(plug_name)
-        _Pyo_plugin = introspection.get_plugin_class(plug_name)
+        try:
+            imported_plugin = __import__(import_name, fromlist=[""])
+            print(imported_plugin)
+        except Exception, e:
+            print(e)
+        #_Pyo_plugin = introspection.get_plugin_class(imported_plugin)
         if self._source is not None:
             del self._source
-        self._source = _Pyo_plugin()
+        self._source = eval("imported_plugin." + plug_name + "()")
         log.debug("*** pyospat plugin: instantiated %s" % (self._source))
         return True
 
