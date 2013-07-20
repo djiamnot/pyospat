@@ -217,14 +217,14 @@ class SoundSource(object):
         # # FIXME: potentially dangerous...
             #self._source = exec(plug_name)
         try:
-            imported_plugin = __import__(import_name)
+            imported_plugin = __import__(import_name, fromlist=[""])
             print(imported_plugin)
         except Exception, e:
             print(e)
-        _Pyo_plugin = introspection.get_plugin_class(imported_plugin)
+        #_Pyo_plugin = introspection.get_plugin_class(imported_plugin)
         if self._source is not None:
             del self._source
-        self._source = _Pyo_plugin()
+        self._source = eval("imported_plugin." + plug_name + "()")
         log.debug("*** pyospat plugin: instantiated %s" % (self._source))
         return True
 
