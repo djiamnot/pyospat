@@ -34,7 +34,7 @@ Installation
 
 Dependencies:
 
-* libspatosc-0.1-dev
+* libspatosc-0.6-dev
 * python-pyo
 * python-setuptools
 * python-twisted-core
