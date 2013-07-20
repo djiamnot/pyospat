@@ -1,6 +1,8 @@
 from pyo import *
 from pyospat import logger
 
+log = logger.start(name="SimpleSin")
+
 class SimpleSin(PyoObject):
     """
     A simple sine wave oscillator.
