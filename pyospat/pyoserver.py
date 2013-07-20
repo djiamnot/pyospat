@@ -27,7 +27,7 @@ import os
 from pyospat import logger
 from xml.dom import minidom
 
-log = logger.start(name="oscinterface")
+log = logger.start(name="pyoserver")
 
 def list_devices():
     pyo.pa_list_devices()
