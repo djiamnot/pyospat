@@ -2,9 +2,9 @@
 # -*- coding: latin-1 -*-
 
 from pyo import *
-from pyospat import logger
+#from pyospat import logger
 
-log = logger.start(name="AddSynth")
+#log = logger.start(name="AddSynth")
 
 class AddSynth(PyoObject):
     """
@@ -26,7 +26,7 @@ class AddSynth(PyoObject):
 
     import random
 
-    def __init__(self, freq=440, feedback=0.5, mul=0.5, add=1):
+    def __init__(self, freq=440, feedback=0.35, mul=0.5, add=1):
         #PyoObject.__init__(self)
         self._freq = freq
         self._feedback = feedback
@@ -96,3 +96,10 @@ class AddSynth(PyoObject):
     # def setFreq(self, f):
     #     f, lmax = convertArgsToLists(f)
     #     [obj.setFreq(wrap(f,i)) for i, obj in enumerate(self._base_objs)]
+
+
+if __name__ == "__main__":
+    s = Server().boot()
+    a = AddSynth().play().out()
+    #m = Mixer()
+    s.gui(locals())
