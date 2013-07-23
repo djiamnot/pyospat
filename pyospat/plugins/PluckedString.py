@@ -2,9 +2,9 @@
 # -*- coding: latin-1 -*-
 
 from pyo import *
-from pyospat import logger
+#from pyospat import logger
 
-log = logger.start(name="PluckedString")
+#log = logger.start(name="PluckedString")
 
 class PluckedString(PyoObject):
     """
@@ -25,7 +25,7 @@ class PluckedString(PyoObject):
     _______________________________________________________________________________________
     """
     def __init__(self, freq=110, dur=1, deviation=1, mul=0.5, add=1):
-        
+        PyoObject.__init__(self)
         self._freq = freq
         self._mul = mul
         self._add = add
@@ -40,9 +40,10 @@ class PluckedString(PyoObject):
         self._outs = []
         self._base_objs = []
         
-        freq, dur, deviation, mul, add, lmax = convertArgsToLists(freq, dur, deviation, mul, add)
+        freq, dur, deviation, mul, add, lmax = convertArgsToLists(self._freq, self._dur, self._deviation, mul, add)
         
         for i in range (lmax):
+            self._freq = wrap(freq, i)
             self._trig.append(Trig().play())
             self._deviations.append(Randi(
                     min=0.-wrap(deviation, i), 
@@ -50,7 +51,7 @@ class PluckedString(PyoObject):
                     freq=random.uniform(2,4) , 
                     add=1))
             self._tables.append(CosTable([(0,0),(50,1),(300,0),(8191,0)]))
-            self._impulses.append((TrigEnv(self._trig, table=self._tables, dur=.1)))
+            self._impulses.append((TrigEnv(self._trig, table=self._tables, dur=.1*self._dur)))
             self._noises.append(Biquad(Noise(self._impulses), freq=2500))
             self._outs.append(Waveguide(
                     self._noises, 
@@ -111,8 +112,9 @@ class PluckedString(PyoObject):
 
     # TODO: add setters for mul, add, dur, deviation
 
+
     # override some methods
-    def play(self, dur=0, delay=0):
+    def play(self, dur=1, delay=0):
         #print("running with: frequency %d" % (self._freq))
         #self._envs.play()
         dur, delay, lmax = convertArgsToLists(dur, delay)
@@ -126,7 +128,7 @@ class PluckedString(PyoObject):
 
     def out(self, chnl=0, inc=1, dur=0, delay=0):
         dur, delay, lmax = convertArgsToLists(dur, delay)
-        [obj.play(wrap(dur,i), wrap(delay,i)) for obj in self._trig]
+        [obj.play(wrap(dur,1), wrap(delay,0)) for obj in self._trig]
         if type(chnl) == ListType:
             self._base_objs = [obj.out(wrap(chnl,i), wrap(dur,i), wrap(delay, i)) for i, obj in enumerate(self._base_objs)]
         else:
@@ -135,3 +137,23 @@ class PluckedString(PyoObject):
             else:
                 self._base_objs = [obj.out(chnl+i*inc, wrap(dur,i), wrap(delay,i)) for i, obj in enumerate(self._base_objs)]
         return self
+
+    def ctrl(self, map_list=None, title=None, wxnoserver=False):
+        self._map_list = [SLMap(20., 10000., "log", "freq", self._freq),
+                          SLMap(0.001, 20., "lin", "deviation", self._deviation),
+                          SLMapMul(self._mul)]
+        PyoObject.ctrl(self, map_list, title, wxnoserver)
+
+if __name__ == "__main__":
+    import random
+    s = Server().boot()
+    s.start()
+    a = PluckedString().out()
+    def notes():
+        f = random.randrange(80, 408, 25)
+        a.freq = [f, f + 20]
+        a.dur = random.randrange(1,4,1)
+        a.out()
+    p = Pattern(notes, 3)
+    p.play()
+    s.gui(locals())
