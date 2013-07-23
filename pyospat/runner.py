@@ -37,6 +37,7 @@ log = None
 
 def start_logging(level="debug"):
     global log
+    print("setting level to {0}".format(level))
     log = logger.start(level=level)
 
 def run():
@@ -53,7 +54,7 @@ def run():
     parser.add_option("-w", "--debug", action="store_true", help="print some debug messages")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
-    level = "warning"
+    level = "debug"
     if options.verbose:
         config.verbose = True
         level = "info"
