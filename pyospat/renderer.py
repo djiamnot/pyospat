@@ -20,6 +20,9 @@
 
 from pyospat import sound_source
 from pyospat import introspection
+from pyospat import logger
+
+log = logger.start(name="renderer")
 
 PROPERTY_SPREAD = "setSpread"
 
@@ -32,7 +35,7 @@ class Renderer(object):
         self._speakers_angles = speakers_angles
         # ID
         self._listener_id = listener_id
-        print("New renderer instance with listener %s" % (self._listener_id))
+        log.debug("New renderer instance with listener %s" % (self._listener_id))
         # sources:
         self._sources = {}
 
@@ -50,14 +53,14 @@ class Renderer(object):
         @type listener_id: string
          @rtype: bool
         """
-        print("entered renderer.add_listener()")
+        log.debug("entered renderer.add_listener()")
         if listener_id not in self._listener_id:
-            print("will add make %s"%(listener_id))
+            log.debug("will add make %s"%(listener_id))
             self._listener_id = listener_id
-            print("Success adding listener %s" % (self._listener_id))
+            log.debug("Success adding listener %s" % (self._listener_id))
             return True
         else:
-            print("Already have listener named %s" % (listener_id))
+            log.debug("Already have listener named %s" % (listener_id))
             return False
 
     def set_connected(self, source_id, listener_id, connected=True):
@@ -78,9 +81,9 @@ class Renderer(object):
         @rtype bool
         """
         if self.has_source(source_name):
-            print("renderer will call set_uri() on %s"%(self._sources[source_name]))
+            log.debug("renderer will call set_uri() on %s"%(self._sources[source_name]))
             self._sources[source_name].set_uri(uri)
-            print("Success seting URI %s to %s" % (uri, source_name))
+            log.debug("Success seting URI %s to %s" % (uri, source_name))
             return True
         else:
             return False
@@ -97,7 +100,7 @@ class Renderer(object):
         if self.has_source(source_name):
             self._sources[source_name].set_relative_aed(aed, self._speakers_angles)
         else:
-            print("%s No such node: %s" % (self, source_name))
+            log.debug("%s No such node: %s" % (self, source_name))
 
     def set_delay(self, source_name, delay):
         """
@@ -109,7 +112,7 @@ class Renderer(object):
         """
         if self.has_source(source_name):
             if delay < 0.0:
-                print("Negative delay? %f" % (delay))
+                log.warning("Negative delay? %f" % (delay))
                 delay = 0.0
             self._sources[source_name].set_delay(delay)
 
@@ -117,16 +120,17 @@ class Renderer(object):
         """
         handles node property changes.
         """
-        print("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, value))
+        #print("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, value))
         if node_id == self._listener_id:
             if property_name == PROPERTY_SPREAD:
                 try:
-                    _set_spread(float(value))
+                    self._set_spread(float(value))
                 except ValueError, e:
                     print(str(e))
         if node_id in self._sources:
-            print("%s is in sources..." % (node_id))
-            self._sources[node_id].set_property(property_name, float(value))
+            log.debug("%s is in sources..." % (node_id))
+            log.debug("setting %s's property %s to %d" % (node_id, property_name, value))
+            self._sources[node_id].set_property(property_name, value)
 
     def _set_spread(self, spread=2.0):
         """
@@ -136,7 +140,7 @@ class Renderer(object):
             source.set_spread(spread)
 
     def has_source(self, source_name):
-        print("We have the source: %s" % (self._sources.keys()))
+        log.debug("We have the source: %s" % (self._sources.keys()))
         return source_name in self._sources.keys()
 
     def get_number_of_speakers(self):
@@ -154,26 +158,26 @@ class Renderer(object):
         @type type_name: object type
         @rtype: bool
         """
-        print("entered renderer.add_source()")
+        log.debug("entered renderer.add_source()")
         if source_name not in self._sources:
-            print("will instantiate %s"%(source_name))
+            log.debug("will instantiate %s"%(source_name))
             self._sources[source_name] = sound_source.SoundSource(self.get_number_of_speakers())
-            print("Success instantiating %s at %s" % (source_name, self._sources[source_name]))
+            log.debug("Success instantiating %s at %s" % (source_name, self._sources[source_name]))
             return True
         else:
-            print("Already have sound source %s" % (source_name))
+            log.warning("Already have sound source %s" % (source_name))
             return False
 
     def delete_source(self, source_name):
-        print("delete_source(%s)" % (source_name))
+        log.debug("delete_source(%s)" % (source_name))
         if source_name in self._sources:
             del self._sources[source_name]
         else:
-            print("Could not find sound source %s" % (source_name))
+            log.debug("Could not find sound source %s" % (source_name))
             return False
 
     def clear_scene(self):
-        print("clear_scene()!")
+        log.warning("clear_scene()!")
         for k in self._sources.keys():
             del self._sources[k]
 

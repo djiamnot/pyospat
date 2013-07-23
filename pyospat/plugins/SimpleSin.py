@@ -1,15 +1,9 @@
-#!/usr/bin/env python
-# encoding: utf-8
-"""
-A copy of the Sine class for testing purposes.
-
-"""
-#import math
 from pyo import *
+from pyospat import logger
 
-print("module plugins imported")
+log = logger.start(name="SimpleSin")
 
-class Sine2(PyoObject):
+class SimpleSin(PyoObject):
     """
     A simple sine wave oscillator.
     
@@ -51,7 +45,7 @@ class Sine2(PyoObject):
         self._add = add
         freq, phase, mul, add, lmax = convertArgsToLists(freq, phase, mul, add)
         self._base_objs = [Sine_base(wrap(freq,i), wrap(phase,i), wrap(mul,i), wrap(add,i)) for i in range(lmax)]
-        print("Loaded Sine2 plugin")
+        log.debug("Loaded Sine2 plugin")
 
     def __dir__(self):
         return ['freq', 'phase', 'mul', 'add']
