@@ -30,7 +30,7 @@ class PluckedString(PyoObject):
         self._mul = mul
         self._add = add
         self._dur = dur
-        self._deviation = deviation
+        self._deviation = Randi(min=0.-deviation, max=deviation, freq=random.uniform(2,4), add=1)
         self._trig = []
         self._deviations = []
         self._tables = []
@@ -40,24 +40,24 @@ class PluckedString(PyoObject):
         self._outs = []
         self._base_objs = []
         
-        freq, dur, deviation, mul, add, lmax = convertArgsToLists(freq, dur, deviation, mul, add)
+        freq, dur, mul, add, lmax = convertArgsToLists(freq, dur, mul, add)
         
         for i in range (lmax):
             self._freq = wrap(freq, i)
             self._trig.append(Trig().play())
-            self._deviations.append(Randi(
-                    min=0.-wrap(deviation, i), 
-                    max=wrap(deviation, i), 
-                    freq=random.uniform(2,4) , 
-                    add=1))
+            # self._deviations.append(Randi(
+            #         min=0.-wrap(deviation, i), 
+            #         max=wrap(deviation, i), 
+            #         freq=random.uniform(2,4) , 
+            #         add=1))
             self._tables.append(CosTable([(0,0),(50,1),(300,0),(8191,0)]))
-            self._impulses.append((TrigEnv(self._trig[-1], table=self._tables[-1], dur=wrap(dur,i )* 0.1)))
-            self._noises.append(Biquad(Noise(self._impulses[-1]), freq=2500))
+            self._impulses.append((TrigEnv(wrap(self._trig, 1), table=wrap(self._tables, 1), dur=wrap(dur,i )* 0.1)))
+            self._noises.append(Biquad(Noise(wrap(self._impulses, 1)), freq=2500))
             self._outs.append(Waveguide(
-                    self._noises, 
+                    wrap(self._noises, i), 
                     #freq=wrap(freq,i)*wrap(deviation,i),
-                    #freq = self._freq[-1] * wrap(deviation, i),
-                    freq = self._freq,
+                    freq = self._freq * deviation,
+                    #freq = self._freq,
                     #dur=wrap(dur,i), 
                     dur = dur,
                     minfreq=.5, 
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     import random
     s = Server().boot()
     s.start()
-    a = PluckedString().out()
+    a = PluckedString(freq=[220,230], dur=5).out()
     def notes():
         f = random.randrange(80, 408, 25)
         a.freq = [f, f + 20]
