@@ -40,7 +40,7 @@ class PluckedString(PyoObject):
         self._outs = []
         self._base_objs = []
         
-        freq, dur, deviation, mul, add, lmax = convertArgsToLists(self._freq, self._dur, self._deviation, mul, add)
+        freq, dur, deviation, mul, add, lmax = convertArgsToLists(freq, dur, deviation, mul, add)
         
         for i in range (lmax):
             self._freq = wrap(freq, i)
@@ -51,12 +51,15 @@ class PluckedString(PyoObject):
                     freq=random.uniform(2,4) , 
                     add=1))
             self._tables.append(CosTable([(0,0),(50,1),(300,0),(8191,0)]))
-            self._impulses.append((TrigEnv(self._trig, table=self._tables, dur=.1*self._dur)))
-            self._noises.append(Biquad(Noise(self._impulses), freq=2500))
+            self._impulses.append((TrigEnv(self._trig[-1], table=self._tables[-1], dur=wrap(dur,i )* 0.1)))
+            self._noises.append(Biquad(Noise(self._impulses[-1]), freq=2500))
             self._outs.append(Waveguide(
                     self._noises, 
-                    freq=wrap(freq,i)*wrap(deviation,i), 
-                    dur=wrap(dur,i), 
+                    #freq=wrap(freq,i)*wrap(deviation,i),
+                    #freq = self._freq[-1] * wrap(deviation, i),
+                    freq = self._freq,
+                    #dur=wrap(dur,i), 
+                    dur = dur,
                     minfreq=.5, 
                     mul=wrap(mul,i)))
             self._base_objs.extend(self._outs[-1].getBaseObjects())
@@ -152,7 +155,9 @@ if __name__ == "__main__":
     def notes():
         f = random.randrange(80, 408, 25)
         a.freq = [f, f + 20]
-        a.dur = random.randrange(1,4,1)
+        a.dur = random.randrange(1,10,1)
+        print(a.freq)
+        print(a.dur)
         a.out()
     p = Pattern(notes, 3)
     p.play()
