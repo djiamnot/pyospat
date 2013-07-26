@@ -58,4 +58,4 @@ class Application(object):
         self._renderer = renderer.Renderer(configuration.listener_id, self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         OSC.OSCinterface(port_number, self._renderer)
-        
+
