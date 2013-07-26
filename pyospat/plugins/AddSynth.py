@@ -102,4 +102,12 @@ if __name__ == "__main__":
     s = Server().boot()
     a = AddSynth().play().out()
     #m = Mixer()
+
+    def notes():
+        f = random.randrange(80, 408, 25)
+        a.freq = [f, f + 20, f + 23]
+        a.dur = random.randrange(1,4,1)
+        a.out()
+    p = Pattern(notes, 3)
+    p.play()
     s.gui(locals())
