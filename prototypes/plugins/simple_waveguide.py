@@ -52,16 +52,18 @@ if __name__ == "__main__":
     s = Server().boot()
     s.start()
     a = SimpleWaveguide(freq=[200,330])
+    b = Freeverb(a, size=[.79,.8], damp=.1).out()
+
     def notes():
         f = random.randrange(80, 408, 25)
         a.freq = [f, f + 20]
         a.dur = random.randrange(1,10,1)
-        print(a._freq)
-        print(a._dur)
+        #print(a._freq)
+        #print(a._dur)
         a.play()
-        a.out()
     tm = Sine(freq=0.1, mul=.5, add=1.75)
     p = Pattern(notes, tm)
     p.play()
+    b.ctrl()
     s.gui(locals())
 
