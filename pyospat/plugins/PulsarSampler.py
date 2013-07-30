@@ -55,7 +55,7 @@ class PulsarSampler(PyoObject):
     def length(self):
         return self._length
 
-    @dur.setter
+    @length.setter
     def length(self, d):
         self._length = d
         self._table.dur = d
