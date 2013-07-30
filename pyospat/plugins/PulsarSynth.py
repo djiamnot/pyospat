@@ -5,11 +5,15 @@ import random
 from pyo import *
 
 class PulsarSampler(PyoObject):
-    def __init__(self, freq=80, dur=1, lfo=[.1,.15], mul=0.5, add=1):
+    """
+    A pulsar synth reading from a table recorded live. 
+    """
+    def __init__(self, freq=80, length=1, lfo=[.1,.15], mul=0.5, add=1):
         PyoObject.__init__(self)
         self._dur = dur
         self._freq = freq
-        freq, dur, lfo, mul, add, lmax = convertArgsToLists(self._freq, self._dur, lfo, mul, add)
+        self._length = length
+        freq, length, lfo, mul, add, lmax = convertArgsToLists(self._freq, self._length, lfo, mul, add)
 
         self._input = Input(0)
         self._han = HannTable()
@@ -46,13 +50,13 @@ class PulsarSampler(PyoObject):
         self.setPitch(f)
 
     @property
-    def dur(self):
-        return self._freq
+    def length(self):
+        return self._length
 
     @dur.setter
     def dur(self, d):
-        self._dur = d
-        self._out.dur = d
+        self._length = d
+        self._table.dur = d
 
     def play(self, dur=0, delay=0):
         self._rec.play(dur,delay)
