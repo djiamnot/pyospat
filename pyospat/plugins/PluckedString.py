@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 from pyo import *
 #from pyospat import logger
@@ -20,7 +20,7 @@ class PluckedString(PyoObject):
         Chorus depth : Depth of the frequency deviation between the left and right channels.
     
     _______________________________________________________________________________________
-    Author : Olivier Bélanger - 2011
+    Author : Olivier BÃ©langer - 2011
     Adapted to pyospat: Michal Seta
     _______________________________________________________________________________________
     """
