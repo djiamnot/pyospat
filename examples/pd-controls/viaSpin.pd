@@ -1,4 +1,4 @@
-#N canvas 897 61 948 906 10;
+#N canvas 897 77 948 906 10;
 #X obj 363 279 cnv 15 400 430 empty empty empty 20 12 0 14 -233017
 -66577 0;
 #X obj 58 281 cnv 15 300 300 empty empty empty 20 12 0 14 -233017 -66577
@@ -93,6 +93,22 @@ appears to orbit around the spinner:;
 #X msg 403 573 /pluck setParent spinner \, /pluck setTranslation 0
 4 0;
 #X text 779 335 plugin://SimpleSin;
+#X msg 66 671 clear;
+#N canvas 548 530 450 300 PulsarSynth 0;
+#X floatatom 232 198 0 0 0 0 - - -;
+#X msg 66 198 /addsynth setParam freq \$1;
+#X obj 62 232 s \$0-to-SPIN;
+#X msg 66 126 createNode pulsar SoundNode;
+#X msg 67 168 /pulsar setTranslation -0.2 0.5 0.7;
+#X msg 66 147 /pulsar setParam setMediaURI plugin://PulsarSampler;
+#X msg 279 210 /pulsar play 1;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 3 0 2 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X restore 781 374 pd PulsarSynth;
 #X connect 5 0 4 0;
 #X connect 8 0 3 0;
 #X connect 9 0 3 0;
@@ -133,3 +149,4 @@ appears to orbit around the spinner:;
 #X connect 54 0 55 0;
 #X connect 66 0 53 0;
 #X connect 67 0 55 0;
+#X connect 69 0 3 0;
