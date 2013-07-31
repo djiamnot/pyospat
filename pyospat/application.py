@@ -27,7 +27,7 @@ from pyospat import logger
 from pyospat import oscinterface as OSC
 import math
 
-log = logger.start(name="application")
+log = logger.start(name="application", level="debug")
 
 class Application(object):
     """
