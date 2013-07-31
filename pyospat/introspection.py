@@ -27,11 +27,6 @@ from pyospat import logger
 
 log = logger.start(name="introspection")
 
-"""
-Module-wide global variable.
-"""
-VERBOSE = False
-
 def has_class(name):
     """
     @rtype: bool
@@ -127,11 +122,9 @@ def set_instance_property(instance, name, value):
         instance.__setattr__(name, value)
         return True
     except ValueError, e:
-        if VERBOSE:
-            log.info("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, value.__name__, e))
-            return False
+        log.info("pyo.%s.%s is not a %s: %s" % (instance.__class__.__name__, name, value.__name__, e))
+        return False
     else:
-        if VERBOSE:
-            log.info("pyo.%s does not have property %s." % (instance.__class__.__name__, name))
+        log.info("pyo.%s does not have property %s." % (instance.__class__.__name__, name))
         return False
 
