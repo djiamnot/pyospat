@@ -23,7 +23,7 @@ from txosc import dispatch
 from twisted.internet import reactor
 from pyospat import logger
 
-log = logger.start(name="oscinterface")
+log = logger.start(name="oscinterface", level="debug")
     
 def _type_tags_match(message, expected, verbose=False):
     """
