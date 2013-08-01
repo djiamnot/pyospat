@@ -25,7 +25,7 @@ import pyo
 from pyospat import logger
 #from pyospat import plugins
 
-log = logger.start(name="introspection")
+log = logger.start(name="introspection", level="debug")
 
 def has_class(name):
     """
@@ -111,7 +111,7 @@ def class_has_property(klass, property_name):
 # FIXME: handle the types properly. The problem here is that pyo
 # reports some propties as being <int> but should be floats. This should be fixed
 # upstream but a proper bug report needs to be prepared.i
-def set_instance_property(instance, name, *args):
+def set_instance_property(instance, name, args):
     """
     Set some properiy value on some PyoObject. Some PyoObjects allow lists
     others require single values. It is up to the programmer to decide 
@@ -125,11 +125,14 @@ def set_instance_property(instance, name, *args):
         print("%s does not seem to have %s property, trying anyways..." 
               % (instance, name))
     # we can't pass a tuple so we need to figure out whether we have a list or not
-    if len(args) == 1:
-        value = args[0]
+    if type(args) is not list:
+        # some parameters require a float, an int or a string
+        value = args
     else:
-        value = list(args)
+        # some properties allow for python lists
+        value = args
     try:
+        log.debug("Trying to set instance's %s property %s to %s"%(instance, name, str(value)))
         instance.__setattr__(name, value)
         return True
     except ValueError, e:
