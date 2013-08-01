@@ -1,7 +1,7 @@
 #N canvas 897 77 948 906 10;
 #X obj 363 279 cnv 15 400 430 empty empty empty 20 12 0 14 -233017
 -66577 0;
-#X obj 58 281 cnv 15 300 300 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 58 281 cnv 15 300 320 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 362 714 cnv 15 300 150 empty empty empty 20 12 0 14 -233017
 -66577 0;
@@ -30,12 +30,12 @@
 #X text 18 115 spinviewer;
 #X msg 65 321 createNode snd0 SoundNode;
 #X msg 43 205 createNode listener0 Listener;
-#X floatatom 214 432 0 0 0 0 - - -;
-#X msg 77 431 /snd0 setParam mul \$1;
-#X obj 219 515 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X floatatom 214 423 0 0 0 0 - - -;
+#X msg 77 422 /snd0 setParam mul \$1;
+#X obj 219 506 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X msg 76 515 /snd0 setParam loop \$1;
-#X msg 78 558 deleteNode snd0;
+#X msg 76 506 /snd0 setParam loop \$1;
+#X msg 78 549 deleteNode snd0;
 #X obj 9 191 cnv 15 24 24 empty empty 1 4 12 1 24 -99865 -262144 0
 ;
 #X obj 364 281 cnv 15 24 24 empty empty 3 4 12 1 24 -99865 -262144
@@ -69,10 +69,10 @@ appears to orbit around the spinner:;
 ;
 #X floatatom 532 808 0 0 0 0 - - -;
 #X msg 366 808 /addsynth setParam freq \$1;
-#X msg 77 494 /snd0 setParam speed \$1;
-#X floatatom 224 495 5 0 0 0 - - -;
-#X msg 77 453 /snd0 setParam play 1;
-#X msg 77 474 /snd0 setParam stop 1;
+#X msg 77 485 /snd0 setParam speed \$1;
+#X floatatom 224 486 5 0 0 0 - - -;
+#X msg 77 444 /snd0 setParam play 1;
+#X msg 77 465 /snd0 setParam stop 1;
 #X obj 362 842 s \$0-to-SPIN;
 #X msg 367 306 createNode pluck SoundNode;
 #X obj 368 685 s \$0-to-SPIN;
@@ -81,9 +81,9 @@ appears to orbit around the spinner:;
 #X text 779 320 plugin://AddSynth;
 #X text 779 307 pyo://Sine;
 #X text 90 297 soundfile playback;
-#X text 239 516 looping;
-#X text 261 494 playback speed;
-#X text 239 433 volume (0..1);
+#X text 239 507 looping;
+#X text 261 485 playback speed;
+#X text 239 424 volume (0..1);
 #X text 414 282 Pluck example (with optional spin through multichannel)
 ;
 #X text 388 712 simple additive synth (FIXME);
@@ -92,7 +92,7 @@ appears to orbit around the spinner:;
 4 0;
 #X text 779 335 plugin://SimpleSin;
 #X msg 66 671 clear;
-#N canvas 121 86 785 475 PulsarSynth 1;
+#N canvas 121 85 785 475 PulsarSynth 0;
 #X floatatom -5 101 0 0 0 0 - - -;
 #X obj 34 437 s \$0-to-SPIN;
 #X msg 32 27 createNode pulsar SoundNode;
@@ -106,11 +106,14 @@ appears to orbit around the spinner:;
 #X floatatom 8 188 0 0 0 0 - - -;
 #X msg 51 159 /pulsar setParam lfo_mul \$1;
 #X msg 51 189 /pulsar setParam lfo_add \$1;
-#X msg 344 211 /pulsar setParam path \$1;
-#X obj 340 161 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X msg 250 275 /pulsar setParam path \$1;
+#X obj 246 225 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X obj 340 181 openpanel;
+#X obj 246 245 openpanel;
 #X msg 152 410 /pulsar setParam stop 1;
+#X text 268 219 set a file to pulsarate;
+#X text 371 89 see pyo documentation to know what these things mean
+;
 #X connect 0 0 6 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
@@ -128,18 +131,19 @@ appears to orbit around the spinner:;
 #X connect 15 0 13 0;
 #X connect 16 0 1 0;
 #X restore 781 374 pd PulsarSynth;
-#X obj 89 351 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X obj 86 348 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 88 370 openpanel;
-#X msg 72 392 /snd0 setParam setMediaURI file://\$1;
-#X obj 130 791 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X obj 85 367 openpanel;
+#X msg 69 389 /snd0 setParam setMediaURI file://\$1;
+#X obj 181 536 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X obj 129 810 openpanel;
+#X obj 180 555 openpanel;
 #X msg 639 781 /addsynth event freq 420 400;
 #X msg 521 840 /addsynth setParam mul \$1;
 #X floatatom 600 820 5 0 0 0 - - -;
 #X msg 659 423 /pluck event freq 200 220 240;
-#X msg 113 832 /snd0 setParam path \$1;
+#X msg 180 574 /snd0 setParam path \$1;
+#X text 199 536 set a new sound file;
 #X connect 5 0 4 0;
 #X connect 8 0 3 0;
 #X connect 9 0 3 0;
