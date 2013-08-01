@@ -24,7 +24,7 @@ class PluckedString(PyoObject):
     Adapted to pyospat: Michal Seta
     _______________________________________________________________________________________
     """
-    def __init__(self, freq=110, dur=1, deviation=1, mul=0.5, add=1):
+    def __init__(self, freq=[110, 150, 180, 200], dur=1, deviation=1, mul=0.5, add=1):
         PyoObject.__init__(self)
         self._freq = freq
         self._dur = dur
