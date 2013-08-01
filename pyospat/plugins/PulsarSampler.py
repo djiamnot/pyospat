@@ -7,7 +7,7 @@ class PulsarSampler(PyoObject):
     """
     A pulsar synth reading from a table recorded live. 
     """
-    def __init__(self, freq=80, length=10., lfo_freq=[.1,.15], mul=0.5, add=1):
+    def __init__(self, path=None, freq=80, length=10., lfo_freq=[.1,.15], mul=0.5, add=1):
         PyoObject.__init__(self)
         #self._dur = dur
         self._freq = freq
@@ -15,28 +15,41 @@ class PulsarSampler(PyoObject):
         self._lfo_freq = lfo_freq
         self._lfo_mul = 0.2
         self._lfo_add = 0.5
-        freq, length, lfo_freq, mul, add, lmax = convertArgsToLists(self._freq, 
-                                                                    self._length, 
-                                                                    self._lfo_freq, 
-                                                                    mul, 
-                                                                    add)
+        self._path = path
+        path, freq, length, lfo_freq, mul, add, lmax = convertArgsToLists(
+            self._path,
+            self._freq, 
+            self._length, 
+            self._lfo_freq, 
+            mul, 
+            add)
 
         self._input = Input(0)
         self._han = HannTable()
         self._lfo = Sine(self._lfo_freq, mul=self._lfo_mul, add=self._lfo_add)
-        self._table = NewTable(length=self._length, chnls=1)
-        self._rec = TableRec(self._input, table=self._table, fadetime=0.01)
+        # self._table = NewTable(length=self._length, chnls=1)
+        # self._rec = TableRec(self._input, table=self._table, fadetime=0.01)
+        self._table = SndTable(path=self._path, chnl=None, start=0, stop=None)
         self._out = Pulsar(table=self._table, env=self._han, freq=self._freq, frac=self._lfo, mul=0.12)
         #self._out = TrigEnv(self._rec['trig'], table=self._table, dur=self._dur)
 
         self._base_objs = self._out.getBaseObjects()
 
     def __dir__(self):
-        return["freq", "length", "lfo_freq", "mul", "add"]
+        return["path", "freq", "length", "lfo_freq", "lfo_add", "lfo_mul", "mul", "add"]
 
     def setLfo_freq(self, f):
         #self._freq = f
         self._lfo.freq =f
+
+    @property
+    def path(self):
+        return self._path
+
+    @path.setter
+    def path(self, s):
+        self._path = s
+        self._table.path = s
 
     @property
     def lfo_freq(self):
@@ -60,7 +73,7 @@ class PulsarSampler(PyoObject):
         return self._lfo_add
 
     @lfo_add.setter
-    def lfo_mul(self, m):
+    def lfo_add(self, m):
         self._lfo_add = m
         self._lfo.add = m
 
@@ -86,7 +99,7 @@ class PulsarSampler(PyoObject):
         self._table = NewTable(length=self._length, chnls=1)
 
     def play(self, dur=0, delay=0):
-        self._rec.play(dur,delay)
+        #self._rec.play(dur,delay)
         self._out.play(dur, delay)
         return PyoObject.play(self, dur, delay)
     
