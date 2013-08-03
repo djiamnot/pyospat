@@ -22,7 +22,7 @@ from pyospat import sound_source
 from pyospat import introspection
 from pyospat import logger
 
-log = logger.start(name="renderer")
+log = logger.start(name="renderer", level="debug")
 
 PROPERTY_SPREAD = "setSpread"
 
@@ -120,7 +120,7 @@ class Renderer(object):
         """
         handles node property changes.
         """
-        #print("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, value))
+        log.debug("set_node_property called with node:%s prop:%s value:%s" % (node_id, property_name, str(value)))
         if node_id == self._listener_id:
             if property_name == PROPERTY_SPREAD:
                 try:
@@ -129,7 +129,7 @@ class Renderer(object):
                     print(str(e))
         if node_id in self._sources:
             log.debug("%s is in sources..." % (node_id))
-            log.debug("setting %s's property %s to %d" % (node_id, property_name, value))
+            log.debug("setting %s's property %s to %s" % (node_id, property_name, str(value)))
             self._sources[node_id].set_property(property_name, value)
 
     def _set_spread(self, spread=2.0):
