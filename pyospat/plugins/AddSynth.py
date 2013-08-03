@@ -87,6 +87,7 @@ class AddSynth(PyoObject):
 
     @freq.setter
     def freq(self, freq):
+        print("Setting addsynth freq to %s:"%(str(freq)))
         self.setPitch(freq)
 
     @feedback.setter
