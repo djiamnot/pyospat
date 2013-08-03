@@ -27,7 +27,7 @@ import os
 import sys
 import pyo
 
-from pyospat.plugins import SimpleSin
+#from pyospat.plugins import SimpleSin
 
 log = logger.start(name="sound_source", level="debug")
 
