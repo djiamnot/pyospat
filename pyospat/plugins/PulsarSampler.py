@@ -113,6 +113,7 @@ if __name__ == "__main__":
     s.start()
     a = PulsarSampler()
     b = Freeverb(a, size=[.79,.8], damp=.1).out()
+    a.path = "/usr/share/sounds/alsa/Rear_Left.wav"
     trigger = 10
 
     def freqs():
