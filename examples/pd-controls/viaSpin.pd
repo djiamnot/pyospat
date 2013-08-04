@@ -52,7 +52,7 @@
 #X floatatom 535 394 5 0 0 0 - - -;
 #X floatatom 578 415 5 0 0 0 - - -;
 #X msg 399 414 /pluck setParam deviation \$1;
-#X obj 469 435 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 469 435 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 469 453 metro 300;
 #X msg 399 523 createNode spinner GroupNode;
@@ -92,7 +92,7 @@ appears to orbit around the spinner:;
 4 0;
 #X text 779 335 plugin://SimpleSin;
 #X msg 66 671 clear;
-#N canvas 121 85 785 475 PulsarSynth 0;
+#N canvas 121 84 785 475 PulsarSynth 1;
 #X floatatom -5 101 0 0 0 0 - - -;
 #X obj 34 437 s \$0-to-SPIN;
 #X msg 32 27 createNode pulsar SoundNode;
@@ -114,6 +114,7 @@ appears to orbit around the spinner:;
 #X text 268 219 set a file to pulsarate;
 #X text 371 89 see pyo documentation to know what these things mean
 ;
+#X msg 356 169 /pulsar event freq 3 4;
 #X connect 0 0 6 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
@@ -130,6 +131,7 @@ appears to orbit around the spinner:;
 #X connect 14 0 15 0;
 #X connect 15 0 13 0;
 #X connect 16 0 1 0;
+#X connect 19 0 1 0;
 #X restore 781 374 pd PulsarSynth;
 #X obj 86 348 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
@@ -144,7 +146,7 @@ appears to orbit around the spinner:;
 #X msg 659 423 /pluck event freq 200 220 240;
 #X msg 180 574 /snd0 setParam path \$1;
 #X text 199 536 set a new sound file;
-#N canvas 121 84 785 475 MicroLooper 1;
+#N canvas 121 84 785 475 MicroLooper 0;
 #X floatatom -5 101 0 0 0 0 - - -;
 #X obj 34 437 s \$0-to-SPIN;
 #X floatatom -2 128 0 0 0 0 - - -;
