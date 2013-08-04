@@ -34,17 +34,22 @@ class PluckedString(PyoObject):
         self._table = CosTable([(0,0),(50,1),(300,0),(8191,0)])
         self._impulse = TrigEnv(self._trig, table=self._table, dur=dur[-1]* 0.1)
         self._noise = Biquad(Noise(self._impulse), freq=2500)
-        self._out = Waveguide(self._noise, freq=self._freq, dur=dur[-1], minfreq=0.5, mul=0.4)
+        self._pluck = Waveguide(self._noise, freq=self._freq, dur=dur[-1], minfreq=0.5, mul=0.4)
+        # TODO: fix this 
+        self._out = Mixer(outs=1, chnls=2)
+        self._out.addInput(0, self._pluck)
+        self._out.addInput(1, self._pluck)
+        self._out.setAmp(0, 0, 0.5)
+        self._out.setAmp(1, 0, 0.5)
         #self._out.out()
         self._base_objs = self._out.getBaseObjects()
 
     def __dir__(self):
         return ["freq", "dur", "deviation", "mul", "add"]
-    
 
     def setPitch(self, f):
         self._freq = f
-        self._out.freq =f
+        self._pluck.freq =f
 
     @property
     def freq(self):
@@ -61,7 +66,7 @@ class PluckedString(PyoObject):
     @dur.setter
     def dur(self, d):
         self._dur = d
-        self._out.dur = d
+        self._pluck.dur = d
 
     @property
     def deviation(self):
@@ -75,14 +80,13 @@ class PluckedString(PyoObject):
     def deviation(self, deviation):
         self._deviation = deviation
 
-    # TODO: add setters for mul, add, dur, deviation
-
-
+    # TODO: add setters for deviation
     # override some methods
     def play(self, dur=0, delay=0):
         self._trig.play(dur, delay)
         # self._impulse.play(dur, delay)
         # self._noise.play(dur, delay)
+        self._pluck.play(dur, delay)
         return PyoObject.play(self, dur, delay)
     
     def out(self, chnl=0, inc=1, dur=0, delay=0):
