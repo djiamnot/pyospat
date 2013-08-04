@@ -24,7 +24,7 @@ class PulsarSampler(PyoObject):
             mul, 
             add)
 
-        self._input = Input(0)
+        #self._input = Input(0)
         self._han = HannTable()
         self._lfo = Sine(self._lfo_freq, mul=self._lfo_mul, add=self._lfo_add)
         # self._table = NewTable(length=self._length, chnls=1)
