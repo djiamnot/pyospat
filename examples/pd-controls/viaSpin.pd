@@ -1,4 +1,4 @@
-#N canvas 897 77 948 906 10;
+#N canvas 942 171 948 906 10;
 #X obj 363 279 cnv 15 400 430 empty empty empty 20 12 0 14 -233017
 -66577 0;
 #X obj 58 281 cnv 15 300 320 empty empty empty 20 12 0 14 -233017 -66577
@@ -144,6 +144,46 @@ appears to orbit around the spinner:;
 #X msg 659 423 /pluck event freq 200 220 240;
 #X msg 180 574 /snd0 setParam path \$1;
 #X text 199 536 set a new sound file;
+#N canvas 121 84 785 475 MicroLooper 1;
+#X floatatom -5 101 0 0 0 0 - - -;
+#X obj 34 437 s \$0-to-SPIN;
+#X floatatom -2 128 0 0 0 0 - - -;
+#X floatatom 8 158 0 0 0 0 - - -;
+#X floatatom 8 188 0 0 0 0 - - -;
+#X obj 246 225 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 246 245 openpanel;
+#X text 268 219 set a file to pulsarate;
+#X text 371 89 see pyo documentation to know what these things mean
+;
+#X msg 32 27 createNode ml SoundNode;
+#X msg 33 68 /ml setTranslation -0.2 0.5 0.7;
+#X msg 250 275 /ml setParam path \$1;
+#X msg 142 390 /ml setParam play 1;
+#X msg 152 410 /ml setParam stop 1;
+#X msg 32 48 /ml setParam setMediaURI plugin://MicroLooper;
+#X msg 28 101 /ml setParam pitch \$1;
+#X msg 40 128 /ml setParam start \$1;
+#X msg 51 159 /ml setParam dur \$1;
+#X msg 51 189 /ml setParam mul \$1;
+#X connect 0 0 15 0;
+#X connect 2 0 16 0;
+#X connect 3 0 17 0;
+#X connect 4 0 18 0;
+#X connect 5 0 6 0;
+#X connect 6 0 11 0;
+#X connect 9 0 1 0;
+#X connect 10 0 1 0;
+#X connect 11 0 1 0;
+#X connect 12 0 1 0;
+#X connect 13 0 1 0;
+#X connect 14 0 1 0;
+#X connect 15 0 1 0;
+#X connect 16 0 1 0;
+#X connect 17 0 1 0;
+#X connect 18 0 1 0;
+#X restore 780 394 pd MicroLooper;
+#X text 17 130 run pyospat with default OSC port;
 #X connect 5 0 4 0;
 #X connect 8 0 3 0;
 #X connect 9 0 3 0;
