@@ -35,8 +35,14 @@ class MicroLooper(PyoObject):
                                autosmooth=True, 
                                mul=1, 
                                add=0)
+        self._out = Waveguide (self._looper, 
+                               freq=[60, 120.17, 180.31, 240.53], 
+                               dur=20, 
+                               minfreq=20, 
+                               mul=0.4,
+                               )
 
-        self._base_objs = self._looper.getBaseObjects()
+        self._base_objs = self._out.getBaseObjects()
 
     def __dir__(self):
             return["path", "pitch", "start", "dur", "mul", "add"]
