@@ -24,7 +24,7 @@ class PluckedString(PyoObject):
     Adapted to pyospat: Michal Seta
     _______________________________________________________________________________________
     """
-    def __init__(self, freq=[110, 150, 180, 200], dur=1, deviation=1, mul=0.5, add=1):
+    def __init__(self, freq=[210, 250, 280, 300], dur=1, deviation=1, mul=0.5, add=0):
         PyoObject.__init__(self)
         self._freq = freq
         self._dur = dur
@@ -34,13 +34,17 @@ class PluckedString(PyoObject):
         self._table = CosTable([(0,0),(50,1),(300,0),(8191,0)])
         self._impulse = TrigEnv(self._trig, table=self._table, dur=dur[-1]* 0.1)
         self._noise = Biquad(Noise(self._impulse), freq=2500)
-        self._pluck = Waveguide(self._noise, freq=self._freq, dur=dur[-1], minfreq=0.5, mul=0.4)
+        self._pluck = Waveguide(self._noise, freq=self._freq, dur=dur[-1], minfreq=20, mul=0.5)
         # TODO: fix this 
-        self._out = Mixer(outs=1, chnls=2)
-        self._out.addInput(0, self._pluck)
-        self._out.addInput(1, self._pluck)
-        self._out.setAmp(0, 0, 0.5)
-        self._out.setAmp(1, 0, 0.5)
+        self._out = Mixer(outs=1, chnls=4)
+        self._out.addInput(0, self._pluck[0])
+        self._out.addInput(1, self._pluck[1])
+        self._out.addInput(2, self._pluck[2])
+        self._out.addInput(3, self._pluck[3])
+        self._out.setAmp(0, 0, 0.1)
+        self._out.setAmp(1, 0, 0.1)
+        self._out.setAmp(2, 0, 0.1)
+        self._out.setAmp(3, 0, 0.1)
         #self._out.out()
         self._base_objs = self._out.getBaseObjects()
 
@@ -58,6 +62,8 @@ class PluckedString(PyoObject):
     @freq.setter
     def freq(self, f):
         self.setPitch(f)
+        print("Current pitch: {0}".format(self._freq))
+        print("Pluck has {0} streams of audio".format(len(self._pluck)))
 
     @property
     def dur(self):
