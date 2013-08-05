@@ -8,7 +8,10 @@ class MicroLooper(PyoObject):
     Loop small portions of samples from audio file. Can move within the length
     of the file, transpose, control beginning/end loop overlap
     """
-    def __init__(self, path=None, pitch=1., start=0., dur=1.0, mul=0.5, add=1):
+    def __init__(self, path=None, pitch=1., start=0., freq=[100,200,300,400], dur=1.0, mul=0.5, add=1):
+        """
+        
+        """
         PyoObject.__init__(self)
 
         # instance variables
@@ -16,12 +19,14 @@ class MicroLooper(PyoObject):
         self._pitch = pitch
         self._start = start
         self._dur = dur
+        self._freq = freq
         
-        path, pitch, start, dur, mul, add, lmax = convertArgsToLists(
+        path, pitch, start, dur, freq, mul, add, lmax = convertArgsToLists(
             self._path, 
             self._pitch, 
             self._start, 
             self._dur, 
+            self._freq,
             mul, add
             )
         
@@ -35,17 +40,26 @@ class MicroLooper(PyoObject):
                                autosmooth=True, 
                                mul=1, 
                                add=0)
-        self._out = Waveguide (self._looper, 
-                               freq=[60, 120.17, 180.31, 240.53], 
+        self._wg = Waveguide (self._looper, 
+                               freq=freq, 
                                dur=20, 
                                minfreq=20, 
-                               mul=0.4,
+                               mul=0.25,
                                )
+        self._out = Mixer(outs=1, chnls=4)
+        self._out.addInput(0, self._wg[0])
+        self._out.addInput(1, self._wg[1])
+        self._out.addInput(2, self._wg[2])
+        self._out.addInput(3, self._wg[3])
+        self._out.setAmp(0, 0, 0.2)
+        self._out.setAmp(1, 0, 0.2)
+        self._out.setAmp(2, 0, 0.2)
+        self._out.setAmp(3, 0, 0.2)
 
         self._base_objs = self._out.getBaseObjects()
 
     def __dir__(self):
-            return["path", "pitch", "start", "dur", "mul", "add"]
+            return["path", "pitch", "start", "dur", "freq", "mul", "add"]
 
     @property
     def path(self):
@@ -112,3 +126,16 @@ class MicroLooper(PyoObject):
             self._looper.dur = dur
                                  
         print("setting MicroLoope dur to {0}".format(dur))
+
+    @property
+    def freq(self):
+        return self._freq
+
+    @freq.setter
+    def freq(self, freq):
+        """
+        Change reading speed
+        pitch: float, < 1 = lower, > 1 higher, 1 = original
+        """
+        self._freq = freq
+        self._wg.freq = freq
