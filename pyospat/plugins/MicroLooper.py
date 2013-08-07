@@ -20,7 +20,10 @@ class MicroLooper(PyoObject):
         self._start = start
         self._dur = dur
         self._freq = freq
-        
+        self._xfade = 20 # duration of the loop crossfade
+        self._res_len = 10 # duration of the waveguide resonance (sec.)
+        self._res_mix = [0.25, 0.5, 0.7, 0.2] # strength of the 4 voices
+
         path, pitch, start, dur, freq, mul, add, lmax = convertArgsToLists(
             self._path, 
             self._pitch, 
@@ -36,35 +39,34 @@ class MicroLooper(PyoObject):
                                pitch=pitch, 
                                start=start, 
                                dur=dur, 
-                               xfade=20, 
+                               xfade=self._xfade, 
                                autosmooth=True, 
                                mul=1, 
                                add=0)
         self._wg = Waveguide (self._looper, 
                                freq=freq, 
-                               dur=20, 
+                               dur=self._res_len, 
                                minfreq=20, 
-                               mul=0.25,
+                               mul=self._res_mix,
                                )
         self._out = Mixer(outs=1, chnls=4)
         self._out.addInput(0, self._wg[0])
         self._out.addInput(1, self._wg[1])
         self._out.addInput(2, self._wg[2])
         self._out.addInput(3, self._wg[3])
-        self._out.setAmp(0, 0, 0.2)
-        self._out.setAmp(1, 0, 0.2)
-        self._out.setAmp(2, 0, 0.2)
-        self._out.setAmp(3, 0, 0.2)
+        self._out.setAmp(0, 0, 0.3)
+        self._out.setAmp(1, 0, 0.3)
+        self._out.setAmp(2, 0, 0.3)
+        self._out.setAmp(3, 0, 0.3)
 
         self._base_objs = self._out.getBaseObjects()
 
     def __dir__(self):
-            return["path", "pitch", "start", "dur", "freq", "mul", "add"]
+            return["path", "pitch", "start", "dur", "freq", "xfade", "res_len", "res_mix", "mul", "add"]
 
     @property
     def path(self):
         return self._path
-
     @path.setter
     def path(self, path):
         """
@@ -139,3 +141,42 @@ class MicroLooper(PyoObject):
         """
         self._freq = freq
         self._wg.freq = freq
+
+    @property
+    def xfade(self):
+        return self._xfade
+
+    @xfade.setter
+    def xfade(self, x):
+        """
+        Change reading speed
+        pitch: float, < 1 = lower, > 1 higher, 1 = original
+        """
+        self._xfade = x
+        self._looper.freq = x
+
+    @property
+    def res_len(self):
+        return self._res_len
+
+    @res_len.setter
+    def res_len(self, x):
+        """
+        Change reading speed
+        pitch: float, < 1 = lower, > 1 higher, 1 = original
+        """
+        self._res_len = x
+        self._wg.dur = x
+
+    @property
+    def res_mix(self):
+        return self._res_mix
+
+    @res_mix.setter
+    def res_mix(self, x):
+        """
+        Change reading speed
+        pitch: float, < 1 = lower, > 1 higher, 1 = original
+        """
+        self._res_mix = x
+        self._wg.mul = x
