@@ -7,7 +7,7 @@ class Granny(PyoObject):
     """
     Granulator based on Granule class
     """
-    def __init__(self, path=None, mul=1, add=0):
+    def __init__(self, path=None, mul=.2, add=0):
         PyoObject.__init__(self)
         self._path = path
         self._end = 0
@@ -94,3 +94,18 @@ class Granny(PyoObject):
         self._basedur = d
         self._out.basedur = self._basedur
 
+    # override some methods
+    def play(self, dur=0, delay=0):
+        self._out.play(dur, delay)
+        self._pos.play(dur, delay)
+        self._pitch.play(dur, delay)
+        return PyoObject.play(self, dur, delay)
+    
+    def out(self, chnl=0, inc=1, dur=0, delay=0):
+        return PyoObject.out(self, chnl, inc, dur, delay)
+
+    def stop(self):
+        self._out.stop()
+        self._pos.stop()
+        self._pitch.stop()
+        return PyoObject.stop()
