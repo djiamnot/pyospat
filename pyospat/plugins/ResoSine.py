@@ -7,7 +7,7 @@ class ResoSine(PyoObject):
     """
     Blit generator through a waveguide
     """
-    def __init__(self, freq=[100,200,300,400], dur=1.0, mul=0.5, add=1):
+    def __init__(self, freq=[100,200,300,400], dur=1.0, mul=0.9, add=1):
         """
         
         """
@@ -27,14 +27,16 @@ class ResoSine(PyoObject):
             )
         
         # DSP graph
-        self._env = Adsr(attack=.001, decay=.02, sustain=.05, release=.1, dur=.2, mul=.5)
-        self._sin = Blit(freq=self._freq, harms=self._harms, mul=self._env)
-        self._wg = Waveguide (self._sin, 
-                               freq=freq, 
-                               dur=self._res_len, 
-                               minfreq=20, 
-                               mul=self._res_mix,
-                               )
+        self._env = Adsr(attack=.001, decay=.01, sustain=.7, release=.3, dur=.302, mul=.5)
+        self._harm_table = HarmTable([1, 0, .33, .2, 0, .143, 0, .111, 0, 0.091])
+        #self._sin = Blit(freq=self._freq, harms=self._harms, mul=self._env)
+        self._wg = Osc(self._harm_table, freq=self._freq, mul=self._env)
+        # self._wg = Waveguide (self._sin, 
+        #                        freq=freq, 
+        #                        dur=self._res_len, 
+        #                        minfreq=20, 
+        #                        mul=self._res_mix,
+        #                        )
         self._mix1 = Interp(self._wg[0], self._wg[1])
         self._mix2 = Interp(self._wg[2], self._wg[3])
         self._out = Interp(self._mix1, self._mix2)
@@ -59,10 +61,10 @@ class ResoSine(PyoObject):
         pitch: float, < 1 = lower, > 1 higher, 1 = original
         """
         self._freq = freq
-        if type(self._freq) is "list":
-            self._sin.freq = self._freq[0]
-        else:
-            self._sin.freq = self._freq
+        # if type(self._freq) is "list":
+        #     self._sin.freq = self._freq[0]
+        # else:
+        #     self._sin.freq = self._freq
         self._wg.freq = freq
 
     @property
@@ -89,7 +91,7 @@ class ResoSine(PyoObject):
         pitch: float, < 1 = lower, > 1 higher, 1 = original
         """
         self._res_mix = x
-        self._wg.mul = x
+        #self._wg.mul = x
 
     @property
     def harms(self):
