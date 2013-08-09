@@ -28,7 +28,7 @@ class ResoSine(PyoObject):
         
         # DSP graph
         #self._env = Adsr(attack=.001, decay=.01, sustain=.7, release=.3, dur=.302, mul=.5)
-        self._env = Linseg([(0, 0),(0.01 1.), (0.1, 0.5), (0.2, 0.2), (0.25, 0.1),(0.301, 0)] mul=.5).graph()
+        self._env = Linseg([(0,0),(0.01,1.),(0.1,0.5),(0.2,0.2),(0.25,0.1),(0.301,0)] mul=.5).graph()
         self._harm_table = HarmTable([1, 0, .33, .2, 0, .143, 0, .111, 0, 0.091])
         #self._sin = Blit(freq=self._freq, harms=self._harms, mul=self._env)
         self._wg = Osc(self._harm_table, freq=self._freq, mul=self._env)
