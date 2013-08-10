@@ -86,7 +86,7 @@ def run():
         try:
             # start  the application
             s.run()
-            reactor.run()
+            #reactor.run()
         except KeyboardInterrupt:
             pass
         log.info("Goodbye.")
