@@ -213,3 +213,23 @@ class MicroLooper(PyoObject):
         """
         self._harm_wet = x
         self._out.interp = x
+
+    # override some methods
+    def play(self, dur=0, delay=0):
+        self._out.play(dur, delay)
+        self._harm.play(dur, delay)
+        self._looper.play(dur, delay)
+        self._wg.play(dur, delay)
+        # self._impulse.play(dur, delay)
+        # self._noise.play(dur, delay)
+        return PyoObject.play(self, dur, delay)
+    
+    def out(self, chnl=0, inc=1, dur=0, delay=0):
+        return PyoObject.out(self, chnl, inc, dur, delay)
+
+    def stop(self):
+        self._out.stop()
+        self._harm.stop()
+        self._looper.stop()
+        self._wg.stop()
+        return PyoObject.stop()
