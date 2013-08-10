@@ -8,7 +8,7 @@ class MicroLooper(PyoObject):
     Loop small portions of samples from audio file. Can move within the length
     of the file, transpose, control beginning/end loop overlap
     """
-    def __init__(self, path=None, pitch=1., start=0., freq=[100,200,300,400], dur=1.0, mul=0.5, add=1):
+    def __init__(self, path=None, pitch=1., start=0., freq=[100,200], dur=1.0, mul=0.5, add=1):
         """
         
         """
@@ -22,7 +22,7 @@ class MicroLooper(PyoObject):
         self._freq = freq
         self._xfade = 20 # duration of the loop crossfade
         self._res_len = 10 # duration of the waveguide resonance (sec.)
-        self._res_mix = [0.25, 0.5, 0.7, 0.2] # strength of the 4 voices
+        self._res_mix = [0.25, 0.5] # strength of the 4 voices
         self._transposition = -5
         self._harm_wet = 1
 
@@ -52,8 +52,8 @@ class MicroLooper(PyoObject):
                                mul=self._res_mix,
                                )
         self._mix1 = Interp(self._wg[0], self._wg[1])
-        self._mix2 = Interp(self._wg[2], self._wg[3])
-        self._mix = Interp(self._mix1, self._mix2)
+        #self._mix2 = Interp(self._wg[2], self._wg[3])
+        #self._mix = Interp(self._mix1, self._mix2)
         # self._out = Mixer(outs=1, chnls=4)
         # self._out.addInput(0, self._wg[0])
         # self._out.addInput(1, self._wg[1])
@@ -63,8 +63,8 @@ class MicroLooper(PyoObject):
         # self._out.setAmp(1, 0, 0.3)
         # self._out.setAmp(2, 0, 0.3)
         # self._out.setAmp(3, 0, 0.3)
-        self._harm = Harmonizer(self._mix, transpo=self._transposition, winsize=0.05)
-        self._out = Interp(self._mix, self._harm, interp=self._harm_wet)
+        self._harm = Harmonizer(self._mix1, transpo=self._transposition, winsize=0.05)
+        self._out = Interp(self._mix1, self._harm, interp=self._harm_wet)
 
         self._base_objs = self._out.getBaseObjects()
 
