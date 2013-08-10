@@ -16,20 +16,22 @@ class ResoSine(PyoObject):
         # instance variables
         self._dur = dur
         self._freq = freq
-        self._harms = 1
+        self._harms = [1, 0.05, .033, .2, 0, .0143, 0, .011, 0, 0.071]
         self._res_len = 10 # duration of the waveguide resonance (sec.)
         self._res_mix = [0.25, 0.5, 0.7, 0.2] # strength of the 4 voices
 
-        dur, freq, mul, add, lmax = convertArgsToLists(
+        dur, freq, harms, mul, add, lmax = convertArgsToLists(
             self._dur, 
             self._freq,
+            self._harms,
             mul, add
             )
         
         # DSP graph
         #self._env = Adsr(attack=.001, decay=.01, sustain=.7, release=.3, dur=.302, mul=.5)
-        self._env = Linseg([(0,0),(0.01,1.),(0.1,0.5),(0.2,0.2),(0.25,0.1),(0.301,0)] mul=.5).graph()
-        self._harm_table = HarmTable([1, 0, .33, .2, 0, .143, 0, .111, 0, 0.091])
+        self._env = Linseg([(0,0),(0.03,1.),(0.07,0.15),(0.1,0.1),(0.25,0.05),(0.601,0)])
+        self._env.graph(title="env", wxnoserver=True)
+        self._harm_table = HarmTable(harms)
         #self._sin = Blit(freq=self._freq, harms=self._harms, mul=self._env)
         self._wg = Osc(self._harm_table, freq=self._freq, mul=self._env)
         # self._wg = Waveguide (self._sin, 
@@ -101,14 +103,15 @@ class ResoSine(PyoObject):
     @harms.setter
     def harms(self, x):
         """
-        set number of harmonics
+        change harmonic table
         """
-        self._harms = x
-        self._sin.harms = x
+        self._harms = list(x)
+        self._harm_table.replace(self._harms)
 
     # override some methods
     def play(self, dur=0, delay=0):
         self._env.play(dur, delay)
+        self._wg.play(dur, delay)
         # self._impulse.play(dur, delay)
         # self._noise.play(dur, delay)
         return PyoObject.play(self, dur, delay)
@@ -118,4 +121,5 @@ class ResoSine(PyoObject):
 
     def stop(self):
         self._env.stop()
+        self._wg.stop()
         return PyoObject.stop()
