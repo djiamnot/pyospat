@@ -13,7 +13,7 @@ class Granny(PyoObject):
         self._end = 0
         self._pitch_min = 0.99
         self._pitch_max = 1.01
-        self._density = 24
+        self._density = 8
         self._basedur = 0.1
 
         path, mul, add, lmax = convertArgsToLists(self._path, mul, add)
