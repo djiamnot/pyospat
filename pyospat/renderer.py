@@ -22,7 +22,7 @@ from pyospat import sound_source
 from pyospat import introspection
 from pyospat import logger
 
-log = logger.start(name="renderer", level="debug")
+log = logger.start(name="renderer", level="info")
 
 PROPERTY_SPREAD = "setSpread"
 
