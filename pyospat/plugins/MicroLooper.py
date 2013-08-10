@@ -51,6 +51,7 @@ class MicroLooper(PyoObject):
                                minfreq=20, 
                                mul=self._res_mix,
                                )
+#        self._wg = Biquad(self._looper, freq=freq, type=4, q=5)
         self._mix1 = Interp(self._wg[0], self._wg[1])
         #self._mix2 = Interp(self._wg[2], self._wg[3])
         #self._mix = Interp(self._mix1, self._mix2)
