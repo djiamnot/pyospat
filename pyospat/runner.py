@@ -46,7 +46,7 @@ def run():
     """
     parser = OptionParser(usage="%prog [options]", version="%prog " + __version__, description=DESCRIPTION)
     parser.add_option("-v", "--verbose", action="store_true", help="Makes the output verbose.")
-    parser.add_option("-p", "--osc-receive-port", type="int", default=18032, help="UDP port to listen to for OSC messages. Default is 10001")
+    parser.add_option("-p", "--osc-receive-port", type="int", default=18032, help="UDP port to listen to for OSC messages. Default is 18032")
     parser.add_option("-l", "--listener-id", type="string", default="listener0", help="ID of the listener in the spatosc scene")
     parser.add_option("-L", "--layout", type="string", default="STEREO", help="Speakers layout. One of STEREO, QUAD, OCTO")
     parser.add_option("-d", "--list-devices", action="store_true", help="List audio devices")
