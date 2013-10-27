@@ -93,9 +93,10 @@ class OSCinterface(object):
             "/spatosc/core/*/*/prop", self._handle_node_property)
         self._receiver.addCallback(
             "/spatosc/core/source/*/event", self._handle_node_event)
+        # self._receiver.addCallback(
+        #     "/a.plugin/*", self._handle_plugin_msg)
         self._receiver.fallback = self._fallback
-        
-
+    
     def _handle_core(self, message, address):
         """
         Handles /spatosc/core ,ss command arg
