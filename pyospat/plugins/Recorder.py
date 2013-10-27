@@ -11,11 +11,11 @@ class Recorder(PyoObject):
         self._dur = dur
         self._chnls = chnls
         inchannel, filename, chnls, dur, lmax = convertArgsToLists(self._inchannel, self._filename, self._chnls, self._dur)
-        
-        #self._base_objs = self._out.getBaseObjects()
+        self._out = Delay(self._input, delay=2.0, feedback=0, mul=0.1)
+        self._base_objs = self._out.getBaseObjects()
         
     def __dir__(self):
-        return["inchannel", "filename", "dur", "chnls"]
+        return["inchannel", "filename", "mul", "dur"]
 
     @property
     def filename(self):
@@ -26,20 +26,32 @@ class Recorder(PyoObject):
         """
         path: string - path to file to be recorded
         """
-        self._path = path
+        self._filename = path
 
     @property
-    def input(self):
+    def dur(self):
+        return self._dur
+
+    @dur.setter
+    def dur(self, s):
+        """
+        path: float - duration of recording in seconds
+        """
+        self._dur = s
+
+    @property
+    def inchannel(self):
         return self._inchannel
 
-    @input.setter
-    def input(self, i):
+    @inchannel.setter
+    def inchannel(self, i):
         """
         i: int - input channel to record from
         """
         self._inchannel = i
 
     def play(self):
+        print("Recording play method triggered")
         _recorder = Record(self._input, self._filename, chnls=self._chnls)
         doit = Clean_objects(self._dur, _recorder)
         doit.start()
