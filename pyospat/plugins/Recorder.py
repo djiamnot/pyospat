@@ -40,7 +40,7 @@ class Recorder(PyoObject):
         self._inchannel = i
 
     def play(self):
-        _recorder = Record(self._input, self._filename)
+        _recorder = Record(self._input, self._filename, chnls=self._chnls)
         doit = Clean_objects(self._dur, _recorder)
         doit.start()
         #return PyoObject.play(self, dur, delay)
