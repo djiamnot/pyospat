@@ -24,6 +24,7 @@ from pyospat import introspection
 from pyospat import logger
 from pyospat import maths
 from pyospat import plugins
+from types import ModuleType
 import os
 import sys
 import pyo
@@ -279,10 +280,7 @@ class SoundSource(object):
         
     def _connect(self):
         log.debug("%s attempts to connect %s" % (self, self._source))
-        print("********* Type of sound source is: ")
-        print(type(self._source))
-        print("********* is it of type Recorder.Recorder?")
-        if self._source is not None and type(self._source) is not plugins.Recorder.Recorder:
+        if self._source is not None:
             log.debug("%s is not empty so it should connect to mixer" % (self._source))
             self._mixer.addInput(0, self._source)
         # self._mixer.setAmp(0, 0, 0.5)
