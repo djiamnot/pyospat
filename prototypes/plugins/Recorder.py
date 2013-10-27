@@ -37,6 +37,17 @@ class Recorder(PyoObject):
         """
         self._inchannel = i
 
+    @property
+    def chnls(self):
+        return self._chnls
+
+    @chnls.setter
+    def chnls(self, ch):
+        """
+        i: int - number of channels to record 
+        """
+        self._chnls = ch
+
     def play(self):
         _recorder = Record(self._input, self._filename)
         doit = Clean_objects(self._dur, _recorder)
