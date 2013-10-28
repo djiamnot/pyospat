@@ -6,7 +6,7 @@ class Recorder(PyoObject):
     def __init__(self, inchannel=0, filename="/tmp/test.wav", dur=5.5, chnls=1):
         PyoObject.__init__(self)
         self._inchannel = inchannel
-        self._input = Input(self._inchannel)
+        self._input = Input(chnl=self._inchannel)
         self._filename = filename
         self._dur = dur
         self._chnls = chnls
@@ -48,13 +48,16 @@ class Recorder(PyoObject):
         """
         i: int - input channel to record from
         """
-        self._inchannel = i
+        self._inchannel = int(i)
+        self._input = Input(chnl=self._inchannel)
 
     def play(self):
-        print("Recording play method triggered")
+        #self._input = Input(chnl=self._inchannel)
         _recorder = Record(self._input, self._filename, chnls=self._chnls)
         doit = Clean_objects(self._dur, _recorder)
         doit.start()
+        print("Recording ch: ")
+        print(self._inchannel)
         #return PyoObject.play(self, dur, delay)
 
 if __name__ == "__main__":
