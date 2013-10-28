@@ -1,4 +1,4 @@
-#N canvas 16 59 948 665 10;
+#N canvas 12 75 948 665 10;
 #X obj 363 279 cnv 15 400 430 empty empty empty 20 12 0 14 -233017
 -66577 0;
 #X obj 58 281 cnv 15 300 320 empty empty empty 20 12 0 14 -233017 -66577
