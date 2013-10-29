@@ -160,3 +160,11 @@ SATDOME = [
     [ - math.radians(LOW_OFFSET + 60), math.radians(-15), 1.0],
     [ - math.radians(LOW_OFFSET + 30), math.radians(-15), 1.0],
     ]
+
+FIVE = [
+    [math.radians(288), 0.0, 0.1],
+    [math.radians(0), 0.0, 0.1],
+    [math.radians(72), 0.0, 0.1],
+    [math.radians(144), 0.0, 0.1],
+    [math.radians(216), 0.0, 0.1]
+    ]
