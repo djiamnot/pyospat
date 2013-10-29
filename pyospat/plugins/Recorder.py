@@ -11,11 +11,11 @@ class Recorder(PyoObject):
         self._dur = dur
         self._chnls = chnls
         inchannel, filename, chnls, dur, lmax = convertArgsToLists(self._inchannel, self._filename, self._chnls, self._dur)
-        self._tab = NewTable(4)
+        self._tab = NewTable(6)
         self._rec = TableRec(self._input, self._tab)
         self._pitch = Choice(choice=[.5,.5,.75,.75,1,1,1,1.25,1,5], freq=[3,4])
         self._start = Phasor(freq=0.025, mul=self._tab.getDur()-0.5)
-        self._loopDur = Choice(choice=[.065,.125,.125,.125,.25,.25,.5], freq=4)
+        self._loopDur = Choice(choice=[.125,.25,.5,.5,.5,1,1,1.2], freq=4)
         self._out = Looper(table=self._tab,
                          pitch=self._pitch,
                          start=self._start,
@@ -68,6 +68,7 @@ class Recorder(PyoObject):
     def play(self):
         #self._input = Input(chnl=self._inchannel)
         _recorder = Record(self._input, self._filename, chnls=self._chnls)
+        self._rec.play()
         doit = Clean_objects(self._dur, _recorder)
         doit.start()
         print("Recording ch: ")
@@ -75,7 +76,8 @@ class Recorder(PyoObject):
         #return PyoObject.play(self, dur, delay)
 
 if __name__ == "__main__":
-    s = Server().boot()
+    s = Server(audio="jack", duplex=1).boot()
     s.start()
     r = Recorder(inchannel=0, filename="/tmp/test.wav")
     r.play()
+    r.out()
