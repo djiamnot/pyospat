@@ -11,7 +11,20 @@ class Recorder(PyoObject):
         self._dur = dur
         self._chnls = chnls
         inchannel, filename, chnls, dur, lmax = convertArgsToLists(self._inchannel, self._filename, self._chnls, self._dur)
-        self._out = Delay(self._input, delay=2.0, feedback=0, mul=0.5)
+        self._tab = NewTable(4)
+        self._rec = TableRec(self._input, self._tab)
+        self._pitch = Choice(choice=[.5,.5,.75,.75,1,1,1,1.25,1,5], freq=[3,4])
+        self._start = Phasor(freq=0.025, mul=self._tab.getDur()-0.5)
+        self._loopDur = Choice(choice=[.065,.125,.125,.125,.25,.25,.5], freq=4)
+        self._out = Looper(table=self._tab,
+                         pitch=self._pitch,
+                         start=self._start,
+                         dur=self._loopDur,
+                         xfade=20,
+                         mode=1, #looping mode
+                         xfadeshape=0,
+                         startfromloop=False,
+                         interp=4)
         self._base_objs = self._out.getBaseObjects()
         
     def __dir__(self):
