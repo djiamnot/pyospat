@@ -15,12 +15,12 @@ class Recorder(PyoObject):
         self._rec = TableRec(self._input, self._tab)
         self._pitch = Choice(choice=[.5,.5,.75,.75,1,1,1,1.25,1,5], freq=[3,4])
         self._start = Phasor(freq=0.025, mul=self._tab.getDur()-0.5)
-        self._loopDur = Choice(choice=[.125,.25,.5,.5,.5,1,1,1.2], freq=4)
+        self._loopDur = Choice(choice=[.125,.25,.5,.5,.5,1,1,1.5,2,2,2], freq=4)
         self._out = Looper(table=self._tab,
                          pitch=self._pitch,
                          start=self._start,
                          dur=self._loopDur,
-                         xfade=20,
+                         xfade=10,
                          mode=1, #looping mode
                          xfadeshape=0,
                          startfromloop=False,
