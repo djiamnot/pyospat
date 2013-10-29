@@ -11,7 +11,7 @@ class Recorder(PyoObject):
         self._dur = dur
         self._chnls = chnls
         inchannel, filename, chnls, dur, lmax = convertArgsToLists(self._inchannel, self._filename, self._chnls, self._dur)
-        self._out = Delay(self._input, delay=2.0, feedback=0, mul=0.1)
+        self._out = Delay(self._input, delay=2.0, feedback=0, mul=0.5)
         self._base_objs = self._out.getBaseObjects()
         
     def __dir__(self):
@@ -38,6 +38,7 @@ class Recorder(PyoObject):
         path: float - duration of recording in seconds
         """
         self._dur = s
+        self._out.delay = s * 0.7
 
     @property
     def inchannel(self):
