@@ -162,9 +162,9 @@ SATDOME = [
     ]
 
 FIVE = [
-    [math.radians(288), 0.0, 2.0],
-    [math.radians(0), 0.0, 2.0],
-    [math.radians(72), 0.0, 2.0],
-    [math.radians(144), 0.0, 2.0],
-    [math.radians(216), 0.0, 2.0]
+    [math.radians(288), 0.0, 1.0],
+    [math.radians(0), 0.0, 1.0],
+    [math.radians(72), 0.0, 1.0],
+    [math.radians(144), 0.0, 1.0],
+    [math.radians(216), 0.0, 1.0]
     ]
