@@ -48,6 +48,9 @@ class Application(object):
             self._speakers_angles = layouts.STEREO
         if self._configuration.layout_name == "QUAD":
             self._speakers_angles = layouts.QUAD
+        if self._configuration.layout_name == "FIVE":
+            self._speakers_angles = layouts.FIVE
+
         if self._configuration.layout_name == "OCTO":
             self._speakers_angles = layouts.OCTO
         if self._configuration.layout_name == "SATDOME":
