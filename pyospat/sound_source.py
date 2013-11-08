@@ -23,13 +23,15 @@ The SoundSource class
 from pyospat import introspection
 from pyospat import logger
 from pyospat import maths
+from pyospat import plugins
+from types import ModuleType
 import os
 import sys
 import pyo
 
-from pyospat.plugins import SimpleSin
+#from pyospat.plugins import SimpleSin
 
-log = logger.start(name="sound_source")
+log = logger.start(name="sound_source", level="info")
 
 class SoundSource(object):
     """
@@ -231,6 +233,7 @@ class SoundSource(object):
     def set_property(self, property_name, value):
         """
         Manipulate properties
+        value type: tuple
         """
         if self._source is not None:
             props = introspection.get_instance_properties(self._source)
@@ -247,7 +250,7 @@ class SoundSource(object):
                 except TypeError, e:
                     print("Cannot stop because of {0}".format(e))
             elif property_name in props:
-                #print("Set %s property %s to %s" %(self._source, property_name, *values))
+                log.debug("Set %s property %s to %s" %(self._source, property_name, str(value)))
                 introspection.set_instance_property(self._source, property_name, value)
             else:
                 log.debug("%s does not have %s property" % (self._source, property_name))

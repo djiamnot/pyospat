@@ -27,7 +27,7 @@ from pyospat import logger
 from pyospat import oscinterface as OSC
 import math
 
-log = logger.start(name="application")
+log = logger.start(name="application", level="debug")
 
 class Application(object):
     """
@@ -48,6 +48,9 @@ class Application(object):
             self._speakers_angles = layouts.STEREO
         if self._configuration.layout_name == "QUAD":
             self._speakers_angles = layouts.QUAD
+        if self._configuration.layout_name == "FIVE":
+            self._speakers_angles = layouts.FIVE
+
         if self._configuration.layout_name == "OCTO":
             self._speakers_angles = layouts.OCTO
         if self._configuration.layout_name == "SATDOME":
@@ -58,4 +61,4 @@ class Application(object):
         self._renderer = renderer.Renderer(configuration.listener_id, self._speakers_angles)
         port_number = self._configuration.osc_receive_port
         OSC.OSCinterface(port_number, self._renderer)
-        
+

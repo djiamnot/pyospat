@@ -81,6 +81,7 @@ class ServerWrapper(object):
         self._server.setInOutDevice(config.pa_device)
         self._server.boot()
         self._server.start()
+        #self._server.gui(locals())
         self._running = False
         self._use_twisted = use_twisted
 
