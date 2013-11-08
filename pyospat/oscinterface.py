@@ -23,7 +23,7 @@ from txosc import dispatch
 from twisted.internet import reactor
 from pyospat import logger
 
-log = logger.start(name="oscinterface", level="debug")
+log = logger.start(name="oscinterface", level="info")
     
 def _type_tags_match(message, expected, verbose=False):
     """
@@ -91,8 +91,12 @@ class OSCinterface(object):
             "/spatosc/core", self._handle_core)
         self._receiver.addCallback(
             "/spatosc/core/*/*/prop", self._handle_node_property)
+        self._receiver.addCallback(
+            "/spatosc/core/source/*/event", self._handle_node_event)
+        # self._receiver.addCallback(
+        #     "/a.plugin/*", self._handle_plugin_msg)
         self._receiver.fallback = self._fallback
-
+    
     def _handle_core(self, message, address):
         """
         Handles /spatosc/core ,ss command arg
@@ -139,7 +143,6 @@ class OSCinterface(object):
             log.debug(str(self._renderer))
             return
         property_name = message.getValues()[0]
-        # TODO: handle lists as properties (i.e. a list of frequencies)
         value = message.getValues()
         if _type_tags_match(message, "sf", verbose=True): # float
             self._renderer.set_node_property(node_id, property_name, value[1])
@@ -148,8 +151,24 @@ class OSCinterface(object):
                 self._renderer.set_uri(node_id, value[1])
             else:
                 log.debug("Property is: %s and value is: %s" % (property_name, value))
+                self._renderer.set_node_property(node_id, property_name, value[1])
         else:
             log.debug("Property is neither ss nor sf")
+
+    def _handle_node_event(self, message, address):
+        """
+        Handles /spatosc/core/source/<node>/event ,s[sfi] command arg
+        """
+        log.debug("_handle_node_event  Got {0} from {1}".format(message, address))
+        node_id = message.address.split("/")[4]
+        if not self._renderer.has_source(node_id):
+            log.debug("(event) No such source node: " + node_id)
+            log.debug(str(self._renderer))
+            return
+        property_name = message.getValues()[0]
+        # TODO: handle lists as properties (i.e. a list of frequencies)
+        value = message.getValues()[1:]
+        self._renderer.set_node_property(node_id, property_name, value)
 
     def _handle_create_listener(self, message, address):
         """
@@ -165,7 +184,7 @@ class OSCinterface(object):
         """
         Handles /spatosc/core/scene/create_source ,s node_id
         """
-        log.debug("  Got {} from {}".format(message, address))
+        log.debug("  Got {0} from {1}".format(message, address))
         if not _type_tags_match(message, "ss", verbose=True):
             return
         node_id = message.getValues()[0]
