@@ -44,6 +44,7 @@ def run():
     """
     Runs the application.
     """
+    _config_file_name = os.path.expanduser("~/.pyorc")
     parser = OptionParser(usage="%prog [options]", version="%prog " + __version__, description=DESCRIPTION)
     parser.add_option("-v", "--verbose", action="store_true", help="Makes the output verbose.")
     parser.add_option("-p", "--osc-receive-port", type="int", default=18032, help="UDP port to listen to for OSC messages. Default is 18032")
@@ -52,6 +53,7 @@ def run():
     parser.add_option("-d", "--list-devices", action="store_true", help="List audio devices")
     parser.add_option("-D", "--device", type="int", default=0, help="Use the specified devices (see option -d|--list-devices). Default is 0")
     parser.add_option("-w", "--debug", action="store_true", help="print some debug messages")
+    parser.add_option("-c", "--config-file", type="string", default=_config_file_name, help="pyospat configuration file")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     level = "debug"
@@ -72,9 +74,14 @@ def run():
         print("Listing devices:")
         pyoserver.list_devices()
         sys.exit(1)
+    if options.config_file:
+        if not os.path.exists(options.config_file):
+            return
+        config.config_file = options.config_file
+        print("Using config: " + config.config_file)
         
     start_logging(level)
-    s = pyoserver.ServerWrapper(config, use_twisted=True)
+    s = pyoserver.ServerWrapper(config, config_file_name=config.config_file, use_twisted=True)
     try:
         app = application.Application(config)
         user_path = os.path.expanduser("~/")
