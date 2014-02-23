@@ -7,7 +7,7 @@ class ResoSine(PyoObject):
     """
     Blit generator through a waveguide
     """
-    def __init__(self, freq=[100,200,300,400], dur=1.0, mul=0.9, add=1):
+    def __init__(self, freq=[100,200,300,400], dur=0.233, mul=0.9, add=1):
         """
         
         """
@@ -28,8 +28,8 @@ class ResoSine(PyoObject):
             )
         
         # DSP graph
-        #self._env = Adsr(attack=.001, decay=.01, sustain=.7, release=.3, dur=.302, mul=.5)
-        self._env = Linseg([(0,0),(0.03,1.),(0.07,0.15),(0.1,0.1),(0.25,0.05),(0.601,0)])
+        self._env = Adsr(attack=.001, decay=.01, sustain=.7, release=.3, dur=self._dur, mul=.5)
+        #self._env = Linseg([(0,0),(0.03,1.),(0.07,0.15),(0.1,0.1),(0.25,0.05),(0.601,0)])
         #self._env.graph(title="env", wxnoserver=True)
         self._harm_table = HarmTable(harms)
         #self._sin = Blit(freq=self._freq, harms=self._harms, mul=self._env)
@@ -52,6 +52,15 @@ class ResoSine(PyoObject):
     @property
     def dur(self):
         return self._dur
+    
+    @dur.setter
+    def dur(self, dur):
+        """
+        Change duration
+        @dur: float (sec.)
+        """
+        self._dur = dur
+        self._env.dur = dur
 
     @property
     def freq(self):
