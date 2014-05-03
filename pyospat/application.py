@@ -57,6 +57,9 @@ class Application(object):
             self._speakers_angles = layouts.SATDOME
         if self._configuration.layout_name == "DOME8x8":
             self._speakers_angles = layouts.DOME8x8
+        if self._configuration.layout_name == "OKTA":
+            self._speakers_angles = layouts.OKTA
+
 
         self._renderer = renderer.Renderer(configuration.listener_id, self._speakers_angles)
         port_number = self._configuration.osc_receive_port
