@@ -54,6 +54,29 @@ def aed_to_xyz(aed):
     z = _distance * math.cos(azimuth)
     return [x, y, z]
 
+def xyz_to_aed(xyz):
+    """
+    Converts XYZ to AED.
+    @param aed: list of three floats.
+    @return: list of three floats.
+    """
+    x = xyz[0]
+    y = xyz[1]
+    z = xyz[2]
+    distance = math.sqrt((x*x) + (y*y) + (z*z))
+    azimuth = math.atan2(y,x)
+    # put in range of [-pi, pi]
+    if azimuth > math.pi:
+        azimuth -= 2 * math.pi
+    else:
+        azimuth += 2 * math.pi
+    if distance > 0.00001:
+        elevation = math.acos(z/distance)
+    else:
+        elevation = 0.0
+    return [azimuth, elevation, distance]
+
+
 def normalize(vec):
     """
     Normalizes a 3D vector.
