@@ -25,17 +25,17 @@ Speaker positions constants.
 """
 
 STEREO = [
-    [- math.pi / 4.0, 0.0, 1.0], # each speaker has an aed
-    [math.pi / 4.0, 0.0, 1.0]
+    [math.radians(45), 0.0, 1.0], # each speaker has an aed
+    [math.radians(315), 0.0, 1.0]
     ]
 """
 QUAD - Left, Right, Rear-Right, Rear-Left
 """
 QUAD = [
-    [- math.pi / 4.0, 0.0, 1.0], 
-    [math.pi / 4.0, 0.0, 1.0], 
-    [3 * math.pi / 4.0, 0.0, 1.0], 
-    [- 3 * math.pi / 4.0, 0.0, 1.0]
+    [math.radians(45), 0.0, 1.0], 
+    [math.radians(315), 0.0, 1.0], 
+    [math.radians(225), 0.0, 1.0], 
+    [math.radians(135), 0.0, 1.0]
     ]
 """
 OCTO - 
@@ -43,14 +43,14 @@ Left 315 degrees, center, right 45 degrees, right 90, right-rear 135
 rear center (180), left-rear 225, left 270,
 """
 OCTO =   [
-    [- math.pi / 4.0, 0.0, 1.0],
-    [0.0, 0.0, 1.0],
-    [math.pi / 4.0, 0.0, 1.0], 
-    [math.pi / 2.0, 0.0, 1.0], 
-    [3 * math.pi / 4.0, 0.0, 1.0], 
-    [math.pi, 0.0, 1.0], 
-    [- 3 * math.pi / 4.0, 0.0, 1.0],
-    [- math.pi / 2.0, 0.0, 1.0],
+    [math.radians(45), 0.0, 1.0],
+    [math.radians(0), 0.0, 1.0],
+    [math.radians(315), 0.0, 1.0], 
+    [math.radians(270), 0.0, 1.0], 
+    [math.radians(225), 0.0, 1.0], 
+    [math.radians(180), 0.0, 1.0], 
+    [math.radians(135), 0.0, 1.0],
+    [math.radians(90), 0.0, 1.0],
     ]
 
 """
