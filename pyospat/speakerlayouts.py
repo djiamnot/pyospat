@@ -171,29 +171,29 @@ FIVE = [
 
 # this is a setup specific to OKTA setup by Field Sound
 OKTA = [
-    maths.xyz_to_aed([-6.0, 10.0, 0.0]),
-    maths.xyz_to_aed([-2.0, 10.0, 0.0]),
-    maths.xyz_to_aed([2.0, 10.0, 0.0]),
-    maths.xyz_to_aed([6.0, 10.0, 0.0]),
-    maths.xyz_to_aed([-6.0, 6.0, 0.0]),
-    maths.xyz_to_aed([-2.0, 6.0, 0.0]),
-    maths.xyz_to_aed([2.0, 6.0, 0.0]),
-    maths.xyz_to_aed([6.0, 6.0, 0.0]),
-    maths.xyz_to_aed([-6.0, 2.0, 0.0]),
-    maths.xyz_to_aed([-2.0, 2.0, 0.0]),
-    maths.xyz_to_aed([2.0, 2.0, 0.0]),
-    maths.xyz_to_aed([6.0, 2.0, 0.0]),
-    maths.xyz_to_aed([-6.0, -2.0, 0.0]),
-    maths.xyz_to_aed([-2.0, -2.0, 0.0]),
-    maths.xyz_to_aed([2.0, -2.0, 0.0]),
-    maths.xyz_to_aed([6.0, -2.0, 0.0]),
-    maths.xyz_to_aed([-6.0, -6.0, 0.0]),
-    maths.xyz_to_aed([-2.0, -6.0, 0.0]),
-    maths.xyz_to_aed([2.0, -6.0, 0.0]),
-    maths.xyz_to_aed([6.0, -6.0, 0.0]),
-    maths.xyz_to_aed([-6.0, -10.0, 0.0]),
-    maths.xyz_to_aed([-2.0, -10.0, 0.0]),
-    maths.xyz_to_aed([2.0, -10.0, 0.0]),
-    maths.xyz_to_aed([6.0, -10.0, 0.0]),
+    [math.radians(12), 0.0, 9.], # A1
+    [math.radians(348), 0.0, 9.0], # A2
+    [math.radians(328), 0.0, 10.2], # A3
+    [math.radians(52), 0.0, 8.55], # B1 
+    [math.radians(35), 0.0, 6.], # B2
+    [math.radians(0), 0.0, 5.25], # B3
+    [math.radians(330), 0.0, 6.44], # B4
+    [math.radians(81), 0.0, 9.0], # C1
+    [math.radians(71), 0.0, 5.25], # C2
+    [math.radians(45), 0.0, 2.25], # C3
+    [math.radians(320), 0.0, 2.25], # C4
+    [math.radians(287), 0.0, 5.25], # C5
+    [math.radians(280), 0.0, 9.0], # C6
+    [math.radians(118), 0.0, 9.0], # D1
+    [math.radians(109), 0.0, 5.25], # D2
+    [math.radians(143), 0.0, 2.25], # D3
+    [math.radians(225), 0.0, 2.25], # D4
+    [math.radians(250), 0.0, 5.25], # D5
+    [math.radians(120), 0.0, 10.5], # E1
+    [math.radians(147), 0.0, 6.0], # E2
+    [math.radians(163), 0.0, 5.69], # E3
+    [math.radians(223), 0.0, 5.69], # E4
+    [math.radians(151), 0.0, 9.75], # F1
+    [math.radians(172), 0.0, 9.0] # F2
     ]
 
