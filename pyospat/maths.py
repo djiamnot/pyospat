@@ -46,8 +46,8 @@ def aed_to_xyz(aed):
     @param aed: list of three floats.
     @return: list of three floats.
     """
-    azimuth = aed[0]-math.PI/2
-    elevation = aed[1]-math.PI/2
+    azimuth = aed[0]-math.pi/2
+    elevation = aed[1]-math.pi/2
     _distance = aed[2]
     x = _distance * math.sin(azimuth) * math.cos(elevation)
     y = _distance * math.sin(azimuth) * math.sin(elevation)
