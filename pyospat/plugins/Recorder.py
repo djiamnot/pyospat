@@ -68,7 +68,7 @@ class Recorder(PyoObject):
     def play(self):
         #self._input = Input(chnl=self._inchannel)
         _recorder = Record(self._input, self._filename, chnls=self._chnls)
-        self._rec.play()
+        #self._rec.play()
         doit = Clean_objects(self._dur, _recorder)
         doit.start()
         print("Recording ch: ")
@@ -76,7 +76,7 @@ class Recorder(PyoObject):
         #return PyoObject.play(self, dur, delay)
 
 if __name__ == "__main__":
-    s = Server(audio="jack", duplex=1).boot()
+    s = Server(audio="portaudio", duplex=1).boot()
     s.start()
     r = Recorder(inchannel=0, filename="/tmp/test.wav")
     r.play()
