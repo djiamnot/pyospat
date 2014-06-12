@@ -84,7 +84,8 @@ class PluckedString(PyoObject):
 
     @deviation.setter
     def deviation(self, deviation):
-        self._deviation = deviation
+        self._deviation.min = 0.0 - deviation[-1]
+        self._deviation.max = deviation[-1]
 
     # TODO: add setters for deviation
     # override some methods
