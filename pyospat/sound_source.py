@@ -283,8 +283,8 @@ class SoundSource(object):
         log.debug("%s attempts to connect %s" % (self, self._source))
         if self._source is not None:
             log.debug("%s is not empty so it should connect to mixer" % (self._source))
-            self._compressor = pyo.Compress(self._source)
-            self._mixer.addInput(0, self._compressor)
+            #self._compressor = pyo.Compress(self._source)
+            self._mixer.addInput(0, self._source)
         # self._mixer.setAmp(0, 0, 0.5)
         # self._mixer.setAmp(0, 1, 0.5)
         if self._is_connected_to_listener:
