@@ -54,6 +54,7 @@ def run():
     parser.add_option("-D", "--device", type="int", default=0, help="Use the specified devices (see option -d|--list-devices). Default is 0")
     parser.add_option("-w", "--debug", action="store_true", help="print some debug messages")
     parser.add_option("-c", "--config-file", type="string", default=_config_file_name, help="pyospat configuration file")
+    parser.add_option("-a", "--amplitude", type="float", default=0.5, help="Set overall amplitude")
     (options, args) = parser.parse_args()
     config = configuration.Configuration()
     level = "debug"
@@ -79,6 +80,8 @@ def run():
             return
         config.config_file = options.config_file
         print("Using config: " + config.config_file)
+    if options.amplitude:
+        config.amplitude = options.amplitude
         
     start_logging(level)
     s = pyoserver.ServerWrapper(config, config_file_name=config.config_file, use_twisted=True)
@@ -93,6 +96,7 @@ def run():
         try:
             # start  the application
             s.run()
+            s.setAmp(config.amplitude)
             #reactor.run()
         except KeyboardInterrupt:
             pass
