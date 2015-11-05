@@ -81,9 +81,15 @@ class ServerWrapper(object):
         self._server.setInOutDevice(config.pa_device)
         self._server.boot()
         self._server.start()
+        print("****** config's amplitude:", config.amplitude)
+        self._server.amp = config.amplitude
         #self._server.gui(locals())
         self._running = False
         self._use_twisted = use_twisted
+
+    def setAmp(self, amp):
+        self._server.setAmp(amp)
+        print("**************** server amplitude set to", self._server.amp)
 
     def get_server(self):
         return self._server
