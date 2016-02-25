@@ -1,0 +1,48 @@
+#N canvas 245 218 776 522 10;
+#X obj 66 424 OSCtx;
+#X obj 66 446 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 17139
+17139;
+#X msg 73 32 /spatosc/core createListener listener0;
+#X msg 75 69 /spatosc/core createSoundSource snd0;
+#X msg 98 214 /spatosc/core/source/snd0/prop setMediaURI pyo://Sine
+;
+#X msg 77 259 /spatosc/core/source/snd0/prop freq \$1;
+#X floatatom 341 249 5 0 0 0 - - -;
+#X msg 79 121 /spatosc/core connect snd0 listener0;
+#X msg 223 409 /spatosc/core clear;
+#X floatatom 173 152 5 0 0 0 - - -;
+#X msg 96 178 /spatosc/core/connection/snd0->listener0/aed \$1 0 5
+;
+#X obj 23 122 cnv 15 24 24 empty empty 3 4 12 1 24 -99865 -262144 0
+;
+#X obj 28 175 cnv 15 24 24 empty empty 4 4 12 1 24 -99865 -262144 0
+;
+#X obj 24 214 cnv 15 24 24 empty empty 5 4 12 1 24 -99865 -262144 0
+;
+#X obj 23 25 cnv 15 24 24 empty empty 1 4 12 1 24 -99865 -262144 0
+;
+#X obj 23 66 cnv 15 24 24 empty empty 2 4 12 1 24 -99865 -262144 0
+;
+#X obj 25 258 cnv 15 24 24 empty empty 6 4 12 1 24 -99865 -262144 0
+;
+#X text 323 38 create a listener;
+#X text 320 68 create a sound source;
+#X text 312 120 connect the sound source with the listener;
+#X text 432 209 give the source a voice;
+#X text 328 271 control source's properties;
+#X text 406 284 (see pyo documentation);
+#X text 368 411 clear the scene;
+#X text 419 175 give them some spacial relationship (can be controlled
+dynamically;
+#X msg 70 8 setAddress localhost 18032;
+#X connect 0 0 1 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 6 0 5 0;
+#X connect 7 0 0 0;
+#X connect 8 0 0 0;
+#X connect 9 0 10 0;
+#X connect 10 0 0 0;
+#X connect 25 0 0 0;

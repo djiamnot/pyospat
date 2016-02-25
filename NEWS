@@ -1,6 +1,24 @@
-Pyoscape 0.1.0 - 2011-10-26
+Pyospat 0.1.2 - 2016-02-24
 ---------------------------
 
-    This is the first development snapshot of the 0.1 unstable branch.
+This is a development snapshot in the 0.1 unstable branch.
+
+New features:
+
+* Some synths added
+* Several speaker layouts
+* 5 channel speaker layout (equidistant, star-like, specific to Re-Collect)
+* 24 channel speaker layout (specfic OKTA project http://oktaproject.ca/)
+* Some documentation
+* Overall volume scale from CLI
+
+Known bugs:
+
+* There is no "spread" factor to control "leaking" strength between speakers
+
+Pyospat 0.1.0 - 2011-10-26
+---------------------------
+
+This is the first development snapshot of the 0.1 unstable branch.
 
 

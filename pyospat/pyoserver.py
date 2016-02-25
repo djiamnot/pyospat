@@ -24,7 +24,13 @@ The ServerWrapper and PrefParser classes.
 import pyo
 import time
 import os
+from pyospat import logger
 from xml.dom import minidom
+
+log = logger.start(name="pyoserver")
+
+def list_devices():
+    pyo.pa_list_devices()
 
 class PrefParser(object):
     """
@@ -57,7 +63,7 @@ class PrefParser(object):
                 _type = type(self._constructor_arguments[key])
                 text = elements[0].childNodes[0].toxml()
                 self._constructor_arguments[key] = _type(text)
-        print(self._constructor_arguments)
+        log.debug(self._constructor_arguments)
     
     def get_kwargs(self):
         """
@@ -69,12 +75,21 @@ class ServerWrapper(object):
     """
     Encapsulates a pyo.Server and PrefParser
     """
-    def __init__(self, config_file_name=None, use_twisted=False):
+    def __init__(self, config, config_file_name=None, use_twisted=False):
         parser = PrefParser(config_file_name)
-        self._server = pyo.Server(**parser.get_kwargs()).boot()
+        self._server = pyo.Server(**parser.get_kwargs())
+        self._server.setInOutDevice(config.pa_device)
+        self._server.boot()
         self._server.start()
+        print("****** config's amplitude:", config.amplitude)
+        self._server.amp = config.amplitude
+        #self._server.gui(locals())
         self._running = False
         self._use_twisted = use_twisted
+
+    def setAmp(self, amp):
+        self._server.setAmp(amp)
+        print("**************** server amplitude set to", self._server.amp)
 
     def get_server(self):
         return self._server

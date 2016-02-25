@@ -5,6 +5,16 @@ Pyospat is a Python audio renderer for SpatOSC.
 
 See http://code.sat.qc.ca/trac/spatosc for more information.
 
+Update on 2016-02-24:
+
+This is just a maintenance release to get this software out there for the sake of some sort of completeness. This software is basically abandonware at this point. It has, however, been used in two substantial sound installations:
+
+- Re-Collect, by Jane Tingley and Michal Seta (http://janetingley.com/re-collect/), recipient of the First Prize at the iNTERFACES Interactive Art Competition (http://artes.ucp.pt/interfaces/index_en.html) ex-aequo with Distance by Li Zheng (China)
+
+- OKTA project by Fieldsound duo (Steve Bates and Douglas Moffat) - http://oktaproject.ca/
+
+There are no other projects planned and the developers do not really have the desire to pursue this project. Michal Seta is now involved with another sound spacialisation system called SATIE (https://github.com/nicobou/satie)
+
 
 License
 =======
@@ -34,7 +44,7 @@ Installation
 
 Dependencies:
 
-* libspatosc-0.1-dev
+* libspatosc-0.6-dev
 * python-pyo
 * python-setuptools
 * python-twisted-core

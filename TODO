@@ -1,5 +1,14 @@
- * pyospat: make sure amplitude calculation is OK (write tests)
+ * pyospat: test amplitude calculation
+ * pyospat: remove scene.py
+ * pyospat: store spread in renderer to set new sources' spread as well
+ * pyospat: introspect PyoObjects properties and listen for node props that match
+ * pyospat: listener's spread prop should control spread for speakers
+ * pyospat: GUI with speaker volumes. (over OSC!)
+ * pyospat: allow for changing speaker distance
+ * pyospat: test 2D audio
+ * pyospat: test 3D audio
+ * pyospat: get decided on what is in the XML file and what is command-line specified
+ * Demo: simple 3D demo with pyospat and a simple spatialization GUI
+ * Demo: advanced 3D demo with Tempi, SPIN (joystick) and pyospat
  * spatosc: use spatosc/examples/spinspat for testing
-
-
 

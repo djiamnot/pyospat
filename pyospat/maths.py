@@ -46,13 +46,36 @@ def aed_to_xyz(aed):
     @param aed: list of three floats.
     @return: list of three floats.
     """
-    azimuth = aed[0]
-    elevation = aed[1]
+    azimuth = aed[0]-math.pi/2
+    elevation = aed[1]-math.pi/2
     _distance = aed[2]
     x = _distance * math.sin(azimuth) * math.cos(elevation)
     y = _distance * math.sin(azimuth) * math.sin(elevation)
     z = _distance * math.cos(azimuth)
     return [x, y, z]
+
+def xyz_to_aed(xyz):
+    """
+    Converts XYZ to AED.
+    @param aed: list of three floats.
+    @return: list of three floats.
+    """
+    x = xyz[0]
+    y = xyz[1]
+    z = xyz[2]
+    distance = math.sqrt((x*x) + (y*y) + (z*z))
+    azimuth = math.atan2(y,x)
+    # put in range of [-pi, pi]
+    if azimuth > math.pi:
+        azimuth -= 2 * math.pi
+    else:
+        azimuth += 2 * math.pi
+    if distance > 0.00001:
+        elevation = math.acos(z/distance)
+    else:
+        elevation = 0.0
+    return [azimuth, elevation, distance]
+
 
 def normalize(vec):
     """
@@ -163,6 +186,7 @@ def angles_to_attenuation(speaker_aed, source_aed, exponent=2.0):
     Returns the volume to mix a sound source for its position relative to the position of a speaker.
     @param speaker_aed: AED position of the loudspeaker.
     @param source_aed: AED position of the sound source.
+    @param exponent: spread between speakers. 2.0 is for stereo or quad. 4.0 for octo. 4 is more discrete than 2.
     @rtype: float
     @return: Audio level factor.
     """
